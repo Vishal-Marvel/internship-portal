@@ -1,0 +1,225 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+  background: #168aad;
+    background: -webkit-linear-gradient(20deg, #34a0a4,#168aad);
+    background: linear-gradient(0deg,#34a0a4,#168aad);
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  max-height: 100%;
+  height: 900px;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+}
+
+.container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+
+.container .std-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+.container .title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 50px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+.container form .student-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+form .student-details .input-box {
+  width: calc(100% / 3 - 25px);
+  margin-bottom: 15px;
+}
+
+.student-details .input-box input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+.student-details .input-box .details {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.student-details .input-box input:focus {
+  border-color: #27bcea;
+}
+.student-details .input-box input:valid {
+  border-color: green;
+}
+
+.container form .mentor-details {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+.container .men-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.mentor-details .input input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.mentor-details .input .mentor {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.mentor-details .input input:focus {
+  border-color: #27bcea;
+}
+.mentor-details .input input:valid {
+  border-color: green;
+}
+
+form .mentor-details .input {
+  width: calc(80% / 2 - 50px);
+  margin-bottom: 15px;
+}
+
+.container form .pwd-details {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+.container .pwd-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.pwd-details .pwd input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.pwd-details .pwd .password {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.pwd-details .pwd input:focus {
+  border-color: #27bcea;
+}
+.pwd-details .pwd input:valid {
+  border-color: green;
+}
+
+form .pwd-details .pwd {
+  width: calc(80% / 2 - 50px);
+  margin-bottom: 15px;
+}
+
+form .button {
+  height: 30px;
+  margin: 15px 0;
+}
+
+form .button input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  background: #21a9d3;
+  margin: 0%;
+}
+
+form .button input:hover {
+  background: linear-gradient(-135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+@media (max-width: 584px) {
+  .container {
+    max-width: 100%;
+  }
+  form .student-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  form .mentor-details .input {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  form .pwd-details .pwd {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .container form .student-details {
+    max-height: 100px;
+    overflow-y: scroll;
+  }
+  .student-details::-webkit-scrollbar {
+    width: 0;
+  }
+}
