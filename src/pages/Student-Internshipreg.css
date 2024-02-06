@@ -1,0 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+  /*background: linear-gradient(135deg, #0039a8, #4a88ff, #4a88ff, #003aab);*/
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  max-height: 100%;
+  height: 90%;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+}
+
+.container .title,
+.container .men-title,
+.container .pwd-title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+
+.container .std-title,
+.container .men-title,
+.container .pwd-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.container .title::before,
+.container .men-title::before,
+.container .pwd-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 50px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+.container form .student-details,
+.container form .mentor-details,
+.container form .pwd-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+form .student-details .input-box,
+form .mentor-details .input,
+form .pwd-details .pwd {
+  width: calc(100% / 3 - 25px);
+  margin-bottom: 15px;
+}
+
+.student-details .input-box input,
+.mentor-details .input input,
+.pwd-details .pwd input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.student-details .input-box .details,
+.mentor-details .input .mentor,
+.pwd-details .pwd .password {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.student-details .input-box input:focus,
+.mentor-details .input input:focus,
+.pwd-details .pwd input:focus {
+  border-color: #27bcea;
+}
+
+.student-details .input-box input:valid,
+.mentor-details .input input:valid,
+.pwd-details .pwd input:valid {
+  border-color: green;
+}
+
+.container form .mentor-details {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: 20px 0 12px 0;
+}
+
+.container .mentor-details .men-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+form .mentor-details .input {
+  width: calc(80% / 2 - 50px);
+  margin-bottom: 15px;
+}
+
+.container form .pwd-details {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+.container .pwd-details .pwd-title {
+  font-weight: 420;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.pwd-details .pwd input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  border-bottom-width: 2px;
+  transition: all 0.5s ease;
+}
+
+.pwd-details .pwd .password {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.pwd-details .pwd input:focus {
+  border-color: #27bcea;
+}
+
+.pwd-details .pwd input:valid {
+  border-color: green;
+}
+
+form .pwd-details .pwd {
+  width: calc(80% / 2 - 50px);
+  margin-bottom: 15px;
+}
+
+form .button {
+  height: 30px;
+  margin: 15px 0;
+}
+
+form .button input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #000;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+form .button input:hover {
+  background: linear-gradient(-135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+@media (max-width: 584px) {
+  .container {
+    max-width: 100%;
+  }
+  form .student-details .input-box,
+  form .mentor-details .input,
+  form .pwd-details .pwd {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .container form .student-details {
+    max-height: 100px;
+    overflow-y: scroll;
+  }
+  .student-details::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+#student_det_class,
+#pass_det,
+#mentor_details {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: 80%;
+  width: 100%;
+  row-gap: 18px;
+  column-gap: 15%;
+  padding: 15px;
+}
+
+h1,
+h5 {
+  font-size: 25px;
+  font-weight: 500;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+h5 {
+  margin-bottom: 2px;
+}
+
+#pass_det,
+#mentor_details {
+  justify-content: space-between;
+  column-gap: 30%;
+  padding-right: 50px;
+}
+
+#reg_button.MuiButton-root {
+  background: linear-gradient(
+    135deg,
+    #0039a8,
+    #4a88ff,
+    #4a88ff,
+    #003aab
+  ) !important;
+}
+
+#reg_button {
+  padding-left: 260px;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}
+
+#picbutton,
+#offerletter,
+#busi_id_num {
+  padding-left: 10px;
+  margin-left: 8px;
+  padding: 10px;
+}
+
+form .mentor-details .MuiFormControl-root {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+form .mentor-details .MuiInputLabel-root {
+  background-color: #fff;
+  padding-left: 10px;
+}
+
+form .mentor-details .MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+
+form
+  .mentor-details
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  /*border: 1px solid #27bcea;*/
+}
+
+#company_det,
+#academic_det {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: 80%;
+  width: 100%;
+  row-gap: 20px;
+  padding: 20px;
+}
+
+#academic_det {
+  justify-content: space-between;
+  column-gap: 30%;
+  padding-right: 50px;
+}
+
+#reg_button {
+  padding-left: 260px;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}

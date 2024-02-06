@@ -1,0 +1,60 @@
+#company_det {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: 80%;
+  width: 100%;
+  row-gap: 20px;
+  column-gap: 13%;
+  padding: 8px;
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: 500;
+  padding-left: 20px;
+  padding-top: 5px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+h5 {
+  font-size: 20px;
+  font-weight: 500;
+  padding-left: 25px;
+  padding-top: 3px;
+  margin-bottom: 2px;
+}
+
+#offerletter {
+  padding-left: 10px;
+  margin-left: 8px;
+}
+
+#busi_id_num {
+  width: 100px;
+}
+
+#academic_det {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  height: 80%;
+  width: 100%;
+  row-gap: 20px;
+  column-gap: 30%;
+  padding: 8px;
+  padding-right: 50px;
+}
+
+#reg_button {
+  padding-left: 260px;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}
+
+#certificate {
+  padding-left: 10px;
+  margin-left: 12.5px;
+}

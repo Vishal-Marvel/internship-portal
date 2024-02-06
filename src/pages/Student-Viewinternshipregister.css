@@ -1,0 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  /* margin: 0;
+  padding: 0;
+  box-sizing: border-box; */
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+  /*background: linear-gradient(135deg, #0039a8, #4a88ff, #4a88ff, #003aab);*/
+}
+
+.parent-container,
+.container,
+.con,
+.stud {
+  max-width: 1000px;
+  width: 100%;
+  max-height: 100%;
+  border-radius: 5px;
+}
+
+.container {
+  height: 90%;
+  background: #fff;
+  padding: 25px 30px;
+}
+
+.con {
+  height: 75%;
+  background: rgba(103, 225, 251, 0.36);
+  padding: 25px 30px;
+  margin-top: 0px;
+  margin-left: 45px;
+  margin-right: 45px;
+  margin-bottom: 45px;
+  align-items: center;
+}
+
+.stud {
+  width: 450px;
+  height: 2px;
+  padding: 10px 10px;
+  margin-right: 45px;
+  border-radius: 5px;
+}
+
+.container .title,
+.container .std-title,
+.container .men-title,
+.container .pwd-title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+
+.container .std-title,
+.container .men-title,
+.container .pwd-title {
+  font-weight: 420;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.container .title::before,
+.container .std-title::before,
+.container .men-title::before,
+.container .pwd-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 50px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+.container form .student-details,
+.container form .mentor-details,
+.container form .pwd-details {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px 0 12px 0;
+}
+
+form .student-details .input-box,
+form .mentor-details .input,
+form .pwd-details .pwd {
+  width: calc(100% / 3 - 25px);
+  margin-bottom: 15px;
+}
+
+.student-details .input-box input,
+.mentor-details .input input,
+.pwd-details .pwd input {
+  height: 35px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  padding-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.student-details .input-box .details,
+.mentor-details .input .mentor,
+.pwd-details .pwd .password {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.student-details .input-box input:focus,
+.mentor-details .input input:focus,
+.pwd-details .pwd input:focus {
+  border-color: #27bcea;
+}
+
+.student-details .input-box input:valid,
+.mentor-details .input input:valid,
+.pwd-details .pwd input:valid {
+  border-color: green;
+}
+
+form .mentor-details .input,
+form .pwd-details .pwd {
+  width: calc(80% / 2 - 50px);
+  margin-bottom: 15px;
+}
+
+form .button {
+  height: 30px;
+  margin: 15px 0;
+}
+
+form .button input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #000;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+form .button input:hover {
+  background: linear-gradient(-135deg, #71d0ed, #c6deed, #c6deed, #71d0ed);
+}
+
+@media (max-width: 584px) {
+  .container {
+    max-width: 100%;
+  }
+  form .student-details .input-box,
+  form .mentor-details .input,
+  form .pwd-details .pwd {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .container form .student-details {
+    max-height: 100px;
+    overflow-y: scroll;
+  }
+  .student-details::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+#student_det_class,
+#pass_det,
+#mentor_details,
+#facultyupload,
+#company_det,
+#academic_det {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: 80%;
+  width: 100%;
+  padding: 15px;
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: 500;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+h5 {
+  font-size: 20px;
+  font-weight: 500;
+  padding-left: 25px;
+  padding-top: 3px;
+  margin-bottom: 2px;
+}
+
+#pass_det,
+#mentor_details,
+#facultyupload {
+  justify-content: space-between;
+}
+
+#reg_button.MuiButton-root {
+  background: linear-gradient(
+    135deg,
+    #0039a8,
+    #4a88ff,
+    #4a88ff,
+    #003aab
+  ) !important;
+}
+
+#reg_button,
+#reg_button_staff {
+  padding-left: 260px;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}
+
+#picbutton,
+#offerletter,
+#certificate,
+#busi_id_num {
+  padding-left: 10px;
+  margin-left: 8px;
+}
+
+form .mentor-details .MuiFormControl-root {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+form .mentor-details .MuiInputLabel-root {
+  background-color: #fff;
+  padding-left: 10px;
+}
+
+form .mentor-details .MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+
+#intern_det_by_staff,
+#reg_button_staff {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  height: 80%;
+  width: 100%;
+  row-gap: 20px;
+  column-gap: 15%;
+  padding: 20px;
+}

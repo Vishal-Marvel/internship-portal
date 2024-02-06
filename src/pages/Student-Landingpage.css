@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.innerContainer {
+  width: calc(100vw - 10%);
+  border-radius: 16px;
+  padding: 24px;
+  elevation: 3;
+  background-color: navy;
+}
+
+.roundedBox {
+  background-color: blue;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.welcomeText {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.nameText {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.segmentBox {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  height: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+  margin-top: 16px;
+}
+
+.segment,
+.greenSegment,
+.purpleSegment {
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
+.segment {
+  background-color: red;
+}
+
+.greenSegment {
+  background-color: green;
+}
+
+.purpleSegment {
+  background-color: #9b59b6;
+}
