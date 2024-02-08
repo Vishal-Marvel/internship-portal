@@ -29,7 +29,7 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Main_Login/>}>
+      <Route path="/" element={<Main_Login/>}/>
         <Route index element={<Main_Login/>} />
         <Route path="Faculty_Broadcast" element={<Faculty_Broadcast />} />
         <Route path="Faculty_Changementee" element={<Faculty_Changementee />} />
@@ -48,7 +48,7 @@ function App() {
         <Route path="Student_Registration" element={<Student_Registration />} />
         <Route path="Student_Updateinternship" element={<Student_Updateinternship />} />
         <Route path="Student_Viewinternshipregister" element={<Student_Viewinternshipregister />} />
-      </Route>
+      
     </Routes>
   </BrowserRouter>
   );
