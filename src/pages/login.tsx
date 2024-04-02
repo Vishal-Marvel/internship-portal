@@ -1,13 +1,18 @@
 import StaffSignIn from "@/components/StaffLogin";
 import StudentSignIn from "@/components/StudentLogin";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSession } from "@/providers/context/SessionContext";
 import { useTheme } from "@/providers/theme-provider";
 import { useEffect } from "react";
 
 const Login = () => {
   const { setTheme } = useTheme();
+  const {token} = useSession();
   useEffect(() => {
-    setTheme("default");
+    setTimeout(()=>{
+      if (!token)
+      setTheme("default");
+    }, 500);
   }, []);
   
   return (

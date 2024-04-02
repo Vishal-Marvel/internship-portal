@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { SessionContext } from "@/providers/context/SessionContext";
-import { redirect, useLocation } from "react-router-dom";
-import { ThemeProvider } from "./theme-provider";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { ThemeProvider, useTheme } from "./theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
+  const { setTheme } = useTheme();
+  const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [isPasswordDefault, setIsPasswordDefault] = useState<boolean | null>(
@@ -12,6 +15,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
+    isTokenExpired();
+    if (!token) {
+      setTheme("default");
+      navigate("/");
+    }
     // console.log(token);
     // const regex = /^(\/api|\/edit|\/auth(?!\/signin\b)).*$/;
     // if (regex.test(pathname)){
@@ -25,7 +33,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
     // }
     if (pathname == "/") {
-      if (token) redirect("/dashboard");
+      if (token) navigate("/dashboard");
     }
   }, [pathname, token]);
 
@@ -91,6 +99,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         setSession,
       }}
     >
+      <Toaster position="top-right" />
+
       <ThemeProvider defaultTheme="default">{children}</ThemeProvider>
     </SessionContext.Provider>
   );

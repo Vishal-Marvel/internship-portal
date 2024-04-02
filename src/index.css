@@ -67,7 +67,7 @@
 }
 
 .sit {
-  background-image: url("/public/sit.png");
+  background-image: url("/sit.png");
   background-size: cover;
   background-position: 0%;
   background-repeat: no-repeat;
@@ -77,14 +77,14 @@
 }
 
 .sec {
-  background-image: url("/public/sec.png");
+  background-image: url("/sec.png");
   background-size: cover;
   background-position: 0%;
   background-repeat: no-repeat;
 }
 
 .staff {
-  background-image: url("/public/faculty.png");
+  background-image: url("/faculty.png");
   background-size: cover;
   background-position: 0%;
   background-repeat: no-repeat;

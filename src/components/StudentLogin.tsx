@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ConstructionIcon } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
 import { useEffect, useState } from "react";
 import PasswordInput from "./PasswordInput";
@@ -56,13 +56,13 @@ const StudentSignIn = () => {
 
       router("/dashboard");
     } catch (error: any) {
-      const errorMessage: String = error.response.data;
-      if (errorMessage.includes("User"))
-        form.setError("email", { message: error.response.data });
-      if (errorMessage.includes("Password"))
-        form.setError("password", { message: error.response.data });
-
-      console.error(error);
+      const errorMessage = await error.response.data;
+      
+      toast(
+        <>
+          <AlertCircle /> {errorMessage.message}
+        </>
+      );
     }
   };
 
