@@ -48,7 +48,7 @@ const StaffSignIn = () => {
     try {
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/staffs/login",
-        values
+        { email: values.email + "@sairam.edu.in", password: values.password }
       );
       setSession(response.data.data.token, response.data.data.roles);
       setTheme("staff");

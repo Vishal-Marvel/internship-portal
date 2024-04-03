@@ -12,7 +12,7 @@ const Login = () => {
     setTimeout(()=>{
       if (!token)
       setTheme("default");
-    }, 500);
+    }, 1000);
   }, []);
   
   return (
