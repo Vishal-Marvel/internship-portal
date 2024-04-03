@@ -56,13 +56,13 @@ const StaffSignIn = () => {
 
       router("/dashboard");
     } catch (error: any) {
-      const errorMessage: String = error.response.data;
-      if (errorMessage.includes("User"))
-        form.setError("email", { message: error.response.data });
-      if (errorMessage.includes("Password"))
-        form.setError("password", { message: error.response.data });
-
-      console.error(error);
+      const errorMessage = await error.response.data;
+      
+      toast(
+        <>
+          <AlertCircle /> {errorMessage.message}
+        </>
+      );
     }
   };
 
