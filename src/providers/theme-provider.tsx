@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "sit" | "sec" | "staff" | "default";
+type Theme = "sit" | "sec" | "faculty" | "default";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -33,7 +33,7 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.getElementById("root");
     if (root) {
-      root.classList.remove("sit", "sec", "staff");
+      root.classList.remove("sit", "sec", "faculty");
 
       root.classList.add(theme);
     }

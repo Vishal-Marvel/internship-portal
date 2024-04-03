@@ -62,10 +62,13 @@ const formSchema = z.object({
     .string()
     .min(1, "Inturtry Supervisor Email is Required")
     .default(""),
-    current_cgpa: z.string().refine(str => {
-      const num = parseFloat(str); 
-      return num >= 1 && num <= 10; 
-  }, "CGPA must be within 1-10").default(""),
+  current_cgpa: z
+    .string()
+    .refine((str) => {
+      const num = parseFloat(str);
+      return num >= 1 && num <= 10;
+    }, "CGPA must be within 1-10")
+    .default(""),
   academic_year: z.string().min(1, "Academic year is Required").default(""),
   mode_of_intern: z.string().min(1, "Mode of Intern is Required").default(""),
   starting_date: z.date(),
@@ -104,7 +107,7 @@ const AddStudentInternship = () => {
         "industry_supervisor_ph_no",
         values.industry_supervisor_ph_no
       );
-      
+
       formdata.append(
         "industry_supervisor_email",
         values.industry_supervisor_email
@@ -137,13 +140,12 @@ const AddStudentInternship = () => {
 
       router("/dashboard");
     } catch (error) {
-        toast(
-          <>
-            <AlertCircle />
-            {error.response.data.message}
-          </>
-        );
-      
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
 
       console.error(error.response.data.message);
     }
@@ -154,12 +156,16 @@ const AddStudentInternship = () => {
   }, [form.watch("cin_gst_udyog")]);
 
   useEffect(() => {
-    if (form.getValues("mode_of_intern") == "online" && mode != "online" && isLoading)
+    if (
+      form.getValues("mode_of_intern") == "online" &&
+      mode != "online" &&
+      !isLoading
+    )
       alert(
         "You have selected  'Online' mode , where the number of days will be calculated by half"
       );
     if (form.getValues("mode_of_intern") != "")
-    setMode(form.getValues("mode_of_intern"))
+      setMode(form.getValues("mode_of_intern"));
   }, [form.watch("mode_of_intern")]);
 
   return (
@@ -283,7 +289,6 @@ const AddStudentInternship = () => {
                           <FormControl>
                             <Textarea
                               className=" bg-slate-200 shadow-inner md:min-h-[150px] md:max-h-[150px] min-h-[100px] max-h-[100px]"
-                              
                               disabled={isLoading}
                               placeholder="Enter Company Address"
                               {...field}
@@ -591,8 +596,8 @@ const AddStudentInternship = () => {
                               className="bg-slate-200 shadow-inner"
                               type="file"
                               placeholder="Insert Offer Letter"
-                              accept="type/pdf"
-                              size={1024*1024*5}
+                              accept=".pdf"
+                              size={1024 * 1024 * 5}
                               {...fileRef}
                             />
                           </FormControl>

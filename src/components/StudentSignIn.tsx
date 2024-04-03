@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,66 +31,64 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import axios from "axios";
-import { AlertCircle, CalendarIcon, CheckCircle2 } from "lucide-react";
-import { useSession } from "@/providers/context/SessionContext";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { Student } from "@/schema";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
-import { cn } from "@/lib/utils";
-
-interface Props {
-  student: Student;
-}
-
-const formSchema = z.object({
-  name: z.string().min(1, "Name is Required").default(""),
-  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
-  student_id: z.string().min(1, "Student ID is Required").default(""),
-  batch: z.string().min(1, "Batch is Required").default(""),
-  section: z.string().min(1, "Section is Required").default(""),
-  year_of_studying: z
-    .string()
-    .min(1, "Year Of Studying is Required")
-    .default(""),
-  register_num: z.string().min(1, "Register number is Required").default(""),
-  department: z.string().min(1, "Department is Required").default(""),
-  email: z.string().email().default(""),
-  phone_no: z.string().refine((str) => {
-    return str.length == 10;
-  }, "Phone number is invalid"),
-  total_days_internship: z.string().optional(),
-  placement_status: z.string().optional(),
-  placed_company: z.string().optional(),
-  file: z.instanceof(FileList).optional(),
-  mentor_name: z.string(),
-  skills: z
-    .array(z.object({ value: z.string(), label: z.string() }))
-    .min(1, "Skills Must be selected"),
-});
+import PasswordInput from "./PasswordInput";
 
 interface Option {
   label: string;
   value: string;
 }
 
-const StudentProfile = ({ student }: Props) => {
-  const router = useNavigate();
-  const { token, role } = useSession();
-  const [years, setYears] = useState<string[]>([]);
+const formSchema = z.object({
+  name: z.string().min(1, "Name is Required").default(""),
+  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
+  student_id: z
+    .string()
+    .refine((str) => {
+      const regex = /^(?:SEC|SIT|SECL|SITL)\d{2}[A-Z]{0,3}\d{3}$/;
+      return regex.test(str);
+    }, "Student Id Format Incorrect")
+    .default(""),
+  batch: z.string().min(1, "Batch is Required").default(""),
+  section: z.string().min(1, "Section is Required").default(""),
+  year_of_studying: z
+    .string()
+    .min(1, "Year Of Studying is Required")
+    .default(""),
+  register_num: z
+    .string()
+    .min(12, "Register number should be 12 digits")
+    .default(""),
+  password: z.string().min(8, "Password must be minimum 8").default(""),
+  cpassword: z.string().min(8, "Password must be minimum 8").default(""),
+  department: z.string().min(1, "Department is Required").default(""),
+  phone_no: z.string().refine((str) => {
+    return str.length == 10;
+  }, "Phone number is invalid"),
 
+  file: z.instanceof(FileList).optional(),
+  mentor_name: z.object({ value: z.string(), label: z.string() }),
+  skills: z
+    .array(z.object({ value: z.string(), label: z.string() }))
+    .min(1, "Skills Must be selected"),
+});
+
+const StudentSignIn = () => {
+  const router = useNavigate();
+  const [years, setYears] = useState<string[]>([]);
   const [skills, setSkills] = useState<Option[]>([]);
-  const [image, setImage] = useState("");
+  const [mentors, setMentors] = useState<Option[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-  const [update, setUpdate] = useState(false);
 
-  const isLoading = form.formState.isSubmitting || !update;
+  const isLoading = form.formState.isSubmitting;
   const fileRef = form.register("file");
-  const isStudent = role && role.includes("student");
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -114,127 +118,123 @@ const StudentProfile = ({ student }: Props) => {
     }
   };
 
-  useEffect(() => {
-    getSkills();
-  }, []);
-
-  const getImage = async () => {
-    if (student) {
-      const imageResponse = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/image/" +
-          student.profile_photo,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+  const getMentors = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `http://localhost:5000/internship/api/v1/staffs/${form.getValues(
+          "department"
+        )}/${form.getValues("sec_sit")}/mentors`
       );
-      setImage(imageResponse.data.image);
+      const data = response.data.data;
+      setMentors(
+        Object.keys(data).map((key, index) => ({
+          value: data[key],
+          label: key,
+        }))
+      );
+    } catch (error) {
+      console.error(error.response.data);
     }
   };
 
   useEffect(() => {
-    if (student) {
-      form.setValue("name", student.name);
-      form.setValue("sec_sit", student.sec_sit);
-      form.setValue("batch", student.batch);
-      form.setValue("section", student.section);
-      form.setValue("student_id", student.student_id);
-      form.setValue("year_of_studying", student.year_of_studying);
-      form.setValue("register_num", student.register_num);
-      form.setValue("department", student.department);
-      form.setValue("email", student.email);
-      form.setValue("phone_no", student.phone_no);
-      form.setValue(
-        "total_days_internship",
-        student.total_days_internship || "0"
-      );
-      form.setValue("placement_status", student.placement_status || "unplaced");
-      form.setValue("placed_company", student.placed_company);
-      form.setValue("mentor_name", student.mentor_name);
-      form.setValue(
-        "skills",
-        student.skills.map((skill) => ({ value: skill, label: skill }))
-      );
+    getSkills();
+  }, []);
+
+  useEffect(() => {
+    if (
+      form.getValues("student_id") &&
+      form.getValues("student_id").length > 0
+    ) {
+      form.setValue("student_id", form.getValues("student_id").toUpperCase());
     }
-    getImage();
-  }, [student]);
+  }, [form.watch("student_id")]);
+
+  useEffect(() => {
+    if (
+      form.getValues("department") &&
+      form.getValues("department") != "" &&
+      form.getValues("sec_sit") &&
+      form.getValues("sec_sit") != ""
+    ) {
+      getMentors();
+    }
+  }, [form.watch("department"), form.watch("sec_sit")]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      if (values.file[0].size > 1024 * 512) {
+        alert("File size Exceeds 512 kb");
+        return;
+      }
+      if (values.password != values.cpassword){
+        alert("Password and Confirm Password, didn't match")
+        return;
+      }
       const formdata = new FormData();
-
       formdata.append("name", values.name);
+      formdata.append("sec_sit", values.sec_sit);
       formdata.append("section", values.section);
       formdata.append("batch", values.batch);
       formdata.append("student_id", values.student_id);
       formdata.append("year_of_studying", values.year_of_studying);
       formdata.append("register_num", values.register_num);
       formdata.append("department", values.department);
-      formdata.append("email", values.email);
+      formdata.append("email", values.student_id + "@sairamtap.edu.in");
       formdata.append("phone_no", values.phone_no);
-      formdata.append("total_days_internship", values.total_days_internship);
-      formdata.append("placement_status", values.placement_status);
-      formdata.append("placed_company", values.placed_company);
-      formdata.append("mentor_name", values.mentor_name);
+      formdata.append("mentor_name", values.mentor_name.label);
+      formdata.append("mentor_email", values.mentor_name.value);
+      formdata.append("password", values.password);
+
       values.skills.forEach((skill, index) => {
         formdata.append(`skills`, skill.value);
       });
-      if (values.file) formdata.append("file", values.file[0]);
+      formdata.append("file", values.file[0]);
 
-      const response = await axiosInstance.put(
-        "http://localhost:5000/internship/api/v1/students/update",
-        formdata,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+      const response = await axiosInstance.post(
+        "http://localhost:5000/internship/api/v1/students/signup",
+        formdata
       );
-      console.log(response);
-      toast(
-        <>
-          <CheckCircle2 />
-          <span>{response.data.message}</span>
-        </>
-      );
-      setUpdate(false);
+        toast(
+          <>
+            <CheckCircle2 />
+            <span>Student Data Successfully Registered, Login to Continue</span>
+          </>
+        );
+
+        form.reset();
+
+        router("/");
     } catch (error) {
-      console.error(error);
-      // toast(
-      //   <>
-      //     <AlertCircle />
-      //     {error.response.data.message}
-      //   </>
-      // );
-
-      // console.error(error.response.data.message);
+    //   console.error(error);
+        toast(
+          <>
+            <AlertCircle />
+            {error.response.data.message}
+          </>
+        );
+      //   console.error(error.response.data.message);
     }
   };
 
   return (
-    <Card className="h-full w-full shadow-2xl bg-white/80 rounded-2xl">
+    <Card className="h-full w-full shadow-2xl bg-white/30 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
-          <CardTitle>Student Profile</CardTitle>
-          <Button
-            variant={update ? "destructive" : "default"}
-            onClick={() => setUpdate(!update)}
-          >
-            {!update ? "Update" : "Close"}
-          </Button>
+          <CardTitle>Student Register</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[550px] h-[700px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[450px] h-[600px] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
-              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
+              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center">
                 <FormField
                   name={"name"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -245,7 +245,6 @@ const StudentProfile = ({ student }: Props) => {
                           disabled={isLoading}
                           placeholder="Enter Name "
                           type="text"
-                          value={field.value}
                           {...field}
                         />
                       </FormControl>
@@ -256,15 +255,15 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"sec_sit"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>SEC/SIT</FormLabel>
                       <FormControl>
                         <Select
-                          disabled={true}
+                          disabled={isLoading}
                           onValueChange={field.onChange}
-                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className=" bg-slate-200 shadow-inner">
@@ -287,16 +286,16 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"student_id"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Student Id</FormLabel>
                       <Input
                         className=" bg-slate-200 shadow-inner"
-                        disabled={true}
+                        disabled={isLoading}
                         placeholder="Enter Student Id"
                         type="text"
-                        value={field.value}
                         {...field}
                       />
                       <FormMessage />
@@ -306,6 +305,7 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"year_of_studying"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -314,7 +314,6 @@ const StudentProfile = ({ student }: Props) => {
                         <Select
                           disabled={isLoading}
                           onValueChange={field.onChange}
-                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className=" bg-slate-200 shadow-inner">
@@ -339,15 +338,15 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"batch"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Batch</FormLabel>
                       <FormControl>
                         <Select
-                          disabled={true}
+                          disabled={isLoading}
                           onValueChange={field.onChange}
-                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className=" bg-slate-200 shadow-inner">
@@ -374,6 +373,7 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"register_num"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -381,10 +381,9 @@ const StudentProfile = ({ student }: Props) => {
                       <FormControl>
                         <Input
                           className=" bg-slate-200 shadow-inner"
-                          disabled={true}
+                          disabled={isLoading}
                           placeholder="Enter Register Number"
                           type="string"
-                          value={field.value}
                           {...field}
                         />
                       </FormControl>
@@ -393,37 +392,8 @@ const StudentProfile = ({ student }: Props) => {
                   )}
                 />
                 <FormField
-                  name={"department"}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> Department</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={true}
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <FormControl>
-                            <SelectTrigger className=" bg-slate-200 shadow-inner">
-                              <SelectValue placeholder="Select Department" />
-                            </SelectTrigger>
-                          </FormControl>
-
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="cse">CSE</SelectItem>
-                              <SelectItem value="it">IT</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
                   name={"section"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -432,7 +402,6 @@ const StudentProfile = ({ student }: Props) => {
                         <Select
                           disabled={isLoading}
                           onValueChange={field.onChange}
-                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className=" bg-slate-200 shadow-inner">
@@ -457,20 +426,30 @@ const StudentProfile = ({ student }: Props) => {
                 />
 
                 <FormField
-                  name={"email"}
+                  name={"department"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel> Department</FormLabel>
                       <FormControl>
-                        <Input
-                          className=" bg-slate-200 shadow-inner"
-                          disabled={true}
-                          placeholder="Enter Email "
-                          type="email"
-                          value={field.value}
-                          {...field}
-                        />
+                        <Select
+                          disabled={isLoading}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger className=" bg-slate-200 shadow-inner">
+                              <SelectValue placeholder="Select Department" />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="cse">CSE</SelectItem>
+                              <SelectItem value="it">IT</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -479,6 +458,7 @@ const StudentProfile = ({ student }: Props) => {
 
                 <FormField
                   name={"phone_no"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -489,7 +469,6 @@ const StudentProfile = ({ student }: Props) => {
                           disabled={isLoading}
                           placeholder="Enter Phone Number"
                           type="text"
-                          value={field.value}
                           {...field}
                         />
                       </FormControl>
@@ -497,95 +476,25 @@ const StudentProfile = ({ student }: Props) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  name={"total_days_internship"}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Total Days Of Internship</FormLabel>
-                      <FormControl>
-                        <Input
-                          className=" bg-slate-200 shadow-inner"
-                          disabled={true}
-                          placeholder="Total Days Of Internship"
-                          type="text"
-                          value={field.value}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  disabled={isLoading || isStudent}
-                  control={form.control}
-                  name="placement_status"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Placement Status</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={isLoading || isStudent}
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          defaultValue="unplaced"
-                        >
-                          <FormControl>
-                            <SelectTrigger className=" bg-slate-200 shadow-inner">
-                              <SelectValue placeholder="Select Placement Status" />
-                            </SelectTrigger>
-                          </FormControl>
 
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="placed">Placed</SelectItem>
-                              <SelectItem value="unplaced">Unplaced</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  disabled={isLoading || isStudent}
-                  name={"placed_company"}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Placed Company</FormLabel>
-                      <FormControl>
-                        <Input
-                          className=" bg-slate-200 shadow-inner"
-                          disabled={isLoading || isStudent}
-                          placeholder="Enter Placed Company"
-                          type="text"
-                          value={field.value}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   name={"mentor_name"}
+                  disabled={isLoading || mentors.length == 0}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Mentor Name</FormLabel>
                       <FormControl>
-                        <Input
-                          className=" bg-slate-200 shadow-inner"
-                          disabled={isLoading}
-                          placeholder="Enter Mentor Name "
-                          type="text"
-                          value={field.value}
-                          {...field}
+                        <ReactSelect
+                          classNamePrefix="bg-slate-200"
+                          isDisabled={isLoading || mentors.length == 0}
+                          onChange={field.onChange}
+                          placeholder={"Select Mentor"}
+                          onBlur={field.onBlur}
+                          // @ts-ignore
+                          options={mentors}
+                          menuPlacement="auto"
+                          maxMenuHeight={100}
                         />
                       </FormControl>
                       <FormMessage />
@@ -594,6 +503,7 @@ const StudentProfile = ({ student }: Props) => {
                 />
                 <FormField
                   name={"skills"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -601,12 +511,15 @@ const StudentProfile = ({ student }: Props) => {
                       <FormControl>
                         <ReactSelect
                           isMulti
+                          classNamePrefix="bg-slate-200"
                           isDisabled={isLoading}
                           onChange={field.onChange}
+                          placeholder={"Select Skills"}
                           onBlur={field.onBlur}
-                          // defaultValue={skills[0]}
-                          value={field.value}
+                          // @ts-ignore
                           options={skills}
+                          menuPlacement="auto"
+                          maxMenuHeight={100}
                         />
                       </FormControl>
                       <FormMessage />
@@ -615,62 +528,90 @@ const StudentProfile = ({ student }: Props) => {
                 />
                 <FormField
                   name={"file"}
+                  disabled={isLoading}
                   control={form.control}
                   render={({ field }) => (
-                    <FormItem className={!update && "hidden"}>
+                    <FormItem>
                       <FormLabel>Profile Photo</FormLabel>
                       <FormControl>
                         <Input
-                          disabled={isLoading}
                           className="bg-slate-200 shadow-inner"
                           type="file"
-                          placeholder="Insert Profile Photo"
+                          placeholder="Insert Pofile Photo"
                           accept="image/*"
                           {...fileRef}
                         />
                       </FormControl>
                       <FormDescription>
-                        <Link
-                          className=" text-blue-500 hover:underline"
-                          to={"data:image/jpg;charset=utf-8;base64," + image}
-                          target="_blank"
-                        >
-                          Click to view photo
-                        </Link>
+                        Upload only image files, file size should be less than
+                        512 kb
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div
-                  className={cn("flex flex-col space-y-6", update && "hidden")}
-                >
-                  <FormLabel> Profile Photo</FormLabel>
-                  {image && (
-                    <Link
-                      className=" text-blue-500 hover:underline"
-                      to={"data:image/jpg;charset=utf-8;base64," + image}
-                      target="_blank"
-                    >
-                      Click to view photo
-                    </Link>
+                 <FormField
+                  name={"password"}
+                  disabled={isLoading}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput
+                          className="bg-slate-200 shadow-inner"
+                          placeholder="Enter Password"
+
+                          {...field}
+                        />
+                      </FormControl>
+                     
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
+                /> <FormField
+                name={"cpassword"}
+                disabled={isLoading}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        className="bg-slate-200 shadow-inner"
+                        placeholder="Enter Confirm Password"
+                       
+                        {...field}
+                      />
+                    </FormControl>
+                   
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               </div>
-              {update && (
-                <div className="flex flex-col space-y-1.5 pt-2">
-                  <Button type="submit" disabled={isLoading} variant="primary">
-                    Update
-                  </Button>
-                </div>
-              )}
+              <div className="flex flex-col space-y-1.5 pt-2">
+                <Button type="submit" disabled={isLoading} variant="primary">
+                  Sign In
+                </Button>
+              </div>
             </form>
           </Form>
           <ScrollBar />
         </ScrollArea>
       </CardContent>
+      <CardFooter>
+        <div className="flex flex-col items-center w-full justify-center gap-3">
+          Already Have a Account{" "}
+          <Link to={"/"}>
+            <Button variant="primary" className="p-2">
+              Log in
+            </Button>
+          </Link>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
 
-export default StudentProfile;
+export default StudentSignIn;

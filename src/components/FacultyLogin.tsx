@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,9 +18,8 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
-import { useState } from "react";
 import PasswordInput from "./PasswordInput";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
 import { useTheme } from "@/providers/theme-provider";
 
@@ -29,7 +28,7 @@ const formSchema = z.object({
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-const StaffSignIn = () => {
+const FacultyLogin = () => {
   const router = useNavigate();
   const { setTheme } = useTheme();
 
@@ -51,13 +50,13 @@ const StaffSignIn = () => {
         { email: values.email + "@sairam.edu.in", password: values.password }
       );
       setSession(response.data.data.token, response.data.data.roles);
-      setTheme("staff");
+      setTheme("faculty");
       form.reset();
 
       router("/dashboard");
     } catch (error: any) {
       const errorMessage = await error.response.data;
-      
+
       toast(
         <>
           <AlertCircle /> {errorMessage.message}
@@ -69,7 +68,7 @@ const StaffSignIn = () => {
   return (
     <Card className=" shadow-2xl bg-white/100 rounded-2xl">
       <CardHeader>
-        <CardTitle>Staff Log In</CardTitle>
+        <CardTitle>Faculty Log In</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -81,7 +80,7 @@ const StaffSignIn = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Staff Id</FormLabel>
+                    <FormLabel>Faculty Id</FormLabel>
                     <FormControl>
                       <span className="flex items-center gap-5">
                         <Input
@@ -127,8 +126,13 @@ const StaffSignIn = () => {
           </form>
         </Form>
       </CardContent>
+      <CardFooter>
+          <div className="flex flex-col items-center w-full justify-center gap-3">
+          Haven't Signed up yet? <Link to={"/signin"}><Button variant="primary" className="p-2">Sign in</Button></Link>
+          </div>
+        </CardFooter>
     </Card>
   );
 };
 
-export default StaffSignIn;
+export default FacultyLogin;

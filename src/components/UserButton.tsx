@@ -37,13 +37,9 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
       );
       setResponse(response.data.data.student);
     } catch (error) {
-      //@ts-ignore
-      if (error && error.response && error.response.data) {
-        //@ts-ignore
-        if (error.response.data == "User Not Found") clearSession();
-      }
+      if (error.response.data.message == "User does not exist") clearSession();
 
-      console.error(error);
+      // console.error(error);
     }
   };
   useEffect(() => {
@@ -107,6 +103,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
           <PopoverTrigger>
             <Avatar className="border-2 border-gray-300">
               <AvatarImage
+              className="object-cover"
                 src={"data:image/jpeg;charset=utf-8;base64," + image}
               />
               <AvatarFallback>
@@ -116,6 +113,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
           </PopoverTrigger>
           <PopoverContent>
             <div className="w-full flex flex-col gap-3 items-center">
+              <img src={"data:image/jpeg;charset=utf-8;base64," + image} height={100} width={100} className="rounded-full shadow-xl"/>
               <div>
                 <span>{response?.name}</span>
                 {" - "}

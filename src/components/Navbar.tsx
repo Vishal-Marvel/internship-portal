@@ -3,15 +3,16 @@ import UserButton from "./UserButton";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { publicRoutes } from "@/providers/Provider";
 
 const Navbar = () => {
   const { pathname } = useLocation();
   return (
     <div
       className={cn(
-        pathname == "/"
+        publicRoutes.includes(pathname)
           ? "hidden"
-          : "absolute top-3 left-1/2 -translate-x-1/2 w-3/4 rounded-3xl h-[7%] bg-slate-300/25"
+          : "md:absolute md:top-3 md:left-1/2 md:-translate-x-1/2 md:w-3/4 w-full md:rounded-3xl md:h-[7%] bg-slate-300/25"
       )}
     >
       <div className=" h-full  relative flex w-full justify-center">

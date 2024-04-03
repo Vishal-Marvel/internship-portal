@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,7 +20,7 @@ import { AlertCircle, ConstructionIcon } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
 import { useEffect, useState } from "react";
 import PasswordInput from "./PasswordInput";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
 import { useTheme } from "@/providers/theme-provider";
 
@@ -29,7 +29,7 @@ const formSchema = z.object({
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-const StudentSignIn = () => {
+const StudentLogin = () => {
   const router = useNavigate();
   const { setTheme } = useTheme();
 
@@ -43,6 +43,11 @@ const StudentSignIn = () => {
     },
   });
   const isLoading = form.formState.isSubmitting;
+
+  useEffect(() => {
+    if (form.getValues("email") && form.getValues("email").length>=0)
+    form.setValue("email", form.getValues("email").toUpperCase());
+  }, [form.watch("email")]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -118,7 +123,6 @@ const StudentSignIn = () => {
                 )}
               />
             </div>
-
             <div className="flex flex-col space-y-1.5 pt-2">
               <Button type="submit" disabled={isLoading} variant="primary">
                 Log In
@@ -126,9 +130,15 @@ const StudentSignIn = () => {
             </div>
           </form>
         </Form>
+        
       </CardContent>
+      <CardFooter>
+          <div className="flex flex-col items-center w-full justify-center gap-3">
+          Haven't Signed up yet? <Link to={"/student/signin"}><Button variant="primary" className="p-2">Sign in</Button></Link>
+          </div>
+        </CardFooter>
     </Card>
   );
 };
 
-export default StudentSignIn;
+export default StudentLogin;

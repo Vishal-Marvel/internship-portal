@@ -4,6 +4,8 @@ import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { ThemeProvider, useTheme } from "./theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
+export const publicRoutes = ["/student/signin", "/faculty/signin", "/"]
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
   const { setTheme } = useTheme();
@@ -14,22 +16,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     isTokenExpired();
-    if (!token) {
+    if (!token && !publicRoutes.includes(pathname)) {
       setTheme("default");
       navigate("/");
     }
-    // console.log(token);
-    // const regex = /^(\/api|\/edit|\/auth(?!\/signin\b)).*$/;
-    // if (regex.test(pathname)){
-    //   if (!token && isTokenExpired()){
-    //     redirect("/");
-    //   }
-    // }
-    // if (pathname=="/auth/addUser"){
-    //   if (role!="ADMIN")
-    //   redirect("/");
-
-    // }
     if (pathname == "/") {
       if (token) navigate("/dashboard");
     }
