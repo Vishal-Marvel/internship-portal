@@ -81,7 +81,7 @@ const StaffSignIn = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Staff Id</FormLabel>
                     <FormControl>
                       <span className="flex items-center gap-5">
                         <Input

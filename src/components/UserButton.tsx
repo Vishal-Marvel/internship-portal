@@ -23,7 +23,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
   const [image, setImage] = useState<string>("");
   const [open, setOpen] = useState(false);
   const router = useNavigate();
-  const {setTheme} = useTheme()
+  const { setTheme } = useTheme();
 
   const getData = async () => {
     try {
@@ -53,7 +53,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
   const handleLogout = () => {
     setOpen(false);
     router("/");
-    setTheme("default")
+    setTheme("default");
     clearSession();
   };
   const getImage = async () => {
@@ -68,7 +68,6 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
         }
       );
       setImage(imageResponse.data.image);
-
     }
   };
 
@@ -107,7 +106,9 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
         >
           <PopoverTrigger>
             <Avatar className="border-2 border-gray-300">
-              <AvatarImage src={"data:image/jpeg;charset=utf-8;base64,"+image} />
+              <AvatarImage
+                src={"data:image/jpeg;charset=utf-8;base64," + image}
+              />
               <AvatarFallback>
                 <Loader2 className="animate-spin" />
               </AvatarFallback>
@@ -116,14 +117,15 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
           <PopoverContent>
             <div className="w-full flex flex-col gap-3 items-center">
               <div>
-                <span>{response?.name}</span>{" - "}
+                <span>{response?.name}</span>
+                {" - "}
                 <span className=" text-sm text-gray-400">
                   {response?.email}
                 </span>
               </div>
-              {role && role === "ADMIN" && (
+              {role && role.includes("student") && (
                 <Link
-                  to={"/auth/addUser"}
+                  to={"/student/profile"}
                   className="w-full"
                   onClick={() => {
                     if (setClose) setClose();
@@ -134,12 +136,11 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
                     variant={"secondary"}
                     className="w-full flex gap-2 bg-gray-200"
                   >
-                    <PlusCircle className="h-5 w-5 text-secondary-foreground" />
-                    Add User
+                    View Profile
                   </Button>
                 </Link>
               )}
-              
+
               <Link
                 to={"/auth/resetPassword"}
                 className="w-full"
@@ -161,7 +162,6 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
             </div>
           </PopoverContent>
         </Popover>
-
       )}
     </>
   );

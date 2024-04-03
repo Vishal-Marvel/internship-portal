@@ -10,9 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  const [isPasswordDefault, setIsPasswordDefault] = useState<boolean | null>(
-    null
-  );
+
 
   useEffect(() => {
     isTokenExpired();
@@ -54,7 +52,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     localStorage.setItem("role", newRole);
     setToken(newToken);
     setRole(newRole);
-    setIsPasswordDefault(exp.isPasswordDefault);
   };
 
   const clearSession = () => {
@@ -62,13 +59,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("role");
     setToken(null);
     setRole(null);
-    setIsPasswordDefault(null);
     redirect("/");
   };
 
-  const changePasswordNotDefault = () => {
-    setIsPasswordDefault(false);
-  };
+
 
   const isTokenExpired = () => {
     if (token) {
@@ -92,8 +86,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       value={{
         token,
         role,
-        isPasswordDefault,
-        changePasswordNotDefault,
         isTokenExpired,
         clearSession,
         setSession,

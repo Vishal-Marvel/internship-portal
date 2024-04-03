@@ -4,19 +4,23 @@ import { Providers } from "@/providers/Provider";
 import Dashboard from "@/pages/dashboard";
 import AddInternshipPage from "@/pages/student/addInternship";
 import Navbar from "@/components/Navbar";
+import ViewProfilePage from "./pages/student/viewProfile";
 
 function App() {
   return (
     <Router>
       <Providers>
         <div className="grid place-items-center w-screen h-screen">
-          <Navbar/>
+          <Navbar />
           <div className="md:min-h-[80%] md:min-w-[85%] md:max-h-[80%] md:max-w-[85%] w-screen h-screen grid place-items-center">
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/student/addInternship" element={<AddInternshipPage/>}>
-              </Route>
+              <Route
+                path="/student/addInternship"
+                element={<AddInternshipPage />}
+              />
+              <Route path="/student/profile" element={<ViewProfilePage />} />
             </Routes>
           </div>
         </div>
