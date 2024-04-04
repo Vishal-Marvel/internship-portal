@@ -163,12 +163,12 @@ const StudentSignIn = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (values.file[0].size > 1024 * 512) {
+      if (values.file && values.file[0].size > 1024 * 512) {
         alert("File size Exceeds 512 kb");
         return;
       }
-      if (values.password != values.cpassword){
-        alert("Password and Confirm Password, didn't match")
+      if (values.password != values.cpassword) {
+        alert("Password and Confirm Password, didn't match");
         return;
       }
       const formdata = new FormData();
@@ -189,36 +189,37 @@ const StudentSignIn = () => {
       values.skills.forEach((skill, index) => {
         formdata.append(`skills`, skill.value);
       });
+      if (values.file)
       formdata.append("file", values.file[0]);
 
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/students/signup",
         formdata
       );
-        toast(
-          <>
-            <CheckCircle2 />
-            <span>Student Data Successfully Registered, Login to Continue</span>
-          </>
-        );
+      toast(
+        <>
+          <CheckCircle2 />
+          <span>Student Data Successfully Registered, Login to Continue</span>
+        </>
+      );
 
-        form.reset();
+      form.reset();
 
-        router("/");
+      router("/");
     } catch (error) {
-    //   console.error(error);
-        toast(
-          <>
-            <AlertCircle />
-            {error.response.data.message}
-          </>
-        );
+      //   console.error(error);
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
       //   console.error(error.response.data.message);
     }
   };
 
   return (
-    <Card className="h-full w-full shadow-2xl bg-white/30 rounded-2xl">
+    <Card className="h-full w-full shadow-2xl bg-blue-300/80 border-0 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
           <CardTitle>Student Register</CardTitle>
@@ -231,7 +232,7 @@ const StudentSignIn = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
-              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center">
+              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
                 <FormField
                   name={"name"}
                   disabled={isLoading}
@@ -252,7 +253,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"sec_sit"}
                   disabled={isLoading}
@@ -283,7 +283,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"student_id"}
                   disabled={isLoading}
@@ -302,7 +301,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"year_of_studying"}
                   disabled={isLoading}
@@ -335,7 +333,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"batch"}
                   disabled={isLoading}
@@ -370,7 +367,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"register_num"}
                   disabled={isLoading}
@@ -424,7 +420,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"department"}
                   disabled={isLoading}
@@ -455,7 +450,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"phone_no"}
                   disabled={isLoading}
@@ -476,7 +470,6 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   name={"mentor_name"}
                   disabled={isLoading || mentors.length == 0}
@@ -498,6 +491,9 @@ const StudentSignIn = () => {
                         />
                       </FormControl>
                       <FormMessage />
+                      {mentors.length == 0 && (
+                        <FormDescription>No Mentors Found</FormDescription>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -550,7 +546,7 @@ const StudentSignIn = () => {
                     </FormItem>
                   )}
                 />
-                 <FormField
+                <FormField
                   name={"password"}
                   disabled={isLoading}
                   control={form.control}
@@ -561,34 +557,33 @@ const StudentSignIn = () => {
                         <PasswordInput
                           className="bg-slate-200 shadow-inner"
                           placeholder="Enter Password"
-
                           {...field}
                         />
                       </FormControl>
-                     
+
                       <FormMessage />
                     </FormItem>
                   )}
-                /> <FormField
-                name={"cpassword"}
-                disabled={isLoading}
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        className="bg-slate-200 shadow-inner"
-                        placeholder="Enter Confirm Password"
-                       
-                        {...field}
-                      />
-                    </FormControl>
-                   
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                />{" "}
+                <FormField
+                  name={"cpassword"}
+                  disabled={isLoading}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput
+                          className="bg-slate-200 shadow-inner"
+                          placeholder="Enter Confirm Password"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="flex flex-col space-y-1.5 pt-2">
                 <Button type="submit" disabled={isLoading} variant="primary">

@@ -33,7 +33,7 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.getElementById("root");
     if (root) {
-      root.classList.remove("sit", "sec", "faculty");
+      root.classList.remove("sit", "sec", "faculty", "default");
 
       root.classList.add(theme);
     }

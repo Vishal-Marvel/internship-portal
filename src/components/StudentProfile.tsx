@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import axios from "axios";
-import { AlertCircle, CalendarIcon, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CalendarIcon, CheckCircle2, X } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -85,6 +85,7 @@ const StudentProfile = ({ student }: Props) => {
   const isLoading = form.formState.isSubmitting || !update;
   const fileRef = form.register("file");
   const isStudent = role && role.includes("student");
+  const [imgaeOpen, setImgaeOpen] = useState(false);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -162,6 +163,10 @@ const StudentProfile = ({ student }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      if (values.file && values.file[0].size > 1024 * 512) {
+        alert("File Size Exceeds 512 kb");
+        return;
+      }
       const formdata = new FormData();
 
       formdata.append("name", values.name);
@@ -180,7 +185,9 @@ const StudentProfile = ({ student }: Props) => {
       values.skills.forEach((skill, index) => {
         formdata.append(`skills`, skill.value);
       });
-      if (values.file) formdata.append("file", values.file[0]);
+      if (values.file) {
+        formdata.append("file", values.file[0]);
+      }
 
       const response = await axiosInstance.put(
         "http://localhost:5000/internship/api/v1/students/update",
@@ -226,13 +233,27 @@ const StudentProfile = ({ student }: Props) => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[550px] h-[700px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[550px] h-[500px] max-w-[70vw] bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
               <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
+                <div
+                  className={cn(
+                    "flex flex-col w-full items-center space-y-6 col-span-3",
+                    update && "hidden"
+                  )}
+                >
+                  <FormLabel> Profile Photo</FormLabel>
+
+                  <img
+                    src={"data:image/jpg;charset=utf-8;base64," + image}
+                    height={100}
+                    width={100}
+                  />
+                </div>
                 <FormField
                   name={"name"}
                   control={form.control}
@@ -581,7 +602,7 @@ const StudentProfile = ({ student }: Props) => {
                       <FormControl>
                         <Input
                           className=" bg-slate-200 shadow-inner"
-                          disabled={isLoading}
+                          disabled={true}
                           placeholder="Enter Mentor Name "
                           type="text"
                           value={field.value}
@@ -630,31 +651,38 @@ const StudentProfile = ({ student }: Props) => {
                         />
                       </FormControl>
                       <FormDescription>
-                        <Link
-                          className=" text-blue-500 hover:underline"
-                          to={"data:image/jpg;charset=utf-8;base64," + image}
-                          target="_blank"
+                        <span
+                          className={cn(
+                            " text-blue-400 hover:underline cursor-pointer",
+                            imgaeOpen && "hidden"
+                          )}
+                          onClick={() => setImgaeOpen(true)}
                         >
-                          Click to view photo
-                        </Link>
+                          Click To {!imgaeOpen ? "View" : "Close"}
+                        </span>
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <div
-                  className={cn("flex flex-col space-y-6", update && "hidden")}
-                >
-                  <FormLabel> Profile Photo</FormLabel>
-                  {image && (
-                    <Link
-                      className=" text-blue-500 hover:underline"
-                      to={"data:image/jpg;charset=utf-8;base64," + image}
-                      target="_blank"
-                    >
-                      Click to view photo
-                    </Link>
+                  className={cn(
+                    "w-full justify-center items-center",
+                    imgaeOpen ? "flex" : "hidden"
                   )}
+                >
+                  <div className="relative flex">
+                    <X
+                      className="cursor-pointer -right-3 -top-3 absolute"
+                      onClick={() => setImgaeOpen(false)}
+                    />
+                    <img
+                      className={cn(" text-blue-500 hover:underline right-1/2")}
+                      src={"data:image/jpg;charset=utf-8;base64," + image}
+                      height={100}
+                      width={100}
+                    />
+                  </div>
                 </div>
               </div>
               {update && (

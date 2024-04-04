@@ -67,20 +67,30 @@
 }
 
 .sit {
-  background-image: url("/sit.png");
+  background: rgb(0, 211, 148);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 211, 148, 1) 0%,
+    rgba(19, 144, 184, 1) 50%,
+    rgba(0, 211, 148, 1) 100%
+  );
+}
+.default {
+  background-image: url("/default.jpg");
   background-size: cover;
   background-position: 0%;
   background-repeat: no-repeat;
-}
-.default {
-  background-color: rgb(229, 229, 244);
+  /* background-color: rgb(229, 229, 244); */
 }
 
 .sec {
-  background-image: url("/sec.png");
-  background-size: cover;
-  background-position: 0%;
-  background-repeat: no-repeat;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    135deg,
+    rgba(9, 9, 121, 1) 0%,
+    rgba(0, 82, 255, 1) 50%,
+    rgba(9, 9, 121, 1) 100%
+  );
 }
 
 .faculty {
