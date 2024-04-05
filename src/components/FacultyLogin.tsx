@@ -130,6 +130,9 @@ const FacultyLogin = () => {
           <div className="flex flex-col items-center w-full justify-center gap-3">
           Haven't Signed up yet? <Link to={"/signin"}><Button variant="primary" className="p-2">Sign in</Button></Link>
           </div>
+          <div className="flex flex-col items-center w-full justify-center gap-3">
+          Forgot password? <Link to={"/forgetpass"}><Button variant="primary" className="p-2">Click here</Button></Link>
+          </div>
         </CardFooter>
     </Card>
   );

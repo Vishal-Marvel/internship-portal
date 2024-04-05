@@ -4,7 +4,7 @@ import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { ThemeProvider, useTheme } from "./theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
-export const publicRoutes = ["/student/signin", "/faculty/signin", "/"]
+export const publicRoutes = ["/student/signin", "/faculty/signin", "/", "/forgetpass"]
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();

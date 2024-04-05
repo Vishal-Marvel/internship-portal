@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "@/pages/login";
+import ForgetPassword from "@/pages/forgetPassword";
 import { Providers } from "@/providers/Provider";
 import Dashboard from "@/pages/dashboard";
 import AddInternshipPage from "@/pages/student/addInternship";
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/forgetpass" element={<ForgetPassword />} />
               <Route
                 path="/student/addInternship"
                 element={<AddInternshipPage />}
