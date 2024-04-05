@@ -30,7 +30,7 @@ import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { Student } from "@/schema";
+import { Internship, Student } from "@/schema";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import { cn } from "@/lib/utils";
