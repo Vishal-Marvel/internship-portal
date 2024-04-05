@@ -1,13 +1,13 @@
 import StudentInternship from "@/components/StudentInternship";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
-import { Student } from "@/schema";
+import { Internship} from "@/schema";
 import React, { useEffect, useState } from "react";
 
 const ViewInternshipPage = () => {
-  const [internship, setInternship] = useState<Student>();
+  const [internship, setInternship] = useState<Internship>();
   const { token, isTokenExpired } = useSession();
-  const getStudent = async () => {
+  const getInternship = async () => {
     if (token && !isTokenExpired()) {
       try {
         const response = await axiosInstance.get(
@@ -18,17 +18,17 @@ const ViewInternshipPage = () => {
             },
           }
         );
-        setStudent(response.data.data.student);
+        setInternship(response.data.data.internship);
       } catch (error) {
         console.log(error);
       }
     }
   };
   useEffect(() => {
-    getStudent();
+    getInternship();
   }, []);
   return <div>
-    <StudentInternship internship={student}/>
+    <StudentInternship internship={internship}/>
 
   </div>;
 };

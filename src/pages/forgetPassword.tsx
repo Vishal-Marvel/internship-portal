@@ -151,9 +151,9 @@ const forgetPassword = () => {
                                                 <InputOTPSlot index={0} />
                                                 <InputOTPSlot index={1} />
                                                 <InputOTPSlot index={2} />
-                                            </InputOTPGroup>
+                                            {/* </InputOTPGroup>
                                             <InputOTPSeparator />
-                                            <InputOTPGroup>
+                                            <InputOTPGroup> */}
                                                 <InputOTPSlot index={3} />
                                                 <InputOTPSlot index={4} />
                                                 <InputOTPSlot index={5} />
@@ -216,7 +216,7 @@ const forgetPassword = () => {
                         </div>
                         <div className="grid w-full items-center gap-10 ">
                             <Button  disabled={isLoading} variant="primary">
-                                Send OTP
+                                Reset Password
                             </Button>
                         </div>
                     </form>
