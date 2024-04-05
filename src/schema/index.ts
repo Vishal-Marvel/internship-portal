@@ -53,9 +53,6 @@ export interface Internship {
   approval_status: string;
   internship_status: string;
   student_id: string;
+  student:string;
 }
 
-export type StudentInternship = {
-  student: Student;
-  internship: Internship;
-};

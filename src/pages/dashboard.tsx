@@ -1,7 +1,8 @@
-import ViewInternship from "@/components/ViewInternship";
+import { columns } from "@/components/view-internship/columns";
+import { DataTable } from "@/components/view-internship/data-table";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
-import { Internship, Student, StudentInternship } from "@/schema";
+import { Internship, Student } from "@/schema";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
@@ -9,7 +10,6 @@ const Dashboard = () => {
   if (role && role.includes("student")) {
     const [internship, setInternship] = useState<Internship[]>([]);
     const [student, setStudent] = useState<Student>();
-    const [data, setData] = useState<StudentInternship[]>();
 
     const getData = async () => {
       try {
@@ -41,17 +41,17 @@ const Dashboard = () => {
     }, []);
     useEffect(() => {
       if (student && internship.length>0){
-        const mergedData : StudentInternship[] = internship.map(internshipData=>({
-          student,
-          internship: internshipData
+        const added:Internship[] = internship.map(internshipData=>({
+         ...internshipData, student: student.student_id
         }))
-        setData(mergedData)
+        setInternship(added)
+
       }
     }, [internship, student]);
 
     return (
       <div className="grid place-items-center w-full">
-        <ViewInternship data={data} />
+        <DataTable data={internship} columns={columns} />
       </div>
     );
   } else {
