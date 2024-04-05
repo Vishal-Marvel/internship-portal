@@ -4,8 +4,9 @@ import { Providers } from "@/providers/Provider";
 import Dashboard from "@/pages/dashboard";
 import AddInternshipPage from "@/pages/student/addInternship";
 import Navbar from "@/components/Navbar";
-import ViewProfilePage from "@/pages/student/viewProfile";
+import ViewProfilePage from "@/pages/viewProfile";
 import StudentSignIn from "./components/StudentSignIn";
+import FacultySignIn from "./components/FacultySignIn";
 
 function App() {
   return (
@@ -21,8 +22,9 @@ function App() {
                 path="/student/addInternship"
                 element={<AddInternshipPage />}
               />
-              <Route path="/student/profile" element={<ViewProfilePage />} />
+              <Route path="/profile" element={<ViewProfilePage />} />
               <Route path="/student/signin" element={<StudentSignIn />} />
+              <Route path="/faculty/signin" element={<FacultySignIn />} />
             </Routes>
           </div>
         </div>

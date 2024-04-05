@@ -50,8 +50,9 @@ const formSchema = z.object({
   student_id: z
     .string()
     .refine((str) => {
-      const regex = /^(?:SEC|SIT|SECL|SITL)\d{2}[A-Z]{0,3}\d{3}$/;
-      return regex.test(str);
+      const regex = /^(?:SEC|SIT)\d{2}[A-Z]{0,3}\d{3}$/;
+      const regexL = /^(?:SECL|SITL)\d{2}[A-Z]{0,3}\d{2}$/;
+      return regex.test(str) || regexL.test(str);
     }, "Student Id Format Incorrect")
     .default(""),
   batch: z.string().min(1, "Batch is Required").default(""),
@@ -146,7 +147,7 @@ const StudentSignIn = () => {
       form.getValues("student_id") &&
       form.getValues("student_id").length > 0
     ) {
-      form.setValue("student_id", form.getValues("student_id").toUpperCase());
+      form.setValue("student_id", form.getValues("student_id").toLowerCase());
     }
   }, [form.watch("student_id")]);
 
@@ -189,8 +190,7 @@ const StudentSignIn = () => {
       values.skills.forEach((skill, index) => {
         formdata.append(`skills`, skill.value);
       });
-      if (values.file)
-      formdata.append("file", values.file[0]);
+      if (values.file) formdata.append("file", values.file[0]);
 
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/students/signup",

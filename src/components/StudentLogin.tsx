@@ -46,7 +46,7 @@ const StudentLogin = () => {
 
   useEffect(() => {
     if (form.getValues("email") && form.getValues("email").length>=0)
-    form.setValue("email", form.getValues("email").toUpperCase());
+    form.setValue("email", form.getValues("email").toLowerCase());
   }, [form.watch("email")]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -55,7 +55,7 @@ const StudentLogin = () => {
         "http://localhost:5000/internship/api/v1/students/login",
         { email: values.email + "@sairamtap.edu.in", password: values.password }
       );
-      setSession(response.data.data.token, response.data.data.roles);
+      setSession(response.data.data.token, response.data.data.roles, response.data.data.clg);
       setTheme(response.data.data.clg);
       form.reset();
 
