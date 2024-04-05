@@ -1,3 +1,5 @@
+import { CircleCheckBig, Info, CircleHelp, SquareCheck, CircleX } from "lucide-react";
+
 export interface Student {
   id: string;
   name: string;
@@ -55,4 +57,39 @@ export interface Internship {
   student_id: string;
   student:string;
 }
+
+export const approvalStatuses = [
+  {
+    value: "Approved",
+    label: "Approved",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "Not Approved",
+    label: "Not Approved",
+    icon: Info,
+  },
+  {
+    value: "Sent Back",
+    label: "Sent Back",
+    icon: CircleHelp,
+  },
+];
+export const internshipStatuses = [
+  {
+    value: "Completed",
+    label: "Completed",
+    icon: SquareCheck,
+  },
+  {
+    value: "Not Completed",
+    label: "Not Completed",
+    icon: CircleX,
+  },
+];
+export const noOfDays = [
+  { value: 15, label: "15" },
+  { value: 30, label: "30" },
+  { value: 45, label: "45" },
+];
 

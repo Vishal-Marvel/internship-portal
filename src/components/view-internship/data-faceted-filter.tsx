@@ -25,8 +25,8 @@ interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
   options: {
-    label: string 
-    value: string 
+    label: string
+    value: string
     icon?: React.ComponentType<{ className?: string }>
   }[]
 }
@@ -43,7 +43,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 border-dashed">
-          
+          <CirclePlus className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
             <>
@@ -93,16 +93,15 @@ export function DataTableFacetedFilter<TData, TValue>({
                     key={option.value}
                     onSelect={() => {
                       if (isSelected) {
-                        selectedValues.delete(option.value);
+                        selectedValues.delete(option.value)
                       } else {
-                        selectedValues.add(option.value);
+                        selectedValues.add(option.value)
                       }
-                      const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue({
-                        value: filterValues.length ? filterValues : undefined,
-                      });
+                      const filterValues = Array.from(selectedValues)
+                      column?.setFilterValue(
+                        filterValues.length ? filterValues : undefined
+                      )
                     }}
-                    
                   >
                     <div
                       className={cn(

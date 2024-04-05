@@ -1,13 +1,4 @@
-"use client";
-
-import {
-  CircleCheckBig,
-  CircleHelp,
-  CircleX,
-  Info,
-  SquareCheck,
-  X,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
 import { DataTableViewOptions } from "@/components/view-internship/data-view-options";
@@ -16,6 +7,7 @@ import { DataTableFacetedFilter } from "@/components/view-internship/data-facete
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/providers/context/SessionContext";
+import { approvalStatuses, internshipStatuses, noOfDays } from "@/schema";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -26,49 +18,17 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const { role } = useSession();
-  const approvalStatuses = [
-    {
-      value: "Approved",
-      label: "Approved",
-      icon: CircleCheckBig,
-    },
-    {
-      value: "Not Approved",
-      label: "Not Approved",
-      icon: Info,
-    },
-    {
-      value: "Sent Back",
-      label: "Sent Back",
-      icon: CircleHelp,
-    },
-  ];
-  const internshipStatuses = [
-    {
-      value: "Completed",
-      label: "Completed",
-      icon: SquareCheck,
-    },
-    {
-      value: "Not Completed",
-      label: "Not Completed",
-      icon: CircleX,
-    },
-  ];
-  const noOfDays = [
-    { value: 15, label: "15" },
-    { value: 30, label: "30" },
-    { value: 45, label: "45" },
-  ];
+
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
+      <div className="flex flex-1 md:items-center items-start space-y-2 space-x-2 flex-col md:flex-row ">
         <Input
           placeholder="Filter Company Name..."
-          value={table.getColumn("company_name")?.getFilterValue() as string}
-          onChange={(event) =>
-            table.getColumn("company_name")?.setFilterValue(event.target.value)
-          }
+          // value={table.getColumn("company_name")?.getFilterValue() as string}
+          onChange={(event) => {
+            table.getColumn("company_name")?.setFilterValue(event.target.value);
+            table.getColumn("student")?.setFilterValue(event.target.value);
+          }}
           className="max-w-sm bg-slate-300 shadow-inner"
         />
         {table.getColumn("approval_status") && (
@@ -78,10 +38,11 @@ export function DataTableToolbar<TData>({
             options={approvalStatuses}
           />
         )}
-        {/* {table.getColumn("no_of_days") && (
+        {table.getColumn("no_of_days") && (
           <DataTableFacetedFilter
             column={table.getColumn("no_of_days")}
             title="Number Of Days"
+            //@ts-ignore
             options={noOfDays}
           />
         )}
@@ -91,7 +52,7 @@ export function DataTableToolbar<TData>({
             title="Internship Status"
             options={internshipStatuses}
           />
-        )} */}
+        )}
         {isFiltered && (
           <Button
             variant="ghost"
