@@ -1,12 +1,11 @@
-
 import { createContext, useContext } from "react";
 
 interface SessionContextType {
   token: string | null;
   role: string | null;
-  setSession: (token: string, role:string) => void;
+  setSession: (token: string, role: string, clg:string) => void;
   clearSession: () => void;
-  isTokenExpired: () => boolean| null;
+  isTokenExpired: () => boolean | null;
 }
 
 export const SessionContext = createContext<SessionContextType>({
@@ -17,4 +16,11 @@ export const SessionContext = createContext<SessionContextType>({
   isTokenExpired: () => false,
 });
 
-export const useSession = () => useContext(SessionContext);
+export const useSession = () => {
+  const context = useContext(SessionContext);
+
+  if (context === undefined)
+    throw new Error("useSession must be used within a SessionProvider");
+
+  return context;
+};

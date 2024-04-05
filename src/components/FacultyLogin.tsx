@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,6 +28,7 @@ import PasswordInput from "./PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
 import { useTheme } from "@/providers/theme-provider";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }),
@@ -43,13 +50,18 @@ const FacultyLogin = () => {
   });
   const isLoading = form.formState.isSubmitting;
 
+  useEffect(() => {
+    if (form.getValues("email") && form.getValues("email").length>=0)
+    form.setValue("email", form.getValues("email").toLowerCase());
+  }, [form.watch("email")]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/staffs/login",
         { email: values.email + "@sairam.edu.in", password: values.password }
       );
-      setSession(response.data.data.token, response.data.data.roles);
+      setSession(response.data.data.token, response.data.data.roles, "faculty");
       setTheme("faculty");
       form.reset();
 
@@ -127,13 +139,15 @@ const FacultyLogin = () => {
         </Form>
       </CardContent>
       <CardFooter>
-          <div className="flex flex-col items-center w-full justify-center gap-3">
-          Haven't Signed up yet? <Link to={"/signin"}><Button variant="primary" className="p-2">Sign in</Button></Link>
-          </div>
-          <div className="flex flex-col items-center w-full justify-center gap-3">
-          Forgot password? <Link to={"/forgetpass"}><Button variant="primary" className="p-2">Click here</Button></Link>
-          </div>
-        </CardFooter>
+        <div className="flex flex-col items-center w-full justify-center gap-3">
+          Haven't Signed up yet?{" "}
+          <Link to={"/faculty/signin"}>
+            <Button variant="primary" className="p-2">
+              Sign in
+            </Button>
+          </Link>
+        </div>
+      </CardFooter>
     </Card>
   );
 };

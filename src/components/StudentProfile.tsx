@@ -651,6 +651,10 @@ const StudentProfile = ({ student }: Props) => {
                         />
                       </FormControl>
                       <FormDescription>
+                        Upload only image files, file size should be less than
+                        512 kb
+                      </FormDescription>
+                      <FormDescription>
                         <span
                           className={cn(
                             " text-blue-400 hover:underline cursor-pointer",

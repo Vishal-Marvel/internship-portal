@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "sit" | "sec" | "faculty" | "default";
+export type Theme = "sit" | "sec" | "faculty" | "default";
 
 type ThemeProviderProps = {
   children: React.ReactNode;

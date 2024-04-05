@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SessionContext } from "@/providers/context/SessionContext";
 import { redirect, useLocation, useNavigate } from "react-router-dom";
-import { ThemeProvider, useTheme } from "./theme-provider";
+import { Theme, ThemeProvider, useTheme } from "./theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const publicRoutes = ["/student/signin", "/faculty/signin", "/", "/forgetpass"]
@@ -12,6 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [clg, setClg] = useState<Theme | null>(null);
 
 
   useEffect(() => {
@@ -23,31 +24,44 @@ export function Providers({ children }: { children: React.ReactNode }) {
     if (pathname == "/") {
       if (token) navigate("/dashboard");
     }
+
+    if (role && role.includes("student")){
+      setTheme(clg)
+    }
   }, [pathname, token]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
+    const storedClg = localStorage.getItem("clg");
     if (storedToken) {
       setToken(storedToken);
+    }
+    if (storedClg) {
+      //@ts-ignore
+      setClg(storedClg);
     }
     if (storedRole) {
       setRole(storedRole);
     }
   }, []);
 
-  const setSession = (newToken: string, newRole: string) => {
-    const exp = JSON.parse(atob(newToken.split(".")[1]));
+  const setSession = (newToken: string, newRole: string, newClg: string) => {
     localStorage.setItem("token", newToken);
+    localStorage.setItem("clg", newClg);
     localStorage.setItem("role", newRole);
     setToken(newToken);
     setRole(newRole);
+    //@ts-ignore
+    setClg(newClg)
   };
 
   const clearSession = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("clg")
     setToken(null);
+    setClg(null)
     setRole(null);
     redirect("/");
   };

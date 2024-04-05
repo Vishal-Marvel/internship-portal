@@ -43,7 +43,7 @@ const formSchema = z.object({
   company_address: z.string().min(1, "Company Address is Required").default(""),
   company_ph_no: z
     .string()
-    .min(1, "Company Phone Number is Required")
+    .refine(str=>str.length==10, "Company Phone Number is Invalid")
     .default(""),
   cin_gst_udyog: z.string().min(1, "CIN/GST/UDYOG is Required").default(""),
   cin_gst_udyog_no: z
@@ -56,7 +56,7 @@ const formSchema = z.object({
     .default(""),
   industry_supervisor_ph_no: z
     .string()
-    .min(1, "Inturtry Supervisor Phone Number is Required")
+    .refine(str=>str.length==10, "Inturtry Supervisor Phone Number is Invalid")
     .default(""),
   industry_supervisor_email: z
     .string()
@@ -88,6 +88,18 @@ const AddStudentInternship = () => {
   const [mode, setMode] = useState("");
   const fileRef = form.register("file");
   const [cin_gst_udyog, setcin_gst_udyog] = useState<string>();
+  const [years, setYears] = useState<string[]>([]);
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
+    const endYear = startYear + 1;
+
+    const financialYear = `${startYear}-${endYear}`;
+
+    setYears([financialYear]);
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -184,7 +196,7 @@ const AddStudentInternship = () => {
                 <div className="gap-4 flex flex-col w-full">
                   <span className="text-xl font-semibold">Company Details</span>
                   <div className="grid md:grid-cols-2 grid-cols-1 gap-8 md:pl-3 items-center">
-                    <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
+                    <div className="grid lg:grid-cols-2 grid-cols-1 gap-8">
                       <FormField
                         disabled={isLoading}
                         name={"company_name"}
@@ -238,8 +250,8 @@ const AddStudentInternship = () => {
                               disabled={isLoading}
                               onValueChange={field.onChange}
                             >
-                              <SelectTrigger className=" bg-slate-200 shadow-inner items-start">
-                                <SelectValue placeholder="Select a CIN/GST/UDYOG" />
+                              <SelectTrigger className=" bg-slate-200 shadow-inner">
+                                <SelectValue placeholder="Select CIN/GST/UDYOG" />
                               </SelectTrigger>
 
                               <SelectContent>
@@ -269,7 +281,7 @@ const AddStudentInternship = () => {
                                 className=" bg-slate-200 shadow-inner"
                                 disabled={isLoading}
                                 placeholder={`Enter ${
-                                  cin_gst_udyog || "CIN/GST/UDYOG"
+                                  (cin_gst_udyog && cin_gst_udyog.toUpperCase()) || "CIN/GST/UDYOG"
                                 } Number`}
                                 {...field}
                               />
@@ -288,7 +300,7 @@ const AddStudentInternship = () => {
                           <FormLabel>Company Address</FormLabel>
                           <FormControl>
                             <Textarea
-                              className=" bg-slate-200 shadow-inner md:min-h-[150px] md:max-h-[150px] min-h-[100px] max-h-[100px]"
+                              className=" bg-slate-200 shadow-inner lg:min-h-[150px] lg:max-h-[150px] md:min-h-[300px] md:max-h-[300px]  min-h-[100px] max-h-[100px]"
                               disabled={isLoading}
                               placeholder="Enter Company Address"
                               {...field}
@@ -304,7 +316,7 @@ const AddStudentInternship = () => {
                   <span className="text-xl font-semibold">
                     Industry Supervisor Details
                   </span>
-                  <div className="grid md:grid-cols-3 grid-cols-1 gap-8 md:pl-3 items-center">
+                  <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 md:pl-3 items-center">
                     <FormField
                       disabled={isLoading}
                       name={"industry_supervisor_name"}
@@ -372,7 +384,7 @@ const AddStudentInternship = () => {
                   <span className="text-xl font-semibold">
                     Academic & Internship Details
                   </span>
-                  <div className="grid md:grid-cols-3 grid-cols-1 gap-8 md:pl-3 items-center">
+                  <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 md:pl-3 items-center">
                     <FormField
                       disabled={isLoading}
                       name={"current_cgpa"}
@@ -414,12 +426,12 @@ const AddStudentInternship = () => {
 
                               <SelectContent>
                                 <SelectGroup>
-                                  <SelectItem value="2024-2025">
-                                    2024-2025 (current)
-                                  </SelectItem>
-                                  <SelectItem value="2023-2024">
-                                    2023-2024 (previous)
-                                  </SelectItem>
+                                  {years &&
+                                    years.map((year, index) => (
+                                      <SelectItem value={year} key={index}>
+                                        {year}
+                                      </SelectItem>
+                                    ))}
                                 </SelectGroup>
                               </SelectContent>
                             </Select>

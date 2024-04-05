@@ -14,12 +14,13 @@ import { Loader2, Pencil, PlusCircle } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/providers/theme-provider";
+import { Staff, Student } from "@/schema";
 
 const UserButton = ({ setClose }: { setClose?: () => void }) => {
   const [isMounted, setIsMounted] = useState(false);
-  const { token, clearSession, role } = useSession();
+  const { token, clearSession, role, isTokenExpired } = useSession();
   //@ts-ignore
-  const [response, setResponse] = useState<UserData>();
+  const [response, setResponse] = useState<Student | Staff>();
   const [image, setImage] = useState<string>("");
   const [open, setOpen] = useState(false);
   const router = useNavigate();
@@ -27,19 +28,35 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
 
   const getData = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/viewStudent",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      setResponse(response.data.data.student);
-    } catch (error) {
-      if (error.response.data.message == "User does not exist") clearSession();
+      if (isTokenExpired())
+      return;
+      if (role && role.includes("student")) {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/students/viewStudent",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setResponse(response.data.data.student);
+      } else {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/staffs/viewStaff",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setResponse(response.data.data.staff);
+      }
 
-      // console.error(error);
+      // setResponse(response.data.data.student);
+    } catch (error) {
+      // if (error.response.data.message == "User does not exist") clearSession();
+
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -103,7 +120,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
           <PopoverTrigger>
             <Avatar className="border-2 border-gray-300">
               <AvatarImage
-              className="object-cover"
+                className="object-cover"
                 src={"data:image/jpeg;charset=utf-8;base64," + image}
               />
               <AvatarFallback>
@@ -113,7 +130,12 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
           </PopoverTrigger>
           <PopoverContent>
             <div className="w-full flex flex-col gap-3 items-center">
-              <img src={"data:image/jpeg;charset=utf-8;base64," + image} height={100} width={100} className="rounded-full shadow-xl"/>
+              <img
+                src={"data:image/jpeg;charset=utf-8;base64," + image}
+                height={100}
+                width={100}
+                className="rounded-full shadow-xl"
+              />
               <div>
                 <span>{response?.name}</span>
                 {" - "}
@@ -121,23 +143,21 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
                   {response?.email}
                 </span>
               </div>
-              {role && role.includes("student") && (
-                <Link
-                  to={"/student/profile"}
-                  className="w-full"
-                  onClick={() => {
-                    if (setClose) setClose();
-                    setOpen(false);
-                  }}
+              <Link
+                to={"/profile"}
+                className="w-full"
+                onClick={() => {
+                  if (setClose) setClose();
+                  setOpen(false);
+                }}
+              >
+                <Button
+                  variant={"secondary"}
+                  className="w-full flex gap-2 bg-gray-200"
                 >
-                  <Button
-                    variant={"secondary"}
-                    className="w-full flex gap-2 bg-gray-200"
-                  >
-                    View Profile
-                  </Button>
-                </Link>
-              )}
+                  View Profile
+                </Button>
+              </Link>
 
               <Link
                 to={"/auth/resetPassword"}
