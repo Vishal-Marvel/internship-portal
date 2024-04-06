@@ -35,7 +35,7 @@ export function ThemeProvider({
     if (root) {
       root.classList.remove("sit", "sec", "faculty", "default");
 
-      root.classList.add(theme);
+      root.classList.add(theme, "light");
     }
   }, [theme]);
 

@@ -61,7 +61,7 @@ const FacultyLogin = () => {
         "http://localhost:5000/internship/api/v1/staffs/login",
         { email: values.email + "@sairam.edu.in", password: values.password }
       );
-      setSession(response.data.data.token, response.data.data.roles, "faculty");
+      setSession(response.data.data.token, response.data.data.roles.toString(), "faculty");
       setTheme("faculty");
       form.reset();
 

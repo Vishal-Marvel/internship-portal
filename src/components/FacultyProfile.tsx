@@ -187,7 +187,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
               <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
                 <div
                   className={cn(
-                    "flex flex-col w-full items-center space-y-6 col-span-3",
+                    "flex flex-col w-full items-center space-y-6 lg:col-span-3 md:col-span-2 col-span-1",
                     update && "hidden"
                   )}
                 >

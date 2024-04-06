@@ -4,9 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { publicRoutes } from "@/providers/Provider";
+import { useSession } from "@/providers/context/SessionContext";
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const { role } = useSession();
   return (
     <div
       className={cn(
@@ -30,18 +32,64 @@ const Navbar = () => {
                 Dashboard
               </Button>
             </Link>
-            <Link
-              to={"/student/addInternship"}
-              className={cn(
-                pathname == "/student/addInternship" &&
-                  "bg-slate-300/80 text-black rounded-lg ",
-                "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
-              )}
-            >
-              <Button className=" uppercase" variant="link">
-                Add Internship
-              </Button>
-            </Link>
+            {role?.includes("student") && (
+              <Link
+                to={"/student/addInternship"}
+                className={cn(
+                  pathname == "/student/addInternship" &&
+                    "bg-slate-300/80 text-black rounded-lg ",
+                  "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                )}
+              >
+                <Button className=" uppercase" variant="link">
+                  Add Internship
+                </Button>
+              </Link>
+            )}
+            {!role?.includes("student") && (
+              <>
+                {(role?.includes("hod") ||
+                  role?.includes("principal") ||
+                  role?.includes("ceo") ) && (
+                  <Link
+                    to={"/faculties"}
+                    className={cn(
+                      pathname == "/faculties" &&
+                        "bg-slate-300/80 text-black rounded-lg ",
+                      "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                    )}
+                  >
+                    <Button className=" uppercase" variant="link">
+                      View Faculties
+                    </Button>
+                  </Link>
+                )}
+                <Link
+                  to={"/students"}
+                  className={cn(
+                    pathname == "/students" &&
+                      "bg-slate-300/80 text-black rounded-lg ",
+                    "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                  )}
+                >
+                  <Button className=" uppercase" variant="link">
+                    View Students
+                  </Button>
+                </Link>
+                <Link
+                  to={"/studentInternships"}
+                  className={cn(
+                    pathname == "/studentInternships" &&
+                      "bg-slate-300/80 text-black rounded-lg ",
+                    "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                  )}
+                >
+                  <Button className=" uppercase" variant="link">
+                    View Student Internships
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
           <UserButton />
         </div>

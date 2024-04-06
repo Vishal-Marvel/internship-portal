@@ -1,4 +1,11 @@
-import { CircleCheckBig, Info, CircleHelp, SquareCheck, CircleX } from "lucide-react";
+import {
+  CircleCheckBig,
+  Info,
+  CircleHelp,
+  SquareCheck,
+  CircleX,
+  CircleMinus,
+} from "lucide-react";
 
 export interface Student {
   id: string;
@@ -55,7 +62,7 @@ export interface Internship {
   approval_status: string;
   internship_status: string;
   student_id: string;
-  student:string;
+  student: Student;
 }
 
 export const approvalStatuses = [
@@ -74,6 +81,11 @@ export const approvalStatuses = [
     label: "Sent Back",
     icon: CircleHelp,
   },
+  {
+    value: "Rejected",
+    label: "Rejected",
+    icon: CircleMinus,
+  },
 ];
 export const internshipStatuses = [
   {
@@ -86,6 +98,23 @@ export const internshipStatuses = [
     label: "Not Completed",
     icon: CircleX,
   },
+  {
+    value: "Rejected",
+    label: "Rejected",
+    icon: CircleMinus,
+  },
+];
+export const placement_statuses = [
+  {
+    value: "Placed",
+    label: "Placed",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "Not Placed",
+    label: "Not Placed",
+    icon: CircleX,
+  },
 ];
 export const noOfDays = [
   { value: 15, label: "15" },
@@ -93,3 +122,27 @@ export const noOfDays = [
   { value: 45, label: "45" },
 ];
 
+export const sections = [
+  { value: "A", label: "A" },
+  { value: "B", label: "B" },
+  { value: "C", label: "C" },
+  { value: "D", label: "D" },
+  { value: "E", label: "E" },
+];
+
+export interface FileType {
+  file: string;
+  fileName: string;
+}
+
+export interface ApprovalStatus {
+  id: string;
+  mentor: boolean;
+  internshipcoordinator: boolean;
+  hod: boolean;
+  tapcell: boolean;
+  principal: boolean;
+  comments: string;
+  internship_id: string;
+  rejectedBy: string;
+}

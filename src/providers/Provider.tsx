@@ -3,8 +3,20 @@ import { SessionContext } from "@/providers/context/SessionContext";
 import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { Theme, ThemeProvider, useTheme } from "./theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ModalProvider } from "./model-provider";
 
-export const publicRoutes = ["/student/signin", "/faculty/signin", "/", "/forgetpass"]
+export const publicRoutes = [
+  "/student/signin",
+  "/faculty/signin",
+  "/",
+  "/forgetpass",
+];
+
+export const facultyRoutes = [
+  "/faculties", 
+  "/students",
+  "/studentInternships"
+]
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -13,7 +25,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [clg, setClg] = useState<Theme | null>(null);
-
 
   useEffect(() => {
     isTokenExpired();
@@ -25,8 +36,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       if (token) navigate("/dashboard");
     }
 
-    if (role && role.includes("student")){
-      setTheme(clg)
+    if (facultyRoutes.includes(pathname) && role?.includes("student")){
+      navigate("/")
     }
   }, [pathname, token]);
 
@@ -53,20 +64,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
     setToken(newToken);
     setRole(newRole);
     //@ts-ignore
-    setClg(newClg)
+    setClg(newClg);
   };
 
   const clearSession = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("clg")
+    localStorage.removeItem("clg");
     setToken(null);
-    setClg(null)
+    setClg(null);
     setRole(null);
     redirect("/");
   };
-
-
 
   const isTokenExpired = () => {
     if (token) {
@@ -97,7 +106,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <Toaster position="top-right" />
 
-      <ThemeProvider defaultTheme="default">{children}</ThemeProvider>
+      <ThemeProvider defaultTheme="default">
+        <ModalProvider />
+        {children}
+      </ThemeProvider>
     </SessionContext.Provider>
   );
 }

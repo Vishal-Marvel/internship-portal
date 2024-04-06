@@ -1,28 +1,27 @@
-import { columns } from "@/components/view-internship/columns";
-import { DataTable } from "@/components/view-internship/data-table";
+import { DashBoardChart } from "@/components/DashBoardChart";
 import axiosInstance from "@/lib/axios";
+import { cn } from "@/lib/utils";
 import { useSession } from "@/providers/context/SessionContext";
-import { Internship, Student } from "@/schema";
+import { Student } from "@/schema";
 import { useEffect, useState } from "react";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import ViewInternships from "@/components/ViewInternships";
 
 const Dashboard = () => {
   const { token, role, isTokenExpired } = useSession();
+
   if (role && role.includes("student")) {
-    const [internship, setInternship] = useState<Internship[]>([]);
     const [student, setStudent] = useState<Student>();
+    const [visible, setVisible] = useState(true);
 
     const getData = async () => {
       try {
         if (isTokenExpired()) return;
-        const response = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/students/internships",
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        setInternship(response.data.data.internshipDetails);
+
         const studentResponse = await axiosInstance.get(
           "http://localhost:5000/internship/api/v1/students/viewStudent",
           {
@@ -40,22 +39,88 @@ const Dashboard = () => {
       getData();
     }, []);
     useEffect(() => {
-      if (student && internship.length>0){
-        const added:Internship[] = internship.map(internshipData=>({
-         ...internshipData, student: student.student_id
-        }))
-        setInternship(added)
-
-      }
-    }, [internship, student]);
+      const timer = setTimeout(() => setVisible(false), 3000);
+      return () => clearTimeout(timer);
+    }, []);
 
     return (
-      <div className="grid place-items-center w-full">
-        <DataTable data={internship} columns={columns} />
+      <div className="flex justify-center items-center w-full gap-5 ">
+        <div
+          className={cn(
+            !visible ? "hidden " : "h-[570px] w-[500px]",
+            " text-center bg-white/80 p-4 rounded-lg m-2 transition-all duration-700 ease-in"
+          )}
+        >
+          <span>Number of Days Completed</span>
+          {student && (
+            <DashBoardChart
+              datas={[
+                student?.total_days_internship,
+                45 - Number(student?.total_days_internship),
+              ]}
+              labels={["Completed", "Remaining"]}
+            />
+          )}
+        </div>
+        <div className={cn("gap-5", !visible ? "flex items-center" : "hidden")}>
+          <div className="lg:block hidden">
+            <ResizablePanelGroup
+              direction="vertical"
+              className={cn(
+                "lg:min-h-[70vh]  rounded-lg lg:block hidden max-w-[270px]"
+              )}
+            >
+              <ResizablePanel
+                defaultSize={50}
+                className="lg:min-w-[200px] lg:flex hidden justify-center"
+              >
+                <div
+                  className={cn(
+                    "h-[250px] w-[200px] text-center bg-white/80 p-4 rounded-lg m-2 transition-all duration-700 ease-in"
+                  )}
+                >
+                  <span>Number of Days Completed</span>
+                  {student && (
+                    <DashBoardChart
+                      datas={[
+                        student?.total_days_internship,
+                        45 - Number(student?.total_days_internship),
+                      ]}
+                      labels={["Completed", "Remaining"]}
+                    />
+                  )}
+                </div>
+              </ResizablePanel>
+              <ResizableHandle
+                withHandle
+                className="lg:flex hidden bg-slate-700 w-fit"
+              />
+              <ResizablePanel defaultSize={50} className="lg:block hidden">
+                <div
+                  className={cn(
+                    "h-[250px] w-[250px]  text-center bg-white/80 p-4 rounded-lg m-2 transition-all duration-700 ease-in"
+                  )}
+                >
+                  <span>Notifications</span>
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </div>
+
+          <div className="h-full flex flex-1 flex-col items-center justify-center">
+            <div
+              className={cn(
+                visible && "hidden",
+                "transition-all duration-100 ease-in "
+              )}
+            >
+              <ViewInternships />
+            </div>
+          </div>
+        </div>
       </div>
     );
   } else {
-    return <div className="grid place-items-center w-full"></div>;
   }
 };
 

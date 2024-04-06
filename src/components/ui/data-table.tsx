@@ -1,6 +1,4 @@
-"use client"
-
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,11 +8,11 @@ import {
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
+  
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -23,57 +21,65 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { DataTablePagination } from "@/components/view-internship/data-pagination"
-import { DataTableToolbar } from "@/components/view-internship/data-toolbar"
-import { useSession } from "@/providers/context/SessionContext"
+import { DataTableToolbar } from "@/components/ui/data-table/data-toolbar";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  visibleColumns: VisibilityState;
+  type: "internship" | "student" | "faculty"
+
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  type, 
+  visibleColumns
 }: DataTableProps<TData, TValue>) {
-  const {role} = useSession();
-    const isStudent = role?.includes("student");
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({"student": !isStudent})
-    
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(visibleColumns)
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [globalFilter, setGlobalFilter] = React.useState("")
 
+  React.useEffect(() => {
+    setColumnVisibility(visibleColumns)
+  }, [visibleColumns]);
+
+ 
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange:setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFilteredRowModel: getFilteredRowModel(),    
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter
+
+    },
   })
 
   return (
-    <div className="space-y-4 bg-white/80 p-3 rounded-lg">
-      <DataTableToolbar table={table} />
+    <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
+      <span className="capitalize font-semibold font-sans text-xl">{type}</span>
+      <DataTableToolbar table={table} type={type}/>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -89,7 +95,7 @@ export function DataTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -113,10 +119,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className=" text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -124,7 +127,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      {/* <DataTablePagination table={table} /> */}
     </div>
-  )
+  );
 }
