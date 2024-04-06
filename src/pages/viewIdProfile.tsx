@@ -3,8 +3,10 @@ import StudentProfile from "@/components/StudentProfile";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Staff, Student } from "@/schema";
+import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const ViewIdProfilePage = () => {
   const {id, type} = useParams();
@@ -36,7 +38,12 @@ const ViewIdProfilePage = () => {
           setStaff(response.data.data.staff);
         }
       } catch (error) {
-        console.log(error);
+        toast(
+          <>
+            <AlertCircle />
+            {error.response.data.message}
+          </>
+        );
       }
     }
   };

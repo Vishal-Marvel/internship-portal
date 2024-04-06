@@ -2,8 +2,10 @@ import StudentInternship from "@/components/StudentInternship";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Internship } from "@/schema";
+import { AlertCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const ViewInternshipPage = () => {
   const { id } = useParams();
@@ -27,7 +29,12 @@ const ViewInternshipPage = () => {
         );
         setInternship(response.data.data.internshipDetails);
       } catch (error) {
-        console.log(error);
+        toast(
+          <>
+            <AlertCircle />
+            {error.response.data.message}
+          </>
+        );
       }
     }
   };

@@ -5,6 +5,8 @@ import { VisibilityState } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { internshipColumns } from "./data-table-cols/internship-columns";
 import { DataTable } from "./ui/data-table";
+import { AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 function isMobileView() {
   if (window) {
@@ -33,12 +35,9 @@ const ViewInternships = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const [internship, setInternship] = useState<Internship[]>([]);
-  const [student, setStudent] = useState<Student>();
   const [data, setData] = useState<Internship[]>([]);
-  const [visible, setVisible] = useState(true);
   const visibleColumns: VisibilityState = {
-    student_id: !role.includes("student"),
+    student_id: !role?.includes("student"),
     starting_date: width > 0,
     ending_date: width > 1,
     days: width > 0,
@@ -51,41 +50,39 @@ const ViewInternships = () => {
   const getData = async () => {
     try {
       if (isTokenExpired()) return;
-      const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/internships",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      setInternship(response.data.data.internshipDetails);
-      const studentResponse = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/viewStudent",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      setStudent(studentResponse.data.data.student);
+      if (role?.includes("student")) {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/students/internships",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setData(response.data.data.internships);
+      } else {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/internships/view/all",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setData(response.data.data.internships);
+      }
     } catch (error) {
-      console.error(error.response.data.message || error);
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
     }
   };
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (student && internship.length > 0) {
-      const added: Internship[] = internship.map((internshipData) => ({
-        ...internshipData,
-        student,
-      }));
-      setData(added);
-    }
-  }, [internship, student]);
 
   return (
     <DataTable

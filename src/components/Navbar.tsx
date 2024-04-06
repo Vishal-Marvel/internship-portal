@@ -18,19 +18,17 @@ const Navbar = () => {
       )}
     >
       <div className=" h-full  relative flex w-full justify-center">
-        <div className="flex items-center w-[90%] justify-between">
-          <div className="flex">
+        <div className="flex items-center md:w-[95%] justify-between">
+          <div className="flex gap-2">
             <Link
               to={"/dashboard"}
               className={cn(
                 pathname == "/dashboard" &&
-                  "bg-slate-300/80 text-black rounded-lg ",
+                  " text-black rounded-lg ",
                 "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
               )}
             >
-              <Button className=" uppercase" variant="link">
-                Dashboard
-              </Button>
+              <img src="/logo.png"  className="object-cover h-[40px] aspect-auto"/>
             </Link>
             {role?.includes("student") && (
               <Link

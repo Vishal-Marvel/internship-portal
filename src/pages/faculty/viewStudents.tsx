@@ -4,7 +4,9 @@ import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Student } from "@/schema";
 import { VisibilityState } from "@tanstack/react-table";
+import { AlertCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 function isMobileView() {
   if (window) {
     // Get the width of the viewport
@@ -40,32 +42,41 @@ const ViewStudents = () => {
   }, []);
   const visibleColumns: VisibilityState = {
     select: false,
-    sec_sit: width > 0 && (isCEO ||isTapCell),
-    year_of_studying: width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
+    sec_sit: width > 0 && (isCEO || isTapCell),
+    year_of_studying:
+      width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
     section: width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
     department: width > 0 && (isPrincipal || isCEO || isTapCell),
     mentor_name: width > 1 && (isPrincipal || isCEO || isHOD || isTapCell),
     skills: width > 1,
     placement_status: false,
     total_days_internship: width > 0 && (isMentor || isInternshipCoordinator),
-
   };
   const [student, setStudent] = useState<Student[]>([]);
   const getStudent = async () => {
-    const response = await axiosInstance.get(
-      "http://localhost:5000/internship/api/v1/staffs/viewMultipleStudent",
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    let student = await response.data.data.students;
-    student = student?.map((student) => ({
-      ...student,
-      placement_status: student.placement_status ? "Placed" : "Not Placed",
-    }));
-    setStudent(student);
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStudent",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      let student = await response.data.data.students;
+      student = student?.map((student) => ({
+        ...student,
+        placement_status: student.placement_status ? "Placed" : "Not Placed",
+      }));
+      setStudent(student);
+    } catch (error) {
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
+    }
   };
   useEffect(() => {
     getStudent();

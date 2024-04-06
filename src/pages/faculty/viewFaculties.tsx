@@ -4,7 +4,9 @@ import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Staff } from "@/schema";
 import { VisibilityState } from "@tanstack/react-table";
+import { AlertCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 function isMobileView() {
   if (window) {
     // Get the width of the viewport
@@ -38,15 +40,24 @@ const ViewFaculties = () => {
   };
   const [faculty, setFaculty] = useState<Staff[]>([]);
   const getStaff = async () => {
-    const respose = await axiosInstance.get(
-      "http://localhost:5000/internship/api/v1/staffs/viewMultipleStaff",
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    setFaculty(respose.data.data.staffs);
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStaff",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setFaculty(response.data.data.staffs);
+    } catch (error) {
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
+    }
   };
   useEffect(() => {
     getStaff();
