@@ -1,4 +1,3 @@
-
 import { DataTableFacetedFilter } from "@/components/ui/data-table/data-faceted-filter";
 import { approvalStatuses, internshipStatuses, noOfDays } from "@/schema";
 import { useSession } from "@/providers/context/SessionContext";
@@ -7,8 +6,14 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
-    const {role} = useSession();
-    const isStudent = role?.includes("student");
+  const { role } = useSession();
+  const isStudent = role?.includes("student");
+  const isMentor = role?.includes("mentor");
+  const isTapCell = role?.includes("tapcell");
+  const isPrincipal = role?.includes("principal");
+  const isCEO = role?.includes("ceo");
+  const isInternshipCoordinator = role?.includes("internshipcoordinator");
+  const isHOD = role?.includes("hod");
   return (
     <>
       {table.getColumn("approval_status") && (
@@ -35,40 +40,39 @@ function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           ).map((value) => ({ value: value[0], label: value[0] }))}
         />
       )}
-      {!isStudent && (
-        <>
-          {table.getColumn("batch") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("batch")}
-              title="Batch"
-              options={Array.from(
-                table.getColumn("batch").getFacetedUniqueValues()
-              ).map((value) => ({ value: value[0], label: value[0] }))}
-            />
-          )}
-          {table.getColumn("department") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("department")}
-              title="Department"
-              options={Array.from(
-                table.getColumn("department").getFacetedUniqueValues()
-              ).map((value) => ({
-                value: value[0],
-                label: value[0].toUpperCase(),
-              }))}
-            />
-          )}
-          {table.getColumn("section") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("section")}
-              title="Section"
-              options={Array.from(
-                table.getColumn("section").getFacetedUniqueValues()
-              ).map((value) => ({ value: value[0], label: value[0] }))}
-            />
-          )}
-        </>
+      {(!isMentor || isHOD || isInternshipCoordinator) &&
+        table.getColumn("batch") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("batch")}
+            title="Batch"
+            options={Array.from(
+              table.getColumn("batch").getFacetedUniqueValues()
+            ).map((value) => ({ value: value[0], label: value[0] }))}
+          />
+        )}
+
+      {(isPrincipal || isCEO || isTapCell) && table.getColumn("department") && (
+        <DataTableFacetedFilter
+          column={table.getColumn("department")}
+          title="Department"
+          options={Array.from(
+            table.getColumn("department").getFacetedUniqueValues()
+          ).map((value) => ({
+            value: value[0],
+            label: value[0].toUpperCase(),
+          }))}
+        />
       )}
+      {(!isMentor || isHOD || isInternshipCoordinator) &&
+        table.getColumn("section") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("section")}
+            title="Section"
+            options={Array.from(
+              table.getColumn("section").getFacetedUniqueValues()
+            ).map((value) => ({ value: value[0], label: value[0] }))}
+          />
+        )}
     </>
   );
 }

@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -45,8 +51,8 @@ const StudentLogin = () => {
   const isLoading = form.formState.isSubmitting;
 
   useEffect(() => {
-    if (form.getValues("email") && form.getValues("email").length>=0)
-    form.setValue("email", form.getValues("email").toLowerCase());
+    if (form.getValues("email") && form.getValues("email").length >= 0)
+      form.setValue("email", form.getValues("email").toLowerCase());
   }, [form.watch("email")]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -55,14 +61,18 @@ const StudentLogin = () => {
         "http://localhost:5000/internship/api/v1/students/login",
         { email: values.email + "@sairamtap.edu.in", password: values.password }
       );
-      setSession(response.data.data.token, response.data.data.roles, response.data.data.clg);
+      setSession(
+        response.data.data.token,
+        response.data.data.roles,
+        response.data.data.clg
+      );
       setTheme(response.data.data.clg);
       form.reset();
 
       router("/dashboard");
     } catch (error: any) {
       const errorMessage = await error.response.data;
-      
+
       toast(
         <>
           <AlertCircle /> {errorMessage.message}
@@ -130,16 +140,25 @@ const StudentLogin = () => {
             </div>
           </form>
         </Form>
-        
       </CardContent>
-      <CardFooter>
-          <div className="flex flex-col items-center w-full justify-center gap-3">
-          Haven't Signed up yet? <Link to={"/student/signin"}><Button variant="primary" className="p-2">Sign in</Button></Link>
-          </div>
-          <div className="flex flex-col items-center w-full justify-center gap-3">
-          Forgot password? <Link to={"/forgetpass"}><Button variant="primary" className="p-2">Click here</Button></Link>
-          </div>
-        </CardFooter>
+      <CardFooter className="flex text-center ">
+        <div className="flex flex-col items-center w-full justify-center gap-3">
+          Haven't Signed up yet?{" "}
+          <Link to={"/student/signin"}>
+            <Button variant="primary" className="p-2">
+              Sign in
+            </Button>
+          </Link>
+        </div>
+        <div className="flex flex-col items-center w-full justify-center gap-3">
+          Forgot password?{" "}
+          <Link to={"/forgetpass?student=1"}>
+            <Button variant="primary" className="p-2">
+              Click here
+            </Button>
+          </Link>
+        </div>
+      </CardFooter>
     </Card>
   );
 };

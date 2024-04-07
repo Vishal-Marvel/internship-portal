@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { publicRoutes } from "@/providers/Provider";
 import { useSession } from "@/providers/context/SessionContext";
+import MobileToggle from "./MobileToggle";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -14,12 +15,13 @@ const Navbar = () => {
       className={cn(
         publicRoutes.includes(pathname)
           ? "hidden"
-          : "md:absolute md:top-3 md:left-1/2 md:-translate-x-1/2 md:w-3/4 w-full md:rounded-3xl md:h-[7%] bg-slate-300/25"
+          : "absolute top-0 md:top-3 md:left-1/2 md:-translate-x-1/2 md:w-3/4 w-full  md:rounded-3xl md:h-[7%] h-[8vh] bg-slate-300/25"
       )}
     >
       <div className=" h-full  relative flex w-full justify-center">
-        <div className="flex items-center md:w-[95%] justify-between">
+        <div className="flex items-center w-[92%] justify-between">
           <div className="flex gap-2">
+            <MobileToggle/>
             <Link
               to={"/dashboard"}
               className={cn(
@@ -30,6 +32,7 @@ const Navbar = () => {
             >
               <img src="/logo.png"  className="object-cover h-[40px] aspect-auto"/>
             </Link>
+            <div className="hidden lg:flex gap-2">
             {role?.includes("student") && (
               <Link
                 to={"/student/addInternship"}
@@ -88,6 +91,7 @@ const Navbar = () => {
                 </Link>
               </>
             )}
+            </div>
           </div>
           <UserButton />
         </div>

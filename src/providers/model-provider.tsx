@@ -1,4 +1,5 @@
 
+import CompletionForm from "@/components/modals/CompletionForm";
 import RejectInternship from "@/components/modals/RejectInternship";
 import SendBackInternship from "@/components/modals/SendBackInternship";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ export const ModalProvider = () => {
     <>
       <RejectInternship/>
       <SendBackInternship/>
+      <CompletionForm/>
     </>
   );
 };

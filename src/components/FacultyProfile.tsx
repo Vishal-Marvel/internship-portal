@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,6 +32,7 @@ import axiosInstance from "@/lib/axios";
 import { Staff } from "@/schema";
 import { useSession } from "@/providers/context/SessionContext";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
@@ -63,6 +59,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
   const [image, setImage] = useState("");
   const [update, setUpdate] = useState(false);
   const [imgaeOpen, setImgaeOpen] = useState(false);
+  const { onOpen } = useModal();
 
   const isPrincipal = role && role.includes("principal");
   const isCeo = role && role.includes("ceo");
@@ -110,7 +107,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
     try {
       if (isTokenExpired()) return;
       if (values.file[0] && values.file[0].size > 1024 * 512) {
-        alert("File size Exceeds 512 kb");
+        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
         return;
       }
 

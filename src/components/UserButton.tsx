@@ -28,8 +28,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
 
   const getData = async () => {
     try {
-      if (isTokenExpired())
-      return;
+      if (isTokenExpired()) return;
       if (role && role.includes("student")) {
         const response = await axiosInstance.get(
           "http://localhost:5000/internship/api/v1/students/viewStudent",

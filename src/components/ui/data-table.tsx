@@ -30,13 +30,15 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   visibleColumns: VisibilityState;
   type: "internship" | "student" | "faculty"
+  title?:string
 
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  type, 
+  type,
+  title,
   visibleColumns
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -80,7 +82,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
       <span className="capitalize font-semibold font-sans text-xl">{type}</span>
       <DataTableToolbar table={table} type={type}/>
-      <div className="rounded-md border">
+      <div className="rounded-md ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

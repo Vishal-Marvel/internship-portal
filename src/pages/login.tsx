@@ -4,8 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@/providers/context/SessionContext";
 import { useTheme } from "@/providers/theme-provider";
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Login = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const faculty = searchParams.get("faculty")
   const { setTheme } = useTheme();
   const { token } = useSession();
   useEffect(() => {
@@ -16,7 +19,7 @@ const Login = () => {
 
   return (
     <div className="grid place-items-center w-full">
-      <Tabs defaultValue="student" className=" w-full">
+      <Tabs defaultValue={faculty?"faculty":"student"} className=" w-full md:min-w-[30vw]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="student">Student</TabsTrigger>
           <TabsTrigger value="faculty">Faculty</TabsTrigger>

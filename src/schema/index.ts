@@ -19,7 +19,7 @@ export interface Student {
   department: string;
   email: string;
   phone_no: string;
-  total_days_internship: string;
+  total_days_internship: number;
   placement_status: string;
   placed_company: string;
   profile_photo: string;
@@ -140,7 +140,7 @@ export interface ApprovalStatus {
   mentor: boolean;
   internshipcoordinator: boolean;
   hod: boolean;
-  tapcell: boolean;
+  tap_cell: boolean;
   principal: boolean;
   comments: string;
   internship_id: string;

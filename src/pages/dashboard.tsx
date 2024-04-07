@@ -9,7 +9,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import ViewInternships from "@/components/ViewInternships";
+import ViewInternships from "@/pages/viewInternships";
+import { useSocket } from "@/hooks/use-socket";
 
 const Dashboard = () => {
   const { token, role, isTokenExpired } = useSession();
@@ -17,27 +18,29 @@ const Dashboard = () => {
   if (role && role.includes("student")) {
     const [student, setStudent] = useState<Student>();
     const [visible, setVisible] = useState(true);
-
+    const { type, onClose } = useSocket();
     const getData = async () => {
       try {
         if (isTokenExpired()) return;
-
-        const studentResponse = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/students/viewStudent",
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        setStudent(studentResponse.data.data.student);
+        if (!type || type == "internship") {
+          const studentResponse = await axiosInstance.get(
+            "http://localhost:5000/internship/api/v1/students/viewStudent",
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+          setStudent(studentResponse.data.data.student);
+          onClose();
+        }
       } catch (error) {
         console.error(error.response.data.message || error);
       }
     };
     useEffect(() => {
       getData();
-    }, []);
+    }, [type]);
     useEffect(() => {
       const timer = setTimeout(() => setVisible(false), 3000);
       return () => clearTimeout(timer);
@@ -52,7 +55,7 @@ const Dashboard = () => {
           )}
         >
           <span>Number of Days Completed</span>
-          {student && (
+          {student && student?.total_days_internship <= 45 ? (
             <DashBoardChart
               datas={[
                 student?.total_days_internship,
@@ -60,14 +63,27 @@ const Dashboard = () => {
               ]}
               labels={["Completed", "Remaining"]}
             />
+          ) : (
+            <DashBoardChart
+              datas={[
+                student?.total_days_internship,
+                Number(student?.total_days_internship) - 45,
+              ]}
+              labels={["Completed", "Excess"]}
+            />
           )}
         </div>
-        <div className={cn("gap-5", !visible ? "flex items-center" : "hidden")}>
+        <div
+          className={cn(
+            "gap-5 md:min-h-[85vh]",
+            !visible ? "flex items-center" : "hidden"
+          )}
+        >
           <div className="lg:block hidden">
             <ResizablePanelGroup
               direction="vertical"
               className={cn(
-                "lg:min-h-[70vh]  rounded-lg lg:block hidden max-w-[270px]"
+                "lg:min-h-[80vh]  rounded-lg lg:block hidden max-w-[270px]"
               )}
             >
               <ResizablePanel
@@ -80,13 +96,21 @@ const Dashboard = () => {
                   )}
                 >
                   <span>Number of Days Completed</span>
-                  {student && (
+                  {student && student?.total_days_internship <= 45 ? (
                     <DashBoardChart
                       datas={[
                         student?.total_days_internship,
                         45 - Number(student?.total_days_internship),
                       ]}
                       labels={["Completed", "Remaining"]}
+                    />
+                  ) : (
+                    <DashBoardChart
+                      datas={[
+                        student?.total_days_internship,
+                        Number(student?.total_days_internship) - 45,
+                      ]}
+                      labels={["Completed", "Excess"]}
                     />
                   )}
                 </div>

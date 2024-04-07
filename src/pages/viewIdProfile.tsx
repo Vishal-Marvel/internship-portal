@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const ViewIdProfilePage = () => {
-  const {id, type} = useParams();
+  const { id, type } = useParams();
   const [student, setStudent] = useState<Student>();
   const [staff, setStaff] = useState<Staff>();
   const { token, isTokenExpired, role } = useSession();
@@ -18,7 +18,8 @@ const ViewIdProfilePage = () => {
       try {
         if (type?.includes("student")) {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/students/viewStudent/"+id,
+            "http://localhost:5000/internship/api/v1/students/viewStudent/" +
+              id,
             {
               headers: {
                 Authorization: "Bearer " + token,
@@ -28,7 +29,7 @@ const ViewIdProfilePage = () => {
           setStudent(response.data.data.student);
         } else {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/staffs/viewStaff/"+id,
+            "http://localhost:5000/internship/api/v1/staffs/viewStaff/" + id,
             {
               headers: {
                 Authorization: "Bearer " + token,

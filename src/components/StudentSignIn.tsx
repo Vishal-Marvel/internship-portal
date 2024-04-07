@@ -38,6 +38,7 @@ import { useEffect, useState } from "react";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import PasswordInput from "./PasswordInput";
+import { useModal } from "@/hooks/use-model-store";
 
 interface Option {
   label: string;
@@ -50,8 +51,8 @@ const formSchema = z.object({
   student_id: z
     .string()
     .refine((str) => {
-      const regex = /^(?:SEC|SIT)\d{2}[A-Z]{0,3}\d{3}$/;
-      const regexL = /^(?:SECL|SITL)\d{2}[A-Z]{0,3}\d{2}$/;
+      const regex = /^(?:sec|sit)\d{2}[a-z]{0,3}\d{3}$/;
+      const regexL = /^(?:secl|sitl)\d{2}[a-z]{0,3}\d{2}$/;
       return regex.test(str) || regexL.test(str);
     }, "Student Id Format Incorrect")
     .default(""),
@@ -90,6 +91,8 @@ const StudentSignIn = () => {
 
   const isLoading = form.formState.isSubmitting;
   const fileRef = form.register("file");
+  const { onOpen } = useModal();
+
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -130,7 +133,7 @@ const StudentSignIn = () => {
       setMentors(
         Object.keys(data).map((key, index) => ({
           value: data[key],
-          label: key,
+          label: `${key} (${data[key]})`,
         }))
       );
     } catch (error) {
@@ -164,12 +167,14 @@ const StudentSignIn = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (values.file && values.file[0].size > 1024 * 512) {
-        alert("File size Exceeds 512 kb");
+      if (values.file[0] && values.file[0].size > 1024 * 512) {
+        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+
         return;
       }
       if (values.password != values.cpassword) {
-        alert("Password and Confirm Password, didn't match");
+        onOpen("alert", {alertText: "Password and Confirm Password, didn't match"});
+
         return;
       }
       const formdata = new FormData();
@@ -190,7 +195,7 @@ const StudentSignIn = () => {
       values.skills.forEach((skill, index) => {
         formdata.append(`skills`, skill.value);
       });
-      if (values.file) formdata.append("file", values.file[0]);
+      if (values.file[0]) formdata.append("file", values.file[0]);
 
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/students/signup",
@@ -199,7 +204,9 @@ const StudentSignIn = () => {
       toast(
         <>
           <CheckCircle2 />
-          <span>Student Data Successfully Registered, Login to Continue</span>
+          <span>
+            Student Data Successfully Registered <br /> Login to Continue
+          </span>
         </>
       );
 
@@ -207,7 +214,7 @@ const StudentSignIn = () => {
 
       router("/");
     } catch (error) {
-      //   console.error(error);
+      console.error(error);
       toast(
         <>
           <AlertCircle />
@@ -226,13 +233,13 @@ const StudentSignIn = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[450px] h-[600px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[55vh] h-[600px] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
-              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
+              <div className=" w-full gap-5 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
                 <FormField
                   name={"name"}
                   disabled={isLoading}
@@ -515,7 +522,7 @@ const StudentSignIn = () => {
                           // @ts-ignore
                           options={skills}
                           menuPlacement="auto"
-                          maxMenuHeight={100}
+                          maxMenuHeight={120}
                         />
                       </FormControl>
                       <FormMessage />

@@ -34,6 +34,8 @@ import { Student } from "@/schema";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import { cn } from "@/lib/utils";
+import { useSocket } from "@/hooks/use-socket";
+import { useModal } from "@/hooks/use-model-store";
 
 interface Props {
   student: Student;
@@ -55,7 +57,7 @@ const formSchema = z.object({
   phone_no: z.string().refine((str) => {
     return str.length == 10;
   }, "Phone number is invalid"),
-  total_days_internship: z.string().optional(),
+  total_days_internship: z.number().optional(),
   placement_status: z.string().optional(),
   placed_company: z.string().optional(),
   file: z.instanceof(FileList).optional(),
@@ -71,7 +73,7 @@ interface Option {
 }
 
 const StudentProfile = ({ student }: Props) => {
-  const router = useNavigate();
+  const {onChange} = useSocket();  
   const { token, role } = useSession();
   const [years, setYears] = useState<string[]>([]);
 
@@ -81,6 +83,7 @@ const StudentProfile = ({ student }: Props) => {
     resolver: zodResolver(formSchema),
   });
   const [update, setUpdate] = useState(false);
+  const { onOpen } = useModal();
 
   const isLoading = form.formState.isSubmitting || !update;
   const fileRef = form.register("file");
@@ -148,7 +151,7 @@ const StudentProfile = ({ student }: Props) => {
       form.setValue("phone_no", student.phone_no);
       form.setValue(
         "total_days_internship",
-        student.total_days_internship || "0"
+        student.total_days_internship 
       );
       form.setValue("placement_status", student.placement_status || "unplaced");
       form.setValue("placed_company", student.placed_company);
@@ -164,7 +167,8 @@ const StudentProfile = ({ student }: Props) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (values.file && values.file[0].size > 1024 * 512) {
-        alert("File Size Exceeds 512 kb");
+        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+
         return;
       }
       const formdata = new FormData();
@@ -178,7 +182,7 @@ const StudentProfile = ({ student }: Props) => {
       formdata.append("department", values.department);
       formdata.append("email", values.email);
       formdata.append("phone_no", values.phone_no);
-      formdata.append("total_days_internship", values.total_days_internship);
+      formdata.append("total_days_internship", String(values.total_days_internship));
       formdata.append("placement_status", values.placement_status);
       formdata.append("placed_company", values.placed_company);
       formdata.append("mentor_name", values.mentor_name);
@@ -198,7 +202,6 @@ const StudentProfile = ({ student }: Props) => {
           },
         }
       );
-      console.log(response);
       toast(
         <>
           <CheckCircle2 />
@@ -206,16 +209,17 @@ const StudentProfile = ({ student }: Props) => {
         </>
       );
       setUpdate(false);
+      onChange("studentProfile");
     } catch (error) {
-      console.error(error);
-      // toast(
-      //   <>
-      //     <AlertCircle />
-      //     {error.response.data.message}
-      //   </>
-      // );
+      // console.error(error);
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
 
-      // console.error(error.response.data.message);
+      console.error(error.response.data.message);
     }
   };
 

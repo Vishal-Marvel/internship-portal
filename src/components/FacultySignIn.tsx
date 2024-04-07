@@ -30,13 +30,13 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import axios from "axios";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 import PasswordInput from "./PasswordInput";
+import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
@@ -61,6 +61,8 @@ const formSchema = z.object({
 
 const FacultySignIn = () => {
   const router = useNavigate();
+  const { onOpen } = useModal();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -81,11 +83,13 @@ const FacultySignIn = () => {
     try {
       console.log(values);
       if (values.file[0] && values.file[0].size > 1024 * 512) {
-        alert("File size Exceeds 512 kb");
+        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+
         return;
       }
       if (values.password != values.cpassword) {
-        alert("Password and Confirm Password, didn't match");
+        onOpen("alert", {alertText: "Password and Confirm Password, didn't match"});
+
         return;
       }
       const formdata = new FormData();
@@ -129,17 +133,17 @@ const FacultySignIn = () => {
     <Card className="h-full w-full shadow-2xl bg-blue-300/80 border-0 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
-          <CardTitle>Staff Register</CardTitle>
+          <CardTitle>Faculty Register</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[450px] h-[600px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[55vh] h-[600px] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
-              <div className=" w-full gap-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
+              <div className=" w-full gap-5 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
                 <FormField
                   name={"name"}
                   disabled={isLoading}

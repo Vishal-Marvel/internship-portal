@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
+import { useSession } from "@/providers/context/SessionContext";
+import { useModal } from "@/hooks/use-model-store";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -25,7 +27,10 @@ export const internshipColumns: ColumnDef<Internship>[] = [
       const internship = row.original;
       return (
         <div className="text-right font-medium">
-          <Link className="hover:underline" to={"/profile/student/" + internship.student.id}>
+          <Link
+            className="hover:underline"
+            to={"/profile/student/" + internship.student.id}
+          >
             {row.getValue("student_id")}
           </Link>
         </div>
@@ -160,6 +165,8 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     id: "actions",
     cell: ({ row }) => {
       const internship = row.original;
+      const { role } = useSession();
+      const { onOpen } = useModal();
       const navigate = useNavigate();
       return (
         <DropdownMenu>
@@ -180,6 +187,17 @@ export const internshipColumns: ColumnDef<Internship>[] = [
             >
               View Internship
             </DropdownMenuItem>
+            {role?.includes("student") &&
+              internship.approval_status == "Approved" && (
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    onOpen("completeInternship", { internship });
+                  }}
+                >
+                  Upload Certificate
+                </DropdownMenuItem>
+              )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

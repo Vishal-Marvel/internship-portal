@@ -6,6 +6,7 @@ import { Student } from "@/schema";
 import { VisibilityState } from "@tanstack/react-table";
 import { AlertCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 function isMobileView() {
   if (window) {
@@ -23,7 +24,8 @@ function isMobileView() {
     }
   }
 }
-const ViewStudents = () => {
+const ViewMentees = () => {
+  const { id } = useParams();
   const { token, role } = useSession();
   const [width, setWidth] = useState(isMobileView());
   const isMentor = role?.includes("mentor");
@@ -42,11 +44,11 @@ const ViewStudents = () => {
   }, []);
   const visibleColumns: VisibilityState = {
     select: false,
-    sec_sit: width > 1 && (isCEO || isTapCell),
+    sec_sit: width > 0 && (isCEO || isTapCell),
     year_of_studying:
-      width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
-    section: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
-    department: width > 1 && (isPrincipal || isCEO || isTapCell),
+      width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
+    section: width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
+    department: width > 0 && (isPrincipal || isCEO || isTapCell),
     mentor_name: width > 1 && (isPrincipal || isCEO || isHOD || isTapCell),
     skills: width > 1,
     placement_status: false,
@@ -56,7 +58,7 @@ const ViewStudents = () => {
   const getStudent = async () => {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStudent",
+        "http://localhost:5000/internship/api/v1/staffs/mentee-students/" + id,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -64,10 +66,9 @@ const ViewStudents = () => {
         }
       );
       let student = await response.data.data.students;
-      student = student?.map((student:Student) => ({
+      student = student?.map((student) => ({
         ...student,
         placement_status: student.placement_status ? "Placed" : "Not Placed",
-        total_days_internship: student.total_days_internship ?? 0,
       }));
       setStudent(student);
     } catch (error) {
@@ -94,4 +95,4 @@ const ViewStudents = () => {
   );
 };
 
-export default ViewStudents;
+export default ViewMentees;

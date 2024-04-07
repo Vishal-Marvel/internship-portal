@@ -31,18 +31,23 @@ import { useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import axiosInstance from "@/lib/axios";
+import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   company_name: z.string().min(1, "Company Name is Required").default(""),
   company_address: z.string().min(1, "Company Address is Required").default(""),
   company_ph_no: z
     .string()
-    .refine(str=>str.length==10, "Company Phone Number is Invalid")
+    .refine((str) => str.length == 10, "Company Phone Number is Invalid")
     .default(""),
   cin_gst_udyog: z.string().min(1, "CIN/GST/UDYOG is Required").default(""),
   cin_gst_udyog_no: z
@@ -55,7 +60,10 @@ const formSchema = z.object({
     .default(""),
   industry_supervisor_ph_no: z
     .string()
-    .refine(str=>str.length==10, "Inturtry Supervisor Phone Number is Invalid")
+    .refine(
+      (str) => str.length == 10,
+      "Inturtry Supervisor Phone Number is Invalid"
+    )
     .default(""),
   industry_supervisor_email: z
     .string()
@@ -88,6 +96,7 @@ const AddStudentInternship = () => {
   const fileRef = form.register("file");
   const [cin_gst_udyog, setcin_gst_udyog] = useState<string>();
   const [years, setYears] = useState<string[]>([]);
+  const { onOpen } = useModal();
   useEffect(() => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -172,9 +181,10 @@ const AddStudentInternship = () => {
       mode != "online" &&
       !isLoading
     )
-      alert(
-        "You have selected  'Online' mode , where the number of days will be calculated by half"
-      );
+      onOpen("alert", {
+        alertText:
+          "You have selected  'Online' mode , where the number of days will be calculated by half",
+      });
     if (form.getValues("mode_of_intern") != "")
       setMode(form.getValues("mode_of_intern"));
   }, [form.watch("mode_of_intern")]);
@@ -185,11 +195,11 @@ const AddStudentInternship = () => {
         <CardTitle>Add Internship</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[550px] h-[700px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[65vh] h-[75vh] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 px-4"
+              className="space-y-8 p-4"
             >
               <div className=" w-full gap-8 flex flex-col items-start">
                 <div className="gap-4 flex flex-col w-full">
@@ -280,7 +290,9 @@ const AddStudentInternship = () => {
                                 className=" bg-slate-200 shadow-inner"
                                 disabled={isLoading}
                                 placeholder={`Enter ${
-                                  (cin_gst_udyog && cin_gst_udyog.toUpperCase()) || "CIN/GST/UDYOG"
+                                  (cin_gst_udyog &&
+                                    cin_gst_udyog.toUpperCase()) ||
+                                  "CIN/GST/UDYOG"
                                 } Number`}
                                 {...field}
                               />

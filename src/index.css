@@ -95,7 +95,7 @@
 
 .faculty {
   background-image: url("/faculty.png");
-  background-size: cover;
+  background-size:cover;
   background-position: 0%;
   background-repeat: no-repeat;
 }

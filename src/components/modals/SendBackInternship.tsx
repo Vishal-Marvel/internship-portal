@@ -24,6 +24,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useSocket } from "@/hooks/use-socket";
 
 const formSchema = z.object({
   comments: z.string().min(1, {
@@ -34,6 +35,7 @@ const SendBackInternship = () => {
   const { isOpen, onClose, type, data } = useModal();
   const { token, isTokenExpired } = useSession();
   const { role, id } = data;
+  const {onChange} = useSocket();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,6 +62,8 @@ const SendBackInternship = () => {
         }
       );
       form.reset();
+      onChange("approval");
+
       onClose();
     } catch (error) {
       const errorMessage = await error.response.data;

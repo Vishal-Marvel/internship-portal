@@ -51,8 +51,8 @@ const FacultyLogin = () => {
   const isLoading = form.formState.isSubmitting;
 
   useEffect(() => {
-    if (form.getValues("email") && form.getValues("email").length>=0)
-    form.setValue("email", form.getValues("email").toLowerCase());
+    if (form.getValues("email") && form.getValues("email").length >= 0)
+      form.setValue("email", form.getValues("email").toLowerCase());
   }, [form.watch("email")]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -61,7 +61,11 @@ const FacultyLogin = () => {
         "http://localhost:5000/internship/api/v1/staffs/login",
         { email: values.email + "@sairam.edu.in", password: values.password }
       );
-      setSession(response.data.data.token, response.data.data.roles.toString(), "faculty");
+      setSession(
+        response.data.data.token,
+        response.data.data.roles.toString(),
+        "faculty"
+      );
       setTheme("faculty");
       form.reset();
 
@@ -138,12 +142,21 @@ const FacultyLogin = () => {
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex text-center w-full">
+        
         <div className="flex flex-col items-center w-full justify-center gap-3">
           Haven't Signed up yet?{" "}
           <Link to={"/faculty/signin"}>
             <Button variant="primary" className="p-2">
               Sign in
+            </Button>
+          </Link>
+        </div>
+        <div className="flex flex-col items-center w-full justify-center gap-3">
+          Forgot password?{" "}
+          <Link to={"/forgetpass?faculty=1"}>
+            <Button variant="primary" className="p-2">
+              Click here
             </Button>
           </Link>
         </div>

@@ -11,6 +11,9 @@ const AddStudentInternshipPage = () => {
   const navigate = useNavigate();
   const { token, role } = useSession();
   const [loading, setLoading] = useState(true);
+  if (!role?.includes("student")){
+    navigate("/dashboard")
+  }
   const getStatus = async () => {
     try {
       setLoading(true);
@@ -24,13 +27,15 @@ const AddStudentInternshipPage = () => {
       );
       setLoading(false);
     } catch (error) {
-      toast(
-        <>
-          <AlertCircle />
-          {error.response.data.message}
-        </>
-      );
-      navigate("/dashboard");
+      if (error.response.data.message != "") {
+        toast(
+          <>
+            <AlertCircle />
+            {error.response.data.message}
+          </>
+        );
+        navigate("/dashboard");
+      }
     }
   };
 

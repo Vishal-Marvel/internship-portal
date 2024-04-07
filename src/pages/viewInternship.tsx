@@ -1,4 +1,5 @@
 import StudentInternship from "@/components/StudentInternship";
+import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Internship } from "@/schema";
@@ -11,39 +12,39 @@ const ViewInternshipPage = () => {
   const { id } = useParams();
   const [internship, setInternship] = useState<Internship>();
   const { token, isTokenExpired } = useSession();
-  const change=()=>{
+  const { type, onClose } = useSocket();
 
-    getInternship();
-  }
   const getInternship = async () => {
-
-    if (token ) {
-      try {
-        const response = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/internships/" + id,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        setInternship(response.data.data.internshipDetails);
-      } catch (error) {
-        toast(
-          <>
-            <AlertCircle />
-            {error.response.data.message}
-          </>
-        );
+    if (token && !isTokenExpired()) {
+      if (!type || type == "internship") {
+        try {
+          const response = await axiosInstance.get(
+            "http://localhost:5000/internship/api/v1/internships/" + id,
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+          setInternship(response.data.data.internshipDetails);
+        } catch (error) {
+          toast(
+            <>
+              <AlertCircle />
+              {error.response.data.message}
+            </>
+          );
+        }
+        onClose()
       }
     }
   };
 
   useEffect(() => {
     getInternship();
-  }, [token]);
+  }, [token, type]);
 
-  return <StudentInternship internship={internship} changeIntern={change}/>;
+  return <StudentInternship internship={internship} />;
 };
 
 export default ViewInternshipPage;

@@ -5,14 +5,12 @@ const Approval = ({
   approval,
   role,
   id,
-  change,
   rejected,
 }: {
   approval: ApprovalStatus;
   role: string;
   id: string;
   rejected: boolean;
-  change: () => void;
 }) => {
   const isStudent = role && role.includes("student");
   const isMentor = role && role.includes("mentor");
@@ -30,7 +28,7 @@ const Approval = ({
           approval?.mentor ? (
             <span> {approval?.mentor ? "Approved" : "Not Approved"}</span>
           ) : (
-            <ApproveRejectSendBack id={id} role={"mentor"} change={change} />
+            <ApproveRejectSendBack id={id} role={"mentor"}  />
           )
         ) : (
           <span>
@@ -61,7 +59,7 @@ const Approval = ({
             <ApproveRejectSendBack
               id={id}
               role={"internshipcoordinator"}
-              change={change}
+              
             />
           )
         ) : (
@@ -88,7 +86,7 @@ const Approval = ({
           approval?.hod ? (
             <span> {approval?.hod ? "Approved" : "Not Approved"}</span>
           ) : (
-            <ApproveRejectSendBack id={id} role={"hod"} change={change} />
+            <ApproveRejectSendBack id={id} role={"hod"}  />
           )
         ) : (
           <span>
@@ -106,16 +104,16 @@ const Approval = ({
         <span className="text-lg font-semibold">Tap Cell</span>
         <span>:</span>
         {!isStudent && !rejected && isTapCell && approval && approval?.hod ? (
-          approval?.tapcell ? (
-            <span> {approval?.tapcell ? "Approved" : "Not Approved"}</span>
+          approval?.tap_cell ? (
+            <span> {approval?.tap_cell ? "Approved" : "Not Approved"}</span>
           ) : (
-            <ApproveRejectSendBack id={id} role={"tapcell"} change={change} />
+            <ApproveRejectSendBack id={id} role={"tapcell"}  />
           )
         ) : (
           <span>
             {rejected && approval?.rejectedBy.includes("tapcell") ? (
               <span>Rejected</span>
-            ) : approval?.tapcell ? (
+            ) : approval?.tap_cell ? (
               "Approved"
             ) : (
               "Not Approved"
@@ -130,11 +128,11 @@ const Approval = ({
         !rejected &&
         isPrincial &&
         approval &&
-        approval?.tapcell ? (
+        approval?.tap_cell ? (
           approval?.principal ? (
             <span> {approval?.principal ? "Approved" : "Not Approved"}</span>
           ) : (
-            <ApproveRejectSendBack id={id} role={"principal"} change={change} />
+            <ApproveRejectSendBack id={id} role={"principal"}  />
           )
         ) : (
           <span>

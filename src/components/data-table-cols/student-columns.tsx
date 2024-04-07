@@ -15,6 +15,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { useNavigate } from "react-router-dom";
+import { useSession } from "@/providers/context/SessionContext";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -71,6 +72,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("sec_sit")}
       </div>
     ),
+    filterFn : (row, id, value)=>{
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "year_of_studying",
@@ -82,6 +86,7 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("year_of_studying")}
       </div>
     ),
+   
   },
   {
     accessorKey: "department",
@@ -93,6 +98,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("department")}
       </div>
     ),
+    filterFn:(row, id, value)=>{
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "section",
@@ -108,16 +116,16 @@ export const studentColumns: ColumnDef<Student>[] = [
   {
     accessorKey: "total_days_internship",
     header: ({ column }) => {
-      return (
-         <div className="text-center">Internship Completed Days</div>
-
-      );
+      return <div className="text-center">Internship Completed Days</div>;
     },
     cell: ({ row }) => (
       <div className="text-center font-medium uppercase">
         {row.getValue("total_days_internship")}
       </div>
     ),
+    filterFn: (row, id, value)=>{
+      return value.includes(row.getValue(id));
+    }
   },
   {
     accessorKey: "placement_status",
@@ -129,10 +137,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("placement_status")}
       </div>
     ),
-    filterFn: (row, id, value)=>{
+    filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-    
   },
 
   {
@@ -142,7 +149,7 @@ export const studentColumns: ColumnDef<Student>[] = [
     },
     cell: ({ row }) => (
       <div className="text-center font-medium">
-        {row.getValue("placed_company")?? "Not Placed"}
+        {row.getValue("placed_company") ?? "Not Placed"}
       </div>
     ),
   },
@@ -164,26 +171,27 @@ export const studentColumns: ColumnDef<Student>[] = [
     },
     cell: ({ row }) => (
       <div className="text-end font-medium flex flex-col ">
-        
-        {//@ts-ignore
-         row.getValue("skills").map((skill, index) => (
-          <span key={index} className="mr-2">
-            {skill}
-          </span>
-        ))}
+        {
+          //@ts-ignore
+          row.getValue("skills").map((skill, index) => (
+            <span key={index} className="mr-2">
+              {skill}
+            </span>
+          ))
+        }
       </div>
     ),
     filterFn: (row, id, value) => {
       //@ts-ignore
-      return value.every(val=>row.getValue(id).includes(val));
+      return value.every((val) => row.getValue(id).includes(val));
     },
-    enableGlobalFilter:true
-
+    enableGlobalFilter: true,
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const student = row.original;
+      const { role } = useSession();
       const navigate = useNavigate();
       return (
         <DropdownMenu>
@@ -202,8 +210,18 @@ export const studentColumns: ColumnDef<Student>[] = [
                 navigate("/profile/student/" + student.id);
               }}
             >
-              View Student
+              View Student Profile
             </DropdownMenuItem>
+            {!role?.includes("student") && (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/studentInternships?student=" + student.id);
+                }}
+              >
+                View Student Internhips
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

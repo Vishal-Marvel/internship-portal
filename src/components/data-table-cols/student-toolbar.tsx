@@ -1,14 +1,19 @@
 import { DataTableFacetedFilter } from "@/components/ui/data-table/data-faceted-filter";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
-import { approvalStatuses, internshipStatuses, noOfDays, placement_statuses } from "@/schema";
+import {
+  approvalStatuses,
+  internshipStatuses,
+  noOfDays,
+  placement_statuses,
+} from "@/schema";
 import { Table } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
-  const {role}=useSession();
+  const { role } = useSession();
   const isMentor = role?.includes("mentor");
   const isTapCell = role?.includes("tapcell");
   const isPrincipal = role?.includes("principal");
@@ -16,7 +21,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
   const isInternshipCoordinator = role?.includes("internshipcoordinator");
   const isHOD = role?.includes("hod");
   const [skills, setSkills] = useState([]);
-  const getSkills = async () =>{
+  const getSkills = async () => {
     const response = await axiosInstance.get(
       "http://localhost:5000/internship/api/v1/skill/getAllSkills"
     );
@@ -26,9 +31,9 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
         label: skill,
       }))
     );
-  }
+  };
   useEffect(() => {
-    getSkills()
+    getSkills();
   }, []);
   return (
     <>
@@ -49,17 +54,18 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           ).map((value) => ({ value: value[0], label: value[0] }))}
         />
       )}
-      
-      {(!isMentor || isHOD || isInternshipCoordinator) && table.getColumn("year_of_studying") && (
-        <DataTableFacetedFilter
-          column={table.getColumn("year_of_studying")}
-          title="Year Of Studying"
-          options={Array.from(
-            table.getColumn("year_of_studying").getFacetedUniqueValues()
-          ).map((value) => ({ value: value[0], label: value[0] }))}
-        />
-      )}
-       {(!isMentor && !isHOD && !isInternshipCoordinator) && table.getColumn("department") && (
+
+      {(!isMentor || isHOD || isInternshipCoordinator) &&
+        table.getColumn("year_of_studying") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("year_of_studying")}
+            title="Year Of Studying"
+            options={Array.from(
+              table.getColumn("year_of_studying").getFacetedUniqueValues()
+            ).map((value) => ({ value: value[0], label: value[0] }))}
+          />
+        )}
+      {(isPrincipal || isCEO || isTapCell) && table.getColumn("department") && (
         <DataTableFacetedFilter
           column={table.getColumn("department")}
           title="Department"
@@ -71,7 +77,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           }))}
         />
       )}
-       {(!isMentor && !isHOD && !isInternshipCoordinator && !isPrincipal) && table.getColumn("sec_sit") && (
+      {(isCEO || isTapCell) && table.getColumn("sec_sit") && (
         <DataTableFacetedFilter
           column={table.getColumn("sec_sit")}
           title="SEC/SIT"
@@ -83,16 +89,17 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           }))}
         />
       )}
-     
-      {(!isMentor || isHOD || isInternshipCoordinator) && table.getColumn("section") && (
-        <DataTableFacetedFilter
-          column={table.getColumn("section")}
-          title="Section"
-          options={Array.from(
-            table.getColumn("section").getFacetedUniqueValues()
-          ).map((value) => ({ value: value[0], label: value[0] }))}
-        />
-      )}
+
+      {(!isMentor || isHOD || isInternshipCoordinator) &&
+        table.getColumn("section") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("section")}
+            title="Section"
+            options={Array.from(
+              table.getColumn("section").getFacetedUniqueValues()
+            ).map((value) => ({ value: value[0], label: value[0] }))}
+          />
+        )}
       {table.getColumn("skills") && (
         <DataTableFacetedFilter
           column={table.getColumn("skills")}
@@ -100,7 +107,6 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           options={skills}
         />
       )}
-      
     </>
   );
 }

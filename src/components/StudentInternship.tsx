@@ -41,10 +41,11 @@ import { Textarea } from "./ui/textarea";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import Approval from "./Approval";
+import { useSocket } from "@/hooks/use-socket";
+import { useModal } from "@/hooks/use-model-store";
 
 interface Props {
   internship: Internship;
-  changeIntern: () => void;
 }
 const formSchema = z.object({
   company_name: z.string().min(1, "Company Name is Required").default(""),
@@ -88,9 +89,9 @@ const formSchema = z.object({
   certificate: z.instanceof(FileList).optional(),
 });
 
-const StudentInternship = ({ internship, changeIntern }: Props) => {
+const StudentInternship = ({ internship }: Props) => {
   const { token, role } = useSession();
-
+  const { type, onClose } = useSocket();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -113,18 +114,14 @@ const StudentInternship = ({ internship, changeIntern }: Props) => {
   const isStudent = role && role.includes("student");
   const isRejected = internship?.internship_status == "Rejected";
   const isLoading =
-    (form.formState.isSubmitting || isStudent) && (!update || isRejected);
+    form.formState.isSubmitting || isStudent || !update || isRejected;
   const offer_letterRef = form.register("offer_letter");
   const certificateRef = form.register("certificate");
   const [offer_letter, setOffer_letter] = useState(null);
   const [certificate, setCertificate] = useState(null);
   const [postCompletion, setPostCompletion] = useState(false);
   const [report, setReport] = useState(null);
-
-  const change = () => {
-    getApproval();
-    changeIntern();
-  };
+  const { onOpen } = useModal();
 
   useEffect(() => {
     if (internship) {
@@ -172,7 +169,7 @@ const StudentInternship = ({ internship, changeIntern }: Props) => {
         setPostCompletion(true);
       }
     }
-  }, [internship]);
+  }, [internship, type]);
 
   const getFiles = async () => {
     if (internship.offer_letter) {
@@ -224,26 +221,31 @@ const StudentInternship = ({ internship, changeIntern }: Props) => {
   };
 
   const getApproval = async () => {
-    const response = await axiosInstance.get(
-      "http://localhost:5000/internship/api/v1/internships/approval-status/" +
-        internship.id,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    setApproval(response.data.data.approval_status);
+    if (!type || type == "approval") {
+      const response = await axiosInstance.get(
+        "http://localhost:5000/internship/api/v1/internships/approval-status/" +
+          internship.id,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setApproval(response.data.data.approval_status);
+      onClose();
+    }
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (values.offer_letter && values.offer_letter[0].size > 1024 * 512) {
-        alert("Offer letter File Size Exceeds 512 kb");
+      if (values.offer_letter[0]?.size > 1024 * 512) {
+        onOpen("alert", {alertText: "Offer letter File Size Exceeds 512 kb"});
+
         return;
       }
-      if (values.certificate && values.certificate[0].size > 1024 * 512) {
-        alert("Offer letter File Size Exceeds 512 kb");
+      if (values.certificate[0]?.size > 1024 * 512) {
+        onOpen("alert", {alertText: "Certificate  File Size Exceeds 512 kb"});
+
         return;
       }
       const formdata = new FormData();
@@ -340,7 +342,12 @@ const StudentInternship = ({ internship, changeIntern }: Props) => {
             >
               <div className=" w-full gap-8 flex flex-col items-start">
                 <div className="gap-4 flex flex-col w-full">
-                  <div className={cn("grid grid-cols-1 gap-8 md:pl-3 items-start", approval?.comments ? "md:grid-cols-3": "md:grid-cols-2")}>
+                  <div
+                    className={cn(
+                      "grid grid-cols-1 gap-8 md:pl-3 items-start",
+                      approval?.comments ? "md:grid-cols-3" : "md:grid-cols-2"
+                    )}
+                  >
                     <FormItem>
                       <FormLabel>Approval Status</FormLabel>
                       <FormControl>
@@ -866,7 +873,6 @@ const StudentInternship = ({ internship, changeIntern }: Props) => {
                       approval={approval}
                       role={role}
                       id={internship?.id}
-                      change={change}
                       rejected={isRejected}
                     />
                   </div>

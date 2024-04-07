@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "@/providers/context/SessionContext";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -23,7 +24,9 @@ export const facultyColumns: ColumnDef<Staff>[] = [
       return <div className="text-center">Faculty Id</div>;
     },
     cell: ({ row }) => (
-      <div className="text-center font-medium">{row.getValue("faculty_id")}</div>
+      <div className="text-center font-medium">
+        {row.getValue("faculty_id")}
+      </div>
     ),
   },
   {
@@ -41,7 +44,9 @@ export const facultyColumns: ColumnDef<Staff>[] = [
       return <DataTableColumnHeader column={column} title="SEC/SIT" />;
     },
     cell: ({ row }) => (
-      <div className="text-center font-medium uppercase">{row.getValue("sec_sit")}</div>
+      <div className="text-center font-medium uppercase">
+        {row.getValue("sec_sit")}
+      </div>
     ),
   },
   {
@@ -58,6 +63,7 @@ export const facultyColumns: ColumnDef<Staff>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const { role } = useSession();
       const faculty = row.original;
       const navigate = useNavigate();
       return (
@@ -77,8 +83,18 @@ export const facultyColumns: ColumnDef<Staff>[] = [
                 navigate("/profile/faculty/" + faculty.id);
               }}
             >
-              View Faculty
+              View Faculty Profile
             </DropdownMenuItem>
+            {role && role != "mentor" && (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/mentees/" + faculty.id);
+                }}
+              >
+                View Faculty Mentees
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>Update Role</DropdownMenuItem>
             <DropdownMenuItem>Migrate Mentees</DropdownMenuItem>
           </DropdownMenuContent>
