@@ -15,6 +15,7 @@ import ViewStudents from "./pages/faculty/viewStudents";
 import ViewInternships from "./pages/viewInternships";
 import ForgotPassword from "./pages/forgetPassword";
 import ViewMentees from "./pages/faculty/viewMentees";
+import ResetPassword from "./pages/resetPassword";
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
               <Route path="/faculties" element={<ViewFaculties />} />
               <Route path="/students" element={<ViewStudents />} />
               <Route path="/studentInternships" element={<ViewInternships />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
+
             </Routes>
           </div>
         </div>

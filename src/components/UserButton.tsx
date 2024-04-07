@@ -159,7 +159,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
               </Link>
 
               <Link
-                to={"/auth/resetPassword"}
+                to={"/resetPassword"}
                 className="w-full"
                 onClick={() => {
                   if (setClose) setClose();
