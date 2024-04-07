@@ -72,9 +72,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("sec_sit")}
       </div>
     ),
-    filterFn : (row, id, value)=>{
-      return value.includes(row.getValue(id))
-    }
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "year_of_studying",
@@ -86,7 +86,6 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("year_of_studying")}
       </div>
     ),
-   
   },
   {
     accessorKey: "department",
@@ -98,9 +97,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("department")}
       </div>
     ),
-    filterFn:(row, id, value)=>{
-      return value.includes(row.getValue(id))
-    }
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "section",
@@ -123,9 +122,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("total_days_internship")}
       </div>
     ),
-    filterFn: (row, id, value)=>{
+    filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
-    }
+    },
   },
   {
     accessorKey: "placement_status",
@@ -212,16 +211,22 @@ export const studentColumns: ColumnDef<Student>[] = [
             >
               View Student Profile
             </DropdownMenuItem>
-            {!role?.includes("student") && (
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/studentInternships?student=" + student.id);
-                }}
-              >
-                View Student Internhips
-              </DropdownMenuItem>
-            )}
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/studentInternships?student=" + student.id);
+              }}
+            >
+              View Student Internhips
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/addInternship?student=" + student.id);
+              }}
+            >
+              Add Internhip
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

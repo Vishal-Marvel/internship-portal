@@ -112,9 +112,9 @@ const StudentSignIn = () => {
         "http://localhost:5000/internship/api/v1/skill/getAllSkills"
       );
       setSkills(
-        response.data.data.skillNames.map((skill: string, index) => ({
-          value: skill,
-          label: skill,
+        response.data.data.skillNames.map((skill, index) => ({
+          value: skill.id,
+          label: skill.name,
         }))
       );
     } catch (error) {

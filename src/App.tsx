@@ -15,6 +15,8 @@ import ViewStudents from "./pages/faculty/viewStudents";
 import ViewInternships from "./pages/viewInternships";
 import ForgotPassword from "./pages/forgetPassword";
 import ViewMentees from "./pages/faculty/viewMentees";
+import ModifySkills from "./pages/faculty/updateSkills";
+import ChangeMentees from "./pages/faculty/changeMentees";
 
 function App() {
   return (
@@ -27,8 +29,9 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/forgetpass" element={<ForgotPassword />} />
+              <Route path="/addInternship" element={<AddInternshipPage />} />
               <Route
-                path="/student/addInternship"
+                path="/addInternship/:id"
                 element={<AddInternshipPage />}
               />
 
@@ -44,6 +47,8 @@ function App() {
               <Route path="/faculties" element={<ViewFaculties />} />
               <Route path="/students" element={<ViewStudents />} />
               <Route path="/studentInternships" element={<ViewInternships />} />
+              <Route path="/skills" element={<ModifySkills />} />
+              <Route path="/changeMentee" element={<ChangeMentees />} />
             </Routes>
           </div>
         </div>

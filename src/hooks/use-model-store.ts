@@ -1,17 +1,25 @@
-
-import { ApprovalStatus, Internship, Staff, Student } from "@/schema";
+import { ApprovalStatus, Internship, Skill, Staff, Student } from "@/schema";
 import { create } from "zustand";
 
-export type ModalType = "rejectInternship" | "sendbackInternship" | "completeInternship" | "alert";
+export type ModalType =
+  | "rejectInternship"
+  | "sendbackInternship"
+  | "completeInternship"
+  | "alert"
+  | "updateRole"
+  | "editSkill"
+  | "deleteSkill"
+  | "addSkill";
 
 interface ModalData {
-  internship? :Internship
-  student? :Student
-  faculty? :Staff
-  approval? :ApprovalStatus
-  role? :string
-  id? :string
-  alertText?: string
+  internship?: Internship;
+  student?: Student;
+  faculty?: Staff;
+  approval?: ApprovalStatus;
+  role?: string;
+  id?: string;
+  skill?: Skill;
+  alertText?: string;
 }
 
 interface ModalStore {

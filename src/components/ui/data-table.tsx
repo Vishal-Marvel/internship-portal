@@ -2,14 +2,15 @@ import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -24,14 +25,17 @@ import {
 } from "@/components/ui/table";
 
 import { DataTableToolbar } from "@/components/ui/data-table/data-toolbar";
+import { ScrollArea } from "./scroll-area";
+import { DataTablePagination } from "./data-table/data-pagination";
+import { cn } from "@/lib/utils";
+import { useSocket } from "@/hooks/use-socket";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   visibleColumns: VisibilityState;
-  type: "internship" | "student" | "faculty"
-  title?:string
-
+  type: "internship" | "student" | "faculty" | "skill" |"mentee";
+  title?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,33 +43,40 @@ export function DataTable<TData, TValue>({
   data,
   type,
   title,
-  visibleColumns
+  visibleColumns,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const {onChange} = useSocket();
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(visibleColumns)
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [globalFilter, setGlobalFilter] = React.useState("")
+    React.useState<VisibilityState>(visibleColumns);
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState("");
+  // const [pagination, setPagination] = React.useState<PaginationState>({pageSize:5, pageIndex:0});
 
   React.useEffect(() => {
-    setColumnVisibility(visibleColumns)
+    setColumnVisibility(visibleColumns);
   }, [visibleColumns]);
+  React.useEffect(() => {
+    onChange("rows", {rows: rowSelection})
+  }, [rowSelection]);
+  
 
- 
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange:setGlobalFilter,
+    onGlobalFilterChange: setGlobalFilter,
+    // onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFilteredRowModel: getFilteredRowModel(),    
+    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
@@ -73,23 +84,23 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
-      globalFilter
-
+      globalFilter,
+      // pagination
     },
-  })
+  });
 
   return (
     <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
       <span className="capitalize font-semibold font-sans text-xl">{type}</span>
-      <DataTableToolbar table={table} type={type}/>
-      <div className="rounded-md ">
+      <DataTableToolbar table={table} type={type} />
+      <ScrollArea className={cn("rounded-md  w-full", type== "mentee" ? "md:h-[40vh] h-[40vh]": "md:h-[60vh] h-[65vh]")}>
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-slate-300">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead key={header.id} colSpan={header.colSpan} >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -128,7 +139,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
+      </ScrollArea>
       {/* <DataTablePagination table={table} /> */}
     </div>
   );

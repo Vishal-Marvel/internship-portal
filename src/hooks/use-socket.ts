@@ -1,17 +1,25 @@
 
 import { create } from "zustand";
 
-export type SocketType = "studentProfile" | "facultyProfile" | "internship" | "approval";
+export type SocketType = "studentProfile" | "facultyProfile" | "internship" | "approval" | "skills" | "mentee" | "staff" | "rows" | "fromMentor" |"toMentor";
 
+interface SocketData{
+  rows?: {}
+  fromMentor?:string
+  toMentor?:string
+}
 
 interface SocketStore {
   type: SocketType | null;
-  onChange: (type: SocketType) => void;
+  onChange: (type: SocketType, data?: SocketData) => void;
   onClose: ()=>void;
+  data: SocketData | null;
+
 }
 
 export const useSocket = create<SocketStore>((set) => ({
   type: null,
-  onChange: (type) => set({type}),
-  onClose: () => set({type:null})
+  data: {},
+  onChange: (type, data={}) => set({type, data}),
+  onClose: () => set({type:null, data:{}})
 }));

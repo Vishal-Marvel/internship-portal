@@ -65,6 +65,7 @@ const Navbar = () => {
                     </Button>
                   </Link>
                 )}
+              
                 <Link
                   to={"/students"}
                   className={cn(
@@ -89,6 +90,23 @@ const Navbar = () => {
                     View Student Internships
                   </Button>
                 </Link>
+                {(role?.includes("hod") ||
+                  role?.includes("principal") ||
+                  role?.includes("tapcell") || role?.includes("admin") ||
+                  role?.includes("ceo") ) && (
+                  <Link
+                    to={"/skills"}
+                    className={cn(
+                      pathname == "/skills" &&
+                        "bg-slate-300/80 text-black rounded-lg ",
+                      "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                    )}
+                  >
+                    <Button className=" uppercase" variant="link">
+                      Modify Skills
+                    </Button>
+                  </Link>
+                )}
               </>
             )}
             </div>

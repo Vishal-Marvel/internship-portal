@@ -83,9 +83,10 @@ const formSchema = z.object({
   location: z.string().min(1, "Location is Required").default(""),
   domain: z.string().min(1, "Domain is Required").default(""),
   file: z.instanceof(FileList).optional(),
+  student_id: z.string().optional(),
 });
 
-const AddStudentInternship = () => {
+const AddStudentInternship = ({ student }: { student: string }) => {
   const router = useNavigate();
   const { token, role } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -108,10 +109,18 @@ const AddStudentInternship = () => {
 
     setYears([financialYear]);
   }, []);
+  useEffect(() => {
+    form.setValue("student_id", student);
+  }, [student]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const formdata = new FormData();
+      if (!values.file[0])
+        onOpen("alert", { alertText: "Offer letter File is Required" });
+      if (values.file[0]?.size > 1048576)
+        onOpen("alert", { alertText: "Offer Letter File Size exceeded, 1 mb" });
+
       formdata.append("company_name", values.company_name);
       formdata.append("company_address", values.company_address);
       formdata.append("company_ph_no", values.company_ph_no);
@@ -139,6 +148,8 @@ const AddStudentInternship = () => {
       formdata.append("domain", values.domain);
 
       formdata.append("file", values.file[0]);
+      if (!role?.includes("student"))
+        formdata.append("student_id", values.student_id);
 
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/internships/register",

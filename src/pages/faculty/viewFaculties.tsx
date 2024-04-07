@@ -1,5 +1,6 @@
 import { facultyColumns } from "@/components/data-table-cols/staff-columns";
 import { DataTable } from "@/components/ui/data-table";
+import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Staff } from "@/schema";
@@ -26,6 +27,7 @@ function isMobileView() {
 const ViewFaculties = () => {
   const { token, role } = useSession();
   const [width, setWidth] = useState(isMobileView());
+  const { type, onClose } = useSocket();
   useEffect(() => {
     const handleResize = () => {
       setWidth(isMobileView());
@@ -42,7 +44,7 @@ const ViewFaculties = () => {
   const getStaff = async () => {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStaff",
+        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStaff/all",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -50,7 +52,9 @@ const ViewFaculties = () => {
         }
       );
       setFaculty(response.data.data.staffs);
+      onClose();
     } catch (error) {
+      if (error.response.data.message != "")
       toast(
         <>
           <AlertCircle />
@@ -60,8 +64,8 @@ const ViewFaculties = () => {
     }
   };
   useEffect(() => {
-    getStaff();
-  }, []);
+    if (!type || type == "staff") getStaff();
+  }, [type]);
   return (
     <div className="grid place-items-center w-full">
       <DataTable

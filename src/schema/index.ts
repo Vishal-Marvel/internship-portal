@@ -27,6 +27,12 @@ export interface Student {
   skills: string[];
 }
 
+export interface Skill {
+  id: string;
+  skill: string;
+  count:number;
+}
+
 export interface Staff {
   id: string;
   name: string;
@@ -36,6 +42,7 @@ export interface Staff {
   email: string;
   phone_no: string;
   profile_photo: string;
+  roles:string[]
 }
 
 export interface Internship {

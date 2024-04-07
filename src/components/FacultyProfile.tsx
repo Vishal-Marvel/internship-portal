@@ -162,7 +162,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
   }, [form.watch("faculty_id")]);
 
   return (
-    <Card className="h-full md:max-w-[70vw] w-full shadow-2xl bg-blue-300/80 border-0 rounded-2xl">
+    <Card className="h-full md:max-w-[70vw] w-full shadow-2xl bg-white/80 border-0 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
           <CardTitle>Staff Profile</CardTitle>

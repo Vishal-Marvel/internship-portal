@@ -30,7 +30,7 @@ import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { Student } from "@/schema";
+import { Skill, Student } from "@/schema";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import { cn } from "@/lib/utils";
@@ -108,9 +108,9 @@ const StudentProfile = ({ student }: Props) => {
         "http://localhost:5000/internship/api/v1/skill/getAllSkills"
       );
       setSkills(
-        response.data.data.skillNames.map((skill: string, index) => ({
-          value: skill,
-          label: skill,
+        response.data.data.skillNames.map((skill, index) => ({
+          value: skill.id,
+          label: skill.name,
         }))
       );
     } catch (error) {
@@ -158,7 +158,8 @@ const StudentProfile = ({ student }: Props) => {
       form.setValue("mentor_name", student.mentor_name);
       form.setValue(
         "skills",
-        student.skills.map((skill) => ({ value: skill, label: skill }))
+        //@ts-ignore
+        student.skills.map((skill) => ({ value: skill.id, label: skill.name }))
       );
     }
     getImage();
@@ -192,7 +193,7 @@ const StudentProfile = ({ student }: Props) => {
       if (values.file) {
         formdata.append("file", values.file[0]);
       }
-
+      if (isStudent){
       const response = await axiosInstance.put(
         "http://localhost:5000/internship/api/v1/students/update",
         formdata,
@@ -208,6 +209,24 @@ const StudentProfile = ({ student }: Props) => {
           <span>{response.data.message}</span>
         </>
       );
+      }else{
+        const response = await axiosInstance.put(
+          "http://localhost:5000/internship/api/v1/students/"+student.id,
+          formdata,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        toast(
+          <>
+            <CheckCircle2 />
+            <span>{response.data.message}</span>
+          </>
+        );
+      }
+      
       setUpdate(false);
       onChange("studentProfile");
     } catch (error) {
@@ -237,7 +256,7 @@ const StudentProfile = ({ student }: Props) => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[550px] h-[500px] max-w-[70vw] bg-white rounded-2xl">
+        <ScrollArea className="md:h-[55vh] h-[70vh] md:max-w-[70vw] bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}

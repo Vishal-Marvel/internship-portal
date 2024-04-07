@@ -1,6 +1,5 @@
 import { useModal } from "@/hooks/use-model-store";
 import { useSession } from "@/providers/context/SessionContext";
-import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,

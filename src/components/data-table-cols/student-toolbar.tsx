@@ -73,7 +73,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
             table.getColumn("department").getFacetedUniqueValues()
           ).map((value) => ({
             value: value[0],
-            label: value[0].toUpperCase(),
+            label: value[0]?.toUpperCase(),
           }))}
         />
       )}
@@ -85,7 +85,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
             table.getColumn("sec_sit").getFacetedUniqueValues()
           ).map((value) => ({
             value: value[0],
-            label: value[0].toUpperCase(),
+            label: value[0]?.toUpperCase(),
           }))}
         />
       )}

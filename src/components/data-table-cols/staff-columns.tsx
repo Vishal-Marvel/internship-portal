@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@/providers/context/SessionContext";
+import { useModal } from "@/hooks/use-model-store";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -48,6 +49,9 @@ export const facultyColumns: ColumnDef<Staff>[] = [
         {row.getValue("sec_sit")}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "department",
@@ -59,6 +63,9 @@ export const facultyColumns: ColumnDef<Staff>[] = [
         {row.getValue("department")}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     id: "actions",
@@ -66,6 +73,7 @@ export const facultyColumns: ColumnDef<Staff>[] = [
       const { role } = useSession();
       const faculty = row.original;
       const navigate = useNavigate();
+      const {onOpen} = useModal();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -95,8 +103,18 @@ export const facultyColumns: ColumnDef<Staff>[] = [
                 View Faculty Mentees
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>Update Role</DropdownMenuItem>
-            <DropdownMenuItem>Migrate Mentees</DropdownMenuItem>
+            {(role?.includes("hod") || role?.includes("tapcell") || role?.includes("principal") || role?.includes("ceo")) && (
+                <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={()=>onOpen("updateRole", {faculty})}
+                >Update Role</DropdownMenuItem>
+              )}
+             {(role?.includes("hod") || role?.includes("tapcell") || role?.includes("principal") || role?.includes("ceo")) && faculty.roles.includes("mentor") &&  (
+                <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={()=>navigate("/changeMentee?mentor="+faculty.id)}
+                >Migrate Mentees</DropdownMenuItem>
+              )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -1,5 +1,8 @@
-
+import AddSkill from "@/components/modals/AddSkill";
 import CompletionForm from "@/components/modals/CompletionForm";
+import DeleteSkill from "@/components/modals/DeleteSkill";
+import EditSkill from "@/components/modals/EditSkill";
+import ModifyRole from "@/components/modals/ModifyRole";
 import RejectInternship from "@/components/modals/RejectInternship";
 import SendBackInternship from "@/components/modals/SendBackInternship";
 import { useEffect, useState } from "react";
@@ -17,9 +20,13 @@ export const ModalProvider = () => {
 
   return (
     <>
-      <RejectInternship/>
-      <SendBackInternship/>
-      <CompletionForm/>
+      <ModifyRole />
+      <RejectInternship />
+      <SendBackInternship />
+      <CompletionForm />
+      <AddSkill/>
+      <EditSkill/>
+      <DeleteSkill/>
     </>
   );
 };

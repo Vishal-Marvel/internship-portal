@@ -10,10 +10,11 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import InternshipToolBar from "@/components/data-table-cols/internship-toolbar";
 import StudentToolBar from "@/components/data-table-cols/student-toolbar";
+import FacultyToolBar from "@/components/data-table-cols/staff-toolbar";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  type: "internship" | "student" | "faculty"
+  type: "internship" | "student" | "faculty" | "skill" | "mentee"
 }
 
 export function DataTableToolbar<TData>({
@@ -40,6 +41,7 @@ export function DataTableToolbar<TData>({
         <div className={cn("flex flex-wrap gap-1")}>
           {type == "internship" && <InternshipToolBar table={table}/>}
           {type == "student" && <StudentToolBar table={table}/>}
+          {type == "faculty" && <FacultyToolBar table={table}/>}
 
           {isFiltered && (
             <Button

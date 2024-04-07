@@ -40,6 +40,7 @@ const ViewStudentInternships = ({ internship }: Props) => {
     days: width > 0,
     approval_status: width > 1,
     department: false,
+    internship_status: width>0,
     batch: false,
     section: false,
   };

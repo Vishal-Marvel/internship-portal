@@ -47,9 +47,9 @@ const ViewMentees = () => {
     sec_sit: width > 0 && (isCEO || isTapCell),
     year_of_studying:
       width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
-    section: width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
+    section: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
     department: width > 0 && (isPrincipal || isCEO || isTapCell),
-    mentor_name: width > 1 && (isPrincipal || isCEO || isHOD || isTapCell),
+    mentor_name: false,
     skills: width > 1,
     placement_status: false,
     total_days_internship: width > 0 && (isMentor || isInternshipCoordinator),
@@ -69,6 +69,8 @@ const ViewMentees = () => {
       student = student?.map((student) => ({
         ...student,
         placement_status: student.placement_status ? "Placed" : "Not Placed",
+        total_days_internship: student.total_days_internship ?? 0
+
       }));
       setStudent(student);
     } catch (error) {

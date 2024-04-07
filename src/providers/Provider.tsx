@@ -15,7 +15,9 @@ export const publicRoutes = [
 export const facultyRoutes = [
   "/faculties", 
   "/students",
-  "/studentInternships"
+  "/studentInternships",
+  "/skills"
+  
 ]
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -39,6 +41,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     if (facultyRoutes.includes(pathname) && role?.includes("student")){
       navigate("/")
     }
+    setTheme(clg)
   }, [pathname, token]);
 
   useEffect(() => {
