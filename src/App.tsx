@@ -17,6 +17,7 @@ import ForgotPassword from "./pages/forgetPassword";
 import ViewMentees from "./pages/faculty/viewMentees";
 import ModifySkills from "./pages/faculty/updateSkills";
 import ChangeMentees from "./pages/faculty/changeMentees";
+import ResetPassword from "./pages/resetPassword";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
               <Route path="/studentInternships" element={<ViewInternships />} />
               <Route path="/skills" element={<ModifySkills />} />
               <Route path="/changeMentee" element={<ChangeMentees />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
             </Routes>
           </div>
         </div>
