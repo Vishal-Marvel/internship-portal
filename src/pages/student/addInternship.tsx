@@ -1,4 +1,5 @@
 import AddStudentInternship from "@/components/AddStudentInternship";
+import { useModal } from "@/hooks/use-model-store";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import axios from "axios";
@@ -9,20 +10,24 @@ import { toast } from "sonner";
 
 const AddStudentInternshipPage = () => {
   const navigate = useNavigate();
+  const { onOpen } = useModal();
   const { token, role } = useSession();
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get("student");
-  const [student, setStudent] = useState("student");
+  const [student, setStudent] = useState("");
   useEffect(() => {
     setStudent(id);
   }, [id]);
   const getStatus = async () => {
-    if (!role.includes("student") && student == "student") return;
     try {
+      console.log("ss");
       setLoading(true);
+      if (!role?.includes("student") && student == "") return;
       const response = await axios.get(
-        "http://localhost:5000/internship/api/v1/internships/check/" + student,
+        `http://localhost:5000/internship/api/v1/internships/check${
+          !role?.includes("student") ? "/" + student : ""
+        }`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -31,7 +36,7 @@ const AddStudentInternshipPage = () => {
       );
       setLoading(false);
     } catch (error) {
-      if (error.response.data.message != "") {
+      if (role?.includes("student")) {
         toast(
           <>
             <AlertCircle />
@@ -39,6 +44,13 @@ const AddStudentInternshipPage = () => {
           </>
         );
         navigate("/dashboard");
+      } else {
+        setLoading(false);
+
+        console.error(error);
+        onOpen("alert", {
+          alertText: "Student Has Already Completed 45 days of internship",
+        });
       }
     }
   };

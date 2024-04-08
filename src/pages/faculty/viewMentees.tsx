@@ -44,12 +44,11 @@ const ViewMentees = () => {
   }, []);
   const visibleColumns: VisibilityState = {
     select: false,
-    sec_sit: width > 0 && (isCEO || isTapCell),
-    year_of_studying:
-      width > 0 && (!isMentor || isHOD || isInternshipCoordinator),
+    sec_sit: width > 1 && (isCEO || isTapCell),
     section: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
-    department: width > 0 && (isPrincipal || isCEO || isTapCell),
-    mentor_name: false,
+    department: width > 1 && (isPrincipal || isCEO || isTapCell),
+    batch: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
+    mentor_name: width > 1 && (isPrincipal || isCEO || isHOD || isTapCell),
     skills: width > 1,
     placement_status: false,
     total_days_internship: width > 0 && (isMentor || isInternshipCoordinator),
@@ -69,8 +68,7 @@ const ViewMentees = () => {
       student = student?.map((student) => ({
         ...student,
         placement_status: student.placement_status ? "Placed" : "Not Placed",
-        total_days_internship: student.total_days_internship ?? 0
-
+        total_days_internship: student.total_days_internship ?? 0,
       }));
       setStudent(student);
     } catch (error) {

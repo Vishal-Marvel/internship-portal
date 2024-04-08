@@ -7,7 +7,7 @@ import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Skill } from "@/schema";
 import { AlertCircle, PlusCircle } from "lucide-react";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 function isMobileView() {
   if (window) {
@@ -28,47 +28,47 @@ function isMobileView() {
 const ModifySkills = () => {
   const { token, role, isTokenExpired } = useSession();
   const { type, onClose } = useSocket();
-  const {onOpen} = useModal();
-
-
+  const { onOpen } = useModal();
 
   const [skills, setSkills] = useState<Skill[]>([]);
 
-  const getStaff = async () => {
-    if (!type || type == "skills") {
-      try {
-        if (token && !isTokenExpired()) {
-          const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/skill/skillList",
-            {
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            }
-          );
-          setSkills(response.data.data.skill);
-          onClose();
-        }
-      } catch (error) {
-        toast(
-          <>
-            <AlertCircle />
-            {error.response.data.message}
-          </>
+  const getSkills = async () => {
+    try {
+      if (token && !isTokenExpired()) {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/skill/skillList",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
         );
+        setSkills(response.data.data.skill);
         onClose();
       }
+    } catch (error) {
+      toast(
+        <>
+          <AlertCircle />
+          {error.response.data.message}
+        </>
+      );
+      onClose();
     }
   };
 
   useEffect(() => {
-    getStaff();
+    if (!type || type == "skills") getSkills();
   }, [type]);
 
   return (
     <div className="relative grid place-items-center w-full">
       <div className="absolute top-2 right-2">
-        <Button variant="primary" className="flex gap-2" onClick={()=>onOpen("addSkill")}>
+        <Button
+          variant="primary"
+          className="flex gap-2"
+          onClick={() => onOpen("addSkill")}
+        >
           <PlusCircle className="h-5 w-5" /> Add Skill{" "}
         </Button>
       </div>

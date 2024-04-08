@@ -40,7 +40,7 @@ import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
-  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
+  sec_sit: z.string().min(1, "College is Required").default(""),
   faculty_id: z
     .string()
     .refine((str) => {
@@ -83,12 +83,14 @@ const FacultySignIn = () => {
     try {
       console.log(values);
       if (values.file[0] && values.file[0].size > 1024 * 512) {
-        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+        onOpen("alert", { alertText: "File size Exceeds 512 kb" });
 
         return;
       }
       if (values.password != values.cpassword) {
-        onOpen("alert", {alertText: "Password and Confirm Password, didn't match"});
+        onOpen("alert", {
+          alertText: "Password and Confirm Password, didn't match",
+        });
 
         return;
       }
@@ -170,7 +172,7 @@ const FacultySignIn = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>SEC/SIT</FormLabel>
+                      <FormLabel>College</FormLabel>
                       <FormControl>
                         <Select
                           disabled={isLoading}

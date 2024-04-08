@@ -76,14 +76,13 @@ const formSchema = z.object({
       return num >= 1 && num <= 10;
     }, "CGPA must be within 1-10")
     .default(""),
-  academic_year: z.string().min(1, "Academic year is Required").default(""),
+  sem: z.string().min(1, "Sem is Required").default(""),
   mode_of_intern: z.string().min(1, "Mode of Intern is Required").default(""),
   starting_date: z.date(),
   no_of_days: z.string().min(1, "Number Of Days is Required").default(""),
   location: z.string().min(1, "Location is Required").default(""),
   domain: z.string().min(1, "Domain is Required").default(""),
   file: z.instanceof(FileList).optional(),
-  student_id: z.string().optional(),
 });
 
 const AddStudentInternship = ({ student }: { student: string }) => {
@@ -96,22 +95,7 @@ const AddStudentInternship = ({ student }: { student: string }) => {
   const [mode, setMode] = useState("");
   const fileRef = form.register("file");
   const [cin_gst_udyog, setcin_gst_udyog] = useState<string>();
-  const [years, setYears] = useState<string[]>([]);
   const { onOpen } = useModal();
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-    const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
-    const endYear = startYear + 1;
-
-    const financialYear = `${startYear}-${endYear}`;
-
-    setYears([financialYear]);
-  }, []);
-  useEffect(() => {
-    form.setValue("student_id", student);
-  }, [student]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -127,7 +111,7 @@ const AddStudentInternship = ({ student }: { student: string }) => {
       formdata.append("current_cgpa", values.current_cgpa);
       formdata.append("cin_gst_udyog_no", values.cin_gst_udyog_no);
       formdata.append("cin_gst_udyog", values.cin_gst_udyog);
-      formdata.append("academic_year", values.academic_year);
+      formdata.append("sem", values.sem);
       formdata.append(
         "industry_supervisor_name",
         values.industry_supervisor_name
@@ -148,8 +132,7 @@ const AddStudentInternship = ({ student }: { student: string }) => {
       formdata.append("domain", values.domain);
 
       formdata.append("file", values.file[0]);
-      if (!role?.includes("student"))
-        formdata.append("student_id", values.student_id);
+      if (!role?.includes("student")) formdata.append("student_id", student);
 
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/internships/register",
@@ -167,9 +150,9 @@ const AddStudentInternship = ({ student }: { student: string }) => {
         </>
       );
 
-      form.reset();
+      // form.reset();
 
-      router("/dashboard");
+      // router("/dashboard");
     } catch (error) {
       toast(
         <>
@@ -430,11 +413,11 @@ const AddStudentInternship = ({ student }: { student: string }) => {
 
                     <FormField
                       disabled={isLoading}
-                      name={"academic_year"}
+                      name={"sem"}
                       control={form.control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Academic Year</FormLabel>
+                          <FormLabel>SEM</FormLabel>
                           <FormControl>
                             <Select
                               disabled={isLoading}
@@ -442,18 +425,20 @@ const AddStudentInternship = ({ student }: { student: string }) => {
                             >
                               <FormControl>
                                 <SelectTrigger className=" bg-slate-200 shadow-inner">
-                                  <SelectValue placeholder="Select Academic Year" />
+                                  <SelectValue placeholder="Select SEM" />
                                 </SelectTrigger>
                               </FormControl>
 
                               <SelectContent>
                                 <SelectGroup>
-                                  {years &&
-                                    years.map((year, index) => (
-                                      <SelectItem value={year} key={index}>
-                                        {year}
-                                      </SelectItem>
-                                    ))}
+                                  <SelectItem value="I">I</SelectItem>
+                                  <SelectItem value="II">II</SelectItem>
+                                  <SelectItem value="III">III</SelectItem>
+                                  <SelectItem value="IV">IV</SelectItem>
+                                  <SelectItem value="V">V</SelectItem>
+                                  <SelectItem value="VI">VI</SelectItem>
+                                  <SelectItem value="VII">VII</SelectItem>
+                                  <SelectItem value="VIII">VIII</SelectItem>
                                 </SelectGroup>
                               </SelectContent>
                             </Select>

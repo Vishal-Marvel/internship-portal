@@ -165,7 +165,10 @@ const StudentInternship = ({ internship }: Props) => {
 
       const endingDate = new Date(internship.ending_date);
       const today = new Date();
-      if (internship.approval_status == "Approved" && endingDate < today) {
+      if (
+        (internship.approval_status == "Approved" && endingDate < today) ||
+        internship.certificate
+      ) {
         setPostCompletion(true);
       }
     }
@@ -238,13 +241,13 @@ const StudentInternship = ({ internship }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (values.offer_letter[0]?.size > 1024 * 512) {
-        onOpen("alert", {alertText: "Offer letter File Size Exceeds 512 kb"});
+      if (values.offer_letter[0]?.size > 1048576) {
+        onOpen("alert", { alertText: "Offer letter File Size Exceeds 1 mb" });
 
         return;
       }
-      if (values.certificate[0]?.size > 1024 * 512) {
-        onOpen("alert", {alertText: "Certificate  File Size Exceeds 512 kb"});
+      if (values.certificate[0]?.size > 1048576) {
+        onOpen("alert", { alertText: "Certificate  File Size Exceeds 1 mb" });
 
         return;
       }
@@ -273,9 +276,13 @@ const StudentInternship = ({ internship }: Props) => {
       formdata.append("no_of_days", values.no_of_days.toString());
       formdata.append("location", values.location);
       formdata.append("domain", values.domain);
+      if (values.offer_letter[0])
+        formdata.append("offer_letter", values.offer_letter[0]);
+      if (values.certificate[0])
+        formdata.append("certificate", values.certificate[0]);
 
       const response = await axiosInstance.put(
-        "http://localhost:5000/internship/api/v1/students/update",
+        "http://localhost:5000/internship/api/v1/internships/" + internship.id,
         formdata,
         {
           headers: {
@@ -283,7 +290,6 @@ const StudentInternship = ({ internship }: Props) => {
           },
         }
       );
-      console.log(response);
       toast(
         <>
           <CheckCircle2 />

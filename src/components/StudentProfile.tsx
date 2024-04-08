@@ -43,7 +43,7 @@ interface Props {
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
-  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
+  sec_sit: z.string().min(1, "College is Required").default(""),
   student_id: z.string().min(1, "Student ID is Required").default(""),
   batch: z.string().min(1, "Batch is Required").default(""),
   section: z.string().min(1, "Section is Required").default(""),
@@ -73,7 +73,7 @@ interface Option {
 }
 
 const StudentProfile = ({ student }: Props) => {
-  const {onChange} = useSocket();  
+  const { onChange } = useSocket();
   const { token, role } = useSession();
   const [years, setYears] = useState<string[]>([]);
 
@@ -149,10 +149,7 @@ const StudentProfile = ({ student }: Props) => {
       form.setValue("department", student.department);
       form.setValue("email", student.email);
       form.setValue("phone_no", student.phone_no);
-      form.setValue(
-        "total_days_internship",
-        student.total_days_internship 
-      );
+      form.setValue("total_days_internship", student.total_days_internship);
       form.setValue("placement_status", student.placement_status || "unplaced");
       form.setValue("placed_company", student.placed_company);
       form.setValue("mentor_name", student.mentor_name);
@@ -168,7 +165,7 @@ const StudentProfile = ({ student }: Props) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (values.file && values.file[0].size > 1024 * 512) {
-        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+        onOpen("alert", { alertText: "File size Exceeds 512 kb" });
 
         return;
       }
@@ -183,7 +180,10 @@ const StudentProfile = ({ student }: Props) => {
       formdata.append("department", values.department);
       formdata.append("email", values.email);
       formdata.append("phone_no", values.phone_no);
-      formdata.append("total_days_internship", String(values.total_days_internship));
+      formdata.append(
+        "total_days_internship",
+        String(values.total_days_internship)
+      );
       formdata.append("placement_status", values.placement_status);
       formdata.append("placed_company", values.placed_company);
       formdata.append("mentor_name", values.mentor_name);
@@ -193,25 +193,25 @@ const StudentProfile = ({ student }: Props) => {
       if (values.file) {
         formdata.append("file", values.file[0]);
       }
-      if (isStudent){
-      const response = await axiosInstance.put(
-        "http://localhost:5000/internship/api/v1/students/update",
-        formdata,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      toast(
-        <>
-          <CheckCircle2 />
-          <span>{response.data.message}</span>
-        </>
-      );
-      }else{
+      if (isStudent) {
         const response = await axiosInstance.put(
-          "http://localhost:5000/internship/api/v1/students/"+student.id,
+          "http://localhost:5000/internship/api/v1/students/update",
+          formdata,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        toast(
+          <>
+            <CheckCircle2 />
+            <span>{response.data.message}</span>
+          </>
+        );
+      } else {
+        const response = await axiosInstance.put(
+          "http://localhost:5000/internship/api/v1/students/" + student.id,
           formdata,
           {
             headers: {
@@ -226,7 +226,7 @@ const StudentProfile = ({ student }: Props) => {
           </>
         );
       }
-      
+
       setUpdate(false);
       onChange("studentProfile");
     } catch (error) {
@@ -303,7 +303,7 @@ const StudentProfile = ({ student }: Props) => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>SEC/SIT</FormLabel>
+                      <FormLabel>College</FormLabel>
                       <FormControl>
                         <Select
                           disabled={true}
@@ -318,8 +318,12 @@ const StudentProfile = ({ student }: Props) => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="sec">SEC</SelectItem>
-                              <SelectItem value="sit">SIT</SelectItem>
+                              <SelectItem value="sec">
+                                Sairam Engineering College
+                              </SelectItem>
+                              <SelectItem value="sit">
+                                Sairam Institure Of Technology
+                              </SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -368,10 +372,10 @@ const StudentProfile = ({ student }: Props) => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="1">I</SelectItem>
-                              <SelectItem value="2">II</SelectItem>
-                              <SelectItem value="3">III</SelectItem>
-                              <SelectItem value="4">IV</SelectItem>
+                              <SelectItem value="I">I</SelectItem>
+                              <SelectItem value="II">II</SelectItem>
+                              <SelectItem value="III">III</SelectItem>
+                              <SelectItem value="IV">IV</SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>

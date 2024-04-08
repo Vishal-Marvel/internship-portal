@@ -8,14 +8,12 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 function FacultyToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
-
   const { role } = useSession();
   const isTapCell = role?.includes("tapcell");
   const isPrincipal = role?.includes("principal");
   const isCEO = role?.includes("ceo");
   return (
     <>
-     
       {(isPrincipal || isCEO || isTapCell) && table.getColumn("department") && (
         <DataTableFacetedFilter
           column={table.getColumn("department")}
@@ -31,7 +29,7 @@ function FacultyToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
       {(isCEO || isTapCell) && table.getColumn("sec_sit") && (
         <DataTableFacetedFilter
           column={table.getColumn("sec_sit")}
-          title="SEC/SIT"
+          title="College"
           options={Array.from(
             table.getColumn("sec_sit").getFacetedUniqueValues()
           ).map((value) => ({
@@ -40,8 +38,6 @@ function FacultyToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           }))}
         />
       )}
-
-    
     </>
   );
 }

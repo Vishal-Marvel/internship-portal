@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { AlertCircle, ConstructionIcon } from "lucide-react";
+import { AlertCircle, CheckCircle, ConstructionIcon } from "lucide-react";
 import { useSession } from "@/providers/context/SessionContext";
 import { useEffect, useState } from "react";
 import PasswordInput from "./PasswordInput";
@@ -33,13 +33,14 @@ import { useTheme } from "@/providers/theme-provider";
 const formSchema = z.object({
   OPassword: z.string().min(1, { message: "Old Password is required" }),
   NPassword: z.string().min(1, { message: "New Password is required" }),
+  CNPassword: z
+    .string()
+    .min(1, { message: "Confirm New Password is required" }),
 });
 
 const ResetPassword = () => {
   const router = useNavigate();
-  const { setTheme } = useTheme();
-  const {token , role} = useSession();
-  const { setSession } = useSession();
+  const { token, role } = useSession();
   const isStudent = role?.includes("student");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,28 +48,34 @@ const ResetPassword = () => {
     defaultValues: {
       OPassword: "",
       NPassword: "",
-
+      CNPassword: "",
     },
   });
   const isLoading = form.formState.isSubmitting;
 
-  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-        
-      const response = await axiosInstance.post(
-        
-        `http://localhost:5000/internship/api/v1/${isStudent?"students":"staffs"}/change-password`,
-        { oldPassword: values.OPassword, newPassword: values.NPassword }
+      if (values.CNPassword != values.NPassword) {
+        form.setError("CNPassword", { message: "Passwords didn't match" });
+        return;
+      }
+      await axiosInstance.post(
+        `http://localhost:5000/internship/api/v1/${
+          isStudent ? "students" : "staffs"
+        }/change-password`,
+        { oldPassword: values.OPassword, newPassword: values.NPassword },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
       );
-      
 
-      setSession(
-        response.data.data.token,
-        response.data.data.roles,
-        response.data.data.clg
+      toast(
+        <>
+          <CheckCircle /> Password Resetted Successfully
+        </>
       );
-      setTheme(response.data.data.clg);
       form.reset();
 
       router("/dashboard");
@@ -84,7 +91,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Card className=" shadow-2xl bg-white/100 rounded-2xl">
+    <Card className=" shadow-2xl bg-white/80 rounded-2xl lg:w-[30vw] md:w-[45vw] w-full">
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
       </CardHeader>
@@ -92,7 +99,6 @@ const ResetPassword = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid w-full items-center gap-10 ">
-              
               <FormField
                 disabled={isLoading}
                 name={"OPassword"}
@@ -119,6 +125,25 @@ const ResetPassword = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        className=" bg-slate-300 shadow-inner"
+                        disabled={isLoading}
+                        placeholder="*********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                disabled={isLoading}
+                name={"CNPassword"}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
                       <PasswordInput
                         className=" bg-slate-300 shadow-inner"

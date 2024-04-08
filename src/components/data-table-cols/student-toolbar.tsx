@@ -27,8 +27,10 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
     );
     setSkills(
       response.data.data.skillNames.map((skill: string, index) => ({
-        value: skill,
-        label: skill,
+        //@ts-ignore
+        value: skill.name,
+        //@ts-ignore
+        label: skill.name,
       }))
     );
   };
@@ -54,14 +56,25 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           ).map((value) => ({ value: value[0], label: value[0] }))}
         />
       )}
-
+      {(isCEO || isTapCell) && table.getColumn("sec_sit") && (
+        <DataTableFacetedFilter
+          column={table.getColumn("sec_sit")}
+          title="College"
+          options={Array.from(
+            table.getColumn("sec_sit").getFacetedUniqueValues()
+          ).map((value) => ({
+            value: value[0],
+            label: value[0]?.toUpperCase(),
+          }))}
+        />
+      )}
       {(!isMentor || isHOD || isInternshipCoordinator) &&
-        table.getColumn("year_of_studying") && (
+        table.getColumn("batch") && (
           <DataTableFacetedFilter
-            column={table.getColumn("year_of_studying")}
-            title="Year Of Studying"
+            column={table.getColumn("batch")}
+            title="Batch"
             options={Array.from(
-              table.getColumn("year_of_studying").getFacetedUniqueValues()
+              table.getColumn("batch").getFacetedUniqueValues()
             ).map((value) => ({ value: value[0], label: value[0] }))}
           />
         )}
@@ -77,19 +90,6 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           }))}
         />
       )}
-      {(isCEO || isTapCell) && table.getColumn("sec_sit") && (
-        <DataTableFacetedFilter
-          column={table.getColumn("sec_sit")}
-          title="SEC/SIT"
-          options={Array.from(
-            table.getColumn("sec_sit").getFacetedUniqueValues()
-          ).map((value) => ({
-            value: value[0],
-            label: value[0]?.toUpperCase(),
-          }))}
-        />
-      )}
-
       {(!isMentor || isHOD || isInternshipCoordinator) &&
         table.getColumn("section") && (
           <DataTableFacetedFilter
@@ -100,6 +100,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
             ).map((value) => ({ value: value[0], label: value[0] }))}
           />
         )}
+
       {table.getColumn("skills") && (
         <DataTableFacetedFilter
           column={table.getColumn("skills")}

@@ -42,7 +42,7 @@ export const facultyColumns: ColumnDef<Staff>[] = [
   {
     accessorKey: "sec_sit",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="SEC/SIT" />;
+      return <DataTableColumnHeader column={column} title="College" />;
     },
     cell: ({ row }) => (
       <div className="text-center font-medium uppercase">
@@ -73,7 +73,7 @@ export const facultyColumns: ColumnDef<Staff>[] = [
       const { role } = useSession();
       const faculty = row.original;
       const navigate = useNavigate();
-      const {onOpen} = useModal();
+      const { onOpen } = useModal();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -103,17 +103,28 @@ export const facultyColumns: ColumnDef<Staff>[] = [
                 View Faculty Mentees
               </DropdownMenuItem>
             )}
-            {(role?.includes("hod") || role?.includes("tapcell") || role?.includes("principal") || role?.includes("ceo")) && (
-                <DropdownMenuItem
+            {(role?.includes("hod") ||
+              role?.includes("tapcell") ||
+              role?.includes("principal") ||
+              role?.includes("ceo")) && (
+              <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={()=>onOpen("updateRole", {faculty})}
-                >Update Role</DropdownMenuItem>
-              )}
-             {(role?.includes("hod") || role?.includes("tapcell") || role?.includes("principal") || role?.includes("ceo")) && faculty.roles.includes("mentor") &&  (
+                onClick={() => onOpen("updateRole", { faculty })}
+              >
+                Update Role
+              </DropdownMenuItem>
+            )}
+            {(role?.includes("hod") ||
+              role?.includes("tapcell") ||
+              role?.includes("principal") ||
+              role?.includes("ceo")) &&
+              faculty.roles.includes("mentor") && (
                 <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={()=>navigate("/changeMentee?mentor="+faculty.id)}
-                >Migrate Mentees</DropdownMenuItem>
+                  className="cursor-pointer"
+                  onClick={() => navigate("/changeMentee?mentor=" + faculty.id)}
+                >
+                  Migrate Mentees
+                </DropdownMenuItem>
               )}
           </DropdownMenuContent>
         </DropdownMenu>

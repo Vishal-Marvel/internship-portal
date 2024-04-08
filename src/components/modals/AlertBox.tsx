@@ -1,6 +1,5 @@
 import { useModal } from "@/hooks/use-model-store";
 
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,12 +12,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useSession } from "@/providers/context/SessionContext";
 
-export const DeleteAuxGallery = () => {
+export const AlertBox = () => {
   const { isOpen, type, data, onClose } = useModal();
-  const { token, isTokenExpired } = useSession();
-  const isModalOpen = isOpen && type === "alert";
+  const isModalOpen = isOpen && type == "alert";
   const { alertText } = data;
- 
+
   const handleClose = () => {
     onClose();
   };

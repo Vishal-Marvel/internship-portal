@@ -34,7 +34,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   visibleColumns: VisibilityState;
-  type: "internship" | "student" | "faculty" | "skill" |"mentee";
+  type: "internship" | "student" | "faculty" | "skill" | "mentee";
   title?: string;
 }
 
@@ -45,24 +45,28 @@ export function DataTable<TData, TValue>({
   title,
   visibleColumns,
 }: DataTableProps<TData, TValue>) {
-  const {onChange} = useSocket();
+  const { onChange } = useSocket();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(visibleColumns);
+    React.useState<VisibilityState>();
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
   // const [pagination, setPagination] = React.useState<PaginationState>({pageSize:5, pageIndex:0});
 
   React.useEffect(() => {
+    // console.log(columnVisibility);
     setColumnVisibility(visibleColumns);
   }, [visibleColumns]);
+  const handleColumnVisibility = (e) => {
+    setColumnVisibility(e);
+  };
   React.useEffect(() => {
-    onChange("rows", {rows: rowSelection})
+    if (type == "mentee" && columnVisibility["select"])
+      onChange("rows", { rows: rowSelection });
   }, [rowSelection]);
-  
 
   const table = useReactTable({
     data,
@@ -77,7 +81,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnVisibilityChange: handleColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
@@ -93,14 +97,19 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
       <span className="capitalize font-semibold font-sans text-xl">{type}</span>
       <DataTableToolbar table={table} type={type} />
-      <ScrollArea className={cn("rounded-md  w-full", type== "mentee" ? "md:h-[40vh] h-[40vh]": "md:h-[60vh] h-[65vh]")}>
+      <ScrollArea
+        className={cn(
+          "rounded-md  w-full",
+          type == "mentee" ? "md:h-[40vh] h-[40vh]" : "md:h-[60vh] h-[65vh]"
+        )}
+      >
         <Table>
           <TableHeader className="sticky top-0 bg-slate-300">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} >
+                    <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

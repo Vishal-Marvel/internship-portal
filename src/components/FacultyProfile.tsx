@@ -36,7 +36,7 @@ import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
-  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
+  sec_sit: z.string().min(1, "College is Required").default(""),
   faculty_id: z
     .string()
     .refine((str) => {
@@ -107,7 +107,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
     try {
       if (isTokenExpired()) return;
       if (values.file[0] && values.file[0].size > 1024 * 512) {
-        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+        onOpen("alert", { alertText: "File size Exceeds 512 kb" });
         return;
       }
 
@@ -116,13 +116,13 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
       formdata.append("sec_sit", values.sec_sit);
       formdata.append("faculty_id", values.faculty_id);
       formdata.append("department", values.department);
-      formdata.append("email", values.faculty_id + "@sairam.edu.in");
+      formdata.append("email", values.email);
       formdata.append("phone_no", values.phone_no);
 
       if (values.file[0]) formdata.append("file", values.file[0]);
 
       await axiosInstance.put(
-        "http://localhost:5000/internship/api/v1/staffs/update",
+        `http://localhost:5000/internship/api/v1/staffs/update/` + staff.id,
         formdata,
         {
           headers: {
@@ -222,7 +222,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>SEC/SIT</FormLabel>
+                      <FormLabel>College</FormLabel>
                       <FormControl>
                         <Select
                           disabled={isLoading || !isAuthenticated}
@@ -237,8 +237,12 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="sec">SEC</SelectItem>
-                              <SelectItem value="sit">SIT</SelectItem>
+                              <SelectItem value="sec">
+                                Sri Sairam Engineering College
+                              </SelectItem>
+                              <SelectItem value="sit">
+                                Sairam Institute Of Technology
+                              </SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -266,12 +270,33 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
                   )}
                 />
                 <FormField
+                  name={"email"}
+                  disabled={isLoading || !isAuthenticated}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <span className="flex items-center">
+                        <Input
+                          className=" bg-slate-200 shadow-inner"
+                          disabled={isLoading || !isAuthenticated}
+                          placeholder="Enter Email"
+                          type="text"
+                          {...field}
+                        />
+                        @sairam.edu.in
+                      </span>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
                   name={"department"}
                   disabled={isLoading || !isAuthenticated}
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel> Department</FormLabel>
+                      <FormLabel>Department</FormLabel>
                       <FormControl>
                         <Select
                           disabled={isLoading || !isAuthenticated}
@@ -308,7 +333,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
                           className=" bg-slate-200 shadow-inner"
                           disabled={isLoading}
                           placeholder="Enter Phone Number"
-                          type="text"
+                          type="number"
                           {...field}
                         />
                       </FormControl>

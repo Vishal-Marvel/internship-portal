@@ -21,94 +21,100 @@ const Navbar = () => {
       <div className=" h-full  relative flex w-full justify-center">
         <div className="flex items-center w-[92%] justify-between">
           <div className="flex gap-2">
-            <MobileToggle/>
+            <MobileToggle />
             <Link
               to={"/dashboard"}
               className={cn(
-                pathname == "/dashboard" &&
-                  " text-black rounded-lg ",
+                pathname == "/dashboard" && " text-black rounded-lg ",
                 "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
               )}
             >
-              <img src="/logo.png"  className="object-cover h-[40px] aspect-auto"/>
+              <img
+                src="/logo.png"
+                className="object-cover h-[40px] aspect-auto"
+              />
             </Link>
             <div className="hidden lg:flex gap-2">
-            {role?.includes("student") && (
-              <Link
-                to={"/student/addInternship"}
-                className={cn(
-                  pathname == "/student/addInternship" &&
-                    "bg-slate-300/80 text-black rounded-lg ",
-                  "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
-                )}
-              >
-                <Button className=" uppercase" variant="link">
-                  Add Internship
-                </Button>
-              </Link>
-            )}
-            {!role?.includes("student") && (
-              <>
-                {(role?.includes("hod") ||
-                  role?.includes("principal") ||
-                  role?.includes("ceo") ) && (
-                  <Link
-                    to={"/faculties"}
-                    className={cn(
-                      pathname == "/faculties" &&
-                        "bg-slate-300/80 text-black rounded-lg ",
-                      "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
-                    )}
-                  >
-                    <Button className=" uppercase" variant="link">
-                      View Faculties
-                    </Button>
-                  </Link>
-                )}
-              
+              {role?.includes("student") && (
                 <Link
-                  to={"/students"}
+                  to={"/addInternship"}
                   className={cn(
-                    pathname == "/students" &&
+                    pathname == "/addInternship" &&
                       "bg-slate-300/80 text-black rounded-lg ",
                     "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
                   )}
                 >
                   <Button className=" uppercase" variant="link">
-                    View Students
+                    Add Internship
                   </Button>
                 </Link>
-                <Link
-                  to={"/studentInternships"}
-                  className={cn(
-                    pathname == "/studentInternships" &&
-                      "bg-slate-300/80 text-black rounded-lg ",
-                    "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+              )}
+              {!role?.includes("student") && (
+                <>
+                  {(role?.includes("hod") ||
+                    role?.includes("principal") ||
+                    role?.includes("ceo")) && (
+                    <Link
+                      to={"/faculties"}
+                      className={cn(
+                        pathname == "/faculties" &&
+                          "bg-slate-300/80 text-black rounded-lg ",
+                        "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                      )}
+                    >
+                      <Button className=" uppercase" variant="link">
+                        View Faculties
+                      </Button>
+                    </Link>
                   )}
-                >
-                  <Button className=" uppercase" variant="link">
-                    View Student Internships
-                  </Button>
-                </Link>
-                {(role?.includes("hod") ||
-                  role?.includes("principal") ||
-                  role?.includes("tapcell") || role?.includes("admin") ||
-                  role?.includes("ceo") ) && (
-                  <Link
-                    to={"/skills"}
-                    className={cn(
-                      pathname == "/skills" &&
-                        "bg-slate-300/80 text-black rounded-lg ",
-                      "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
-                    )}
-                  >
-                    <Button className=" uppercase" variant="link">
-                      Modify Skills
-                    </Button>
-                  </Link>
-                )}
-              </>
-            )}
+                  {!role?.includes("admin") && (
+                    <>
+                      <Link
+                        to={"/students"}
+                        className={cn(
+                          pathname == "/students" &&
+                            "bg-slate-300/80 text-black rounded-lg ",
+                          "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                        )}
+                      >
+                        <Button className=" uppercase" variant="link">
+                          View Students
+                        </Button>
+                      </Link>
+                      <Link
+                        to={"/studentInternships"}
+                        className={cn(
+                          pathname == "/studentInternships" &&
+                            "bg-slate-300/80 text-black rounded-lg ",
+                          "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                        )}
+                      >
+                        <Button className=" uppercase" variant="link">
+                          View Student Internships
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                  {(role?.includes("hod") ||
+                    role?.includes("principal") ||
+                    role?.includes("tapcell") ||
+                    role?.includes("admin") ||
+                    role?.includes("ceo")) && (
+                    <Link
+                      to={"/skills"}
+                      className={cn(
+                        pathname == "/skills" &&
+                          "bg-slate-300/80 text-black rounded-lg ",
+                        "flex items-center transition-all text-slate-300/80 duration-100 ease-in"
+                      )}
+                    >
+                      <Button className=" uppercase" variant="link">
+                        Modify Skills
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              )}
             </div>
           </div>
           <UserButton />

@@ -1,4 +1,5 @@
 import AddSkill from "@/components/modals/AddSkill";
+import { AlertBox } from "@/components/modals/AlertBox";
 import CompletionForm from "@/components/modals/CompletionForm";
 import DeleteSkill from "@/components/modals/DeleteSkill";
 import EditSkill from "@/components/modals/EditSkill";
@@ -24,9 +25,10 @@ export const ModalProvider = () => {
       <RejectInternship />
       <SendBackInternship />
       <CompletionForm />
-      <AddSkill/>
-      <EditSkill/>
-      <DeleteSkill/>
+      <AddSkill />
+      <EditSkill />
+      <DeleteSkill />
+      <AlertBox />
     </>
   );
 };

@@ -19,10 +19,21 @@ const ViewInternships = () => {
   const getData = async () => {
     try {
       if (isTokenExpired()) return;
-      if (!type || type == "internship") {
-        if (role?.includes("student")) {
+      if (role?.includes("student")) {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/students/internships",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setData(response.data.data.internships);
+      } else {
+        if (student) {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/students/internships",
+            "http://localhost:5000/internship/api/v1/internships/view-student-internships/" +
+              student,
             {
               headers: {
                 Authorization: "Bearer " + token,
@@ -31,31 +42,18 @@ const ViewInternships = () => {
           );
           setData(response.data.data.internships);
         } else {
-          if (student) {
-            const response = await axiosInstance.get(
-              "http://localhost:5000/internship/api/v1/internships/view-student-internships/" +
-                student,
-              {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              }
-            );
-            setData(response.data.data.internships);
-          } else {
-            const response = await axiosInstance.get(
-              "http://localhost:5000/internship/api/v1/internships/view/all",
-              {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              }
-            );
-            setData(response.data.data.internships);
-          }
+          const response = await axiosInstance.get(
+            "http://localhost:5000/internship/api/v1/internships/view/all",
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+          setData(response.data.data.internships);
         }
-        onClose();
       }
+      onClose();
     } catch (error) {
       toast(
         <>
@@ -67,8 +65,8 @@ const ViewInternships = () => {
     }
   };
   useEffect(() => {
-    getData();
-  }, [type]);
+    if (!type || type == "internship") getData();
+  }, [type, student]);
 
   return <ViewStudentInternships internship={data} />;
 };

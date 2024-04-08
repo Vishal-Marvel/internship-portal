@@ -41,6 +41,7 @@ function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
         />
       )}
       {(!isMentor || isHOD || isInternshipCoordinator) &&
+        !isStudent &&
         table.getColumn("batch") && (
           <DataTableFacetedFilter
             column={table.getColumn("batch")}
@@ -50,6 +51,18 @@ function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
             ).map((value) => ({ value: value[0], label: value[0] }))}
           />
         )}
+      {!isStudent && table.getColumn("sem") && (
+        <DataTableFacetedFilter
+          column={table.getColumn("sem")}
+          title="SEM"
+          options={Array.from(
+            table.getColumn("sem").getFacetedUniqueValues()
+          ).map((value) => ({
+            value: value[0],
+            label: value[0]?.toUpperCase(),
+          }))}
+        />
+      )}
 
       {(isPrincipal || isCEO || isTapCell) && table.getColumn("department") && (
         <DataTableFacetedFilter
@@ -64,6 +77,7 @@ function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
         />
       )}
       {(!isMentor || isHOD || isInternshipCoordinator) &&
+        !isStudent &&
         table.getColumn("section") && (
           <DataTableFacetedFilter
             column={table.getColumn("section")}

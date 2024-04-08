@@ -30,7 +30,7 @@ export interface Student {
 export interface Skill {
   id: string;
   skill: string;
-  count:number;
+  count: number;
 }
 
 export interface Staff {
@@ -42,7 +42,7 @@ export interface Staff {
   email: string;
   phone_no: string;
   profile_photo: string;
-  roles:string[]
+  roles: string[];
 }
 
 export interface Internship {
@@ -54,7 +54,7 @@ export interface Internship {
   current_cgpa: string;
   cin_gst_udyog: string;
   cin_gst_udyog_no: string;
-  academic_year: string;
+  sem: string;
   industry_supervisor_name: string;
   industry_supervisor_ph_no: string;
   industry_supervisor_email: string;

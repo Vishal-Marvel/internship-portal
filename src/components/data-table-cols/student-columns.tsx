@@ -65,7 +65,7 @@ export const studentColumns: ColumnDef<Student>[] = [
   {
     accessorKey: "sec_sit",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="SEC/SIT" />;
+      return <DataTableColumnHeader column={column} title="College" />;
     },
     cell: ({ row }) => (
       <div className="text-center font-medium uppercase">
@@ -77,16 +77,18 @@ export const studentColumns: ColumnDef<Student>[] = [
     },
   },
   {
-    accessorKey: "year_of_studying",
+    accessorKey: "batch",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Year" />;
+      return <div className="text-center">Batch</div>;
     },
     cell: ({ row }) => (
-      <div className="text-center font-medium uppercase">
-        {row.getValue("year_of_studying")}
-      </div>
+      <div className="text-center font-medium">{row.getValue("batch")}</div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
+
   {
     accessorKey: "department",
     header: ({ column }) => {
@@ -181,10 +183,10 @@ export const studentColumns: ColumnDef<Student>[] = [
       </div>
     ),
     filterFn: (row, id, value) => {
+      console.log(value);
       //@ts-ignore
       return value.every((val) => row.getValue(id).includes(val));
     },
-    enableGlobalFilter: true,
   },
   {
     id: "actions",

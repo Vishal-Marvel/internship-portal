@@ -158,7 +158,7 @@ const FacultyForgotPassword = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Faculty Id</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <span className="flex items-center gap-5">
                         <Input

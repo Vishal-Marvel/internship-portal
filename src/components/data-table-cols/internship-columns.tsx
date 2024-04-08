@@ -26,7 +26,7 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     cell: ({ row }) => {
       const internship = row.original;
       return (
-        <div className="text-right font-medium">
+        <div className="text-center font-medium">
           <Link
             className="hover:underline"
             to={"/profile/student/" + internship.student.id}
@@ -42,7 +42,7 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     id: "batch",
     header: "batch",
     cell: ({ row }) => (
-      <div className="text-right font-medium">{row.getValue("batch")}</div>
+      <div className="text-center font-medium">{row.getValue("batch")}</div>
     ),
   },
   {
@@ -50,7 +50,7 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     id: "section",
     header: "section",
     cell: ({ row }) => (
-      <div className="text-right font-medium">{row.getValue("section")}</div>
+      <div className="text-center font-medium">{row.getValue("section")}</div>
     ),
   },
   {
@@ -58,14 +58,25 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     id: "department",
     header: "department",
     cell: ({ row }) => (
-      <div className="text-right font-medium">{row.getValue("department")}</div>
+      <div className="text-center font-medium">
+        {row.getValue("department")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "sem",
+    header: "Sem",
+    cell: ({ row }) => (
+      <div className="text-center font-medium">{row.getValue("sem")}</div>
     ),
   },
   {
     accessorKey: "company_name",
-    header: "Company Name",
+    header: ({ column }) => {
+      return <div className="text-center">Company Name</div>;
+    },
     cell: ({ row }) => (
-      <div className="text-right font-medium">
+      <div className="text-center font-medium">
         {row.getValue("company_name")}
       </div>
     ),
@@ -76,7 +87,7 @@ export const internshipColumns: ColumnDef<Internship>[] = [
       return <DataTableColumnHeader column={column} title="Starting Date" />;
     },
     cell: ({ row }) => (
-      <div className="text-right font-medium ">
+      <div className="text-center font-medium ">
         {new Date(row.getValue("starting_date")).toLocaleDateString("en-GB")}
       </div>
     ),
@@ -87,7 +98,7 @@ export const internshipColumns: ColumnDef<Internship>[] = [
       return <DataTableColumnHeader column={column} title="Ending Date" />;
     },
     cell: ({ row }) => (
-      <div className="text-right font-medium">
+      <div className="text-center font-medium">
         {new Date(row.getValue("ending_date")).toLocaleDateString("en-GB")}
       </div>
     ),
@@ -188,7 +199,8 @@ export const internshipColumns: ColumnDef<Internship>[] = [
               View Internship
             </DropdownMenuItem>
             {role?.includes("student") &&
-              internship.approval_status == "Approved" && (
+              internship.approval_status == "Approved" &&
+              !internship.certificate && (
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {

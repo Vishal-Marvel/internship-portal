@@ -47,7 +47,7 @@ interface Option {
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
-  sec_sit: z.string().min(1, "SEC/SIT is Required").default(""),
+  sec_sit: z.string().min(1, "College is Required").default(""),
   student_id: z
     .string()
     .refine((str) => {
@@ -92,7 +92,6 @@ const StudentSignIn = () => {
   const isLoading = form.formState.isSubmitting;
   const fileRef = form.register("file");
   const { onOpen } = useModal();
-
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -168,12 +167,14 @@ const StudentSignIn = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (values.file[0] && values.file[0].size > 1024 * 512) {
-        onOpen("alert", {alertText: "File size Exceeds 512 kb"});
+        onOpen("alert", { alertText: "File size Exceeds 512 kb" });
 
         return;
       }
       if (values.password != values.cpassword) {
-        onOpen("alert", {alertText: "Password and Confirm Password, didn't match"});
+        onOpen("alert", {
+          alertText: "Password and Confirm Password, didn't match",
+        });
 
         return;
       }
@@ -266,7 +267,7 @@ const StudentSignIn = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>SEC/SIT</FormLabel>
+                      <FormLabel>College</FormLabel>
                       <FormControl>
                         <Select
                           disabled={isLoading}
@@ -280,8 +281,12 @@ const StudentSignIn = () => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="sec">SEC</SelectItem>
-                              <SelectItem value="sit">SIT</SelectItem>
+                              <SelectItem value="sec">
+                                Sri Sairam Engineering College
+                              </SelectItem>
+                              <SelectItem value="sit">
+                                Sairam Institure Of Technology
+                              </SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -328,10 +333,10 @@ const StudentSignIn = () => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="1">I</SelectItem>
-                              <SelectItem value="2">II</SelectItem>
-                              <SelectItem value="3">III</SelectItem>
-                              <SelectItem value="4">IV</SelectItem>
+                              <SelectItem value="I">I</SelectItem>
+                              <SelectItem value="II">II</SelectItem>
+                              <SelectItem value="III">III</SelectItem>
+                              <SelectItem value="IV">IV</SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>

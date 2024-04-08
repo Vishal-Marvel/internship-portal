@@ -6,42 +6,37 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-
 import { cn } from "@/lib/utils";
 import InternshipToolBar from "@/components/data-table-cols/internship-toolbar";
 import StudentToolBar from "@/components/data-table-cols/student-toolbar";
 import FacultyToolBar from "@/components/data-table-cols/staff-toolbar";
+import { DataTableViewOptions } from "./data-view-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  type: "internship" | "student" | "faculty" | "skill" | "mentee"
+  type: "internship" | "student" | "faculty" | "skill" | "mentee";
 }
 
 export function DataTableToolbar<TData>({
   table,
-  type
+  type,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-start justify-between gap-5">
       <div className="flex flex-col justify-between flex-1 gap-2">
         <div className="flex space-x-5">
           <Input
             placeholder="Search..."
-           
-            onChange={(event) =>
-              table
-                .setGlobalFilter(event.target.value)
-            }
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
             className="h-8  bg-slate-300 shadow-inner"
           />
-          
         </div>
         <div className={cn("flex flex-wrap gap-1")}>
-          {type == "internship" && <InternshipToolBar table={table}/>}
-          {type == "student" && <StudentToolBar table={table}/>}
-          {type == "faculty" && <FacultyToolBar table={table}/>}
+          {type == "internship" && <InternshipToolBar table={table} />}
+          {type == "student" && <StudentToolBar table={table} />}
+          {type == "faculty" && <FacultyToolBar table={table} />}
 
           {isFiltered && (
             <Button
@@ -55,6 +50,7 @@ export function DataTableToolbar<TData>({
           )}
         </div>
       </div>
+      {/* <DataTableViewOptions table={table} /> */}
     </div>
   );
 }

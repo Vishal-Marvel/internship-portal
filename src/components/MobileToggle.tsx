@@ -60,7 +60,7 @@ const MobileToggle = () => {
         <div className="flex p-3 flex-col">
           {role?.includes("student") && (
             <Link
-              to={"/student/addInternship"}
+              to={"/addInternship"}
               className={cn(
                 pathname == "/student/addInternship" &&
                   "bg-slate-300/80 text-black rounded-lg ",

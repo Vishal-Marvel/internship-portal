@@ -43,10 +43,9 @@ const ViewStudents = () => {
   const visibleColumns: VisibilityState = {
     select: false,
     sec_sit: width > 1 && (isCEO || isTapCell),
-    year_of_studying:
-      width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
-    section: width > 1 || (!isMentor || isHOD || isInternshipCoordinator),
+    section: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
     department: width > 1 && (isPrincipal || isCEO || isTapCell),
+    batch: width > 1 && (!isMentor || isHOD || isInternshipCoordinator),
     mentor_name: width > 1 && (isPrincipal || isCEO || isHOD || isTapCell),
     skills: width > 1,
     placement_status: false,
@@ -64,10 +63,10 @@ const ViewStudents = () => {
         }
       );
       let student = await response.data.data.students;
-      student = student?.map((student:Student) => ({
+      student = student?.map((student: Student) => ({
         ...student,
         placement_status: student.placement_status ? "Placed" : "Not Placed",
-        total_days_internship: student.total_days_internship ?? 0
+        total_days_internship: student.total_days_internship ?? 0,
       }));
       setStudent(student);
     } catch (error) {
