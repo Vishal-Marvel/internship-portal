@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -81,7 +80,7 @@ const StudentLogin = () => {
   };
 
   return (
-    <Card className=" shadow-2xl bg-white/100 rounded-2xl">
+    <Card className=" shadow-2xl bg-white/80 rounded-2xl">
       <CardHeader>
         <CardTitle>Student Log In</CardTitle>
       </CardHeader>

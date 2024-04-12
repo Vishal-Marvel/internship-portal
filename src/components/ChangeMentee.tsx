@@ -48,6 +48,7 @@ const ChangeMentee = ({ staff, loading }: Props) => {
   useEffect(() => {
     onChange("fromMentor", { fromMentor });
     setTimeout(() => onChange("toMentor", { toMentor }), 100);
+    setTimeout(() => onClose(), 100);
   }, [fromMentor, toMentor]);
   const getStaff = async () => {
     try {

@@ -34,18 +34,18 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   visibleColumns: VisibilityState;
-  type: "internship" | "student" | "faculty" | "skill" | "mentee";
+  tableType: "internship" | "student" | "faculty" | "skill" | "mentee";
   title?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  type,
+  tableType,
   title,
   visibleColumns,
 }: DataTableProps<TData, TValue>) {
-  const { onChange } = useSocket();
+  const { onChange, type, onClose } = useSocket();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -57,16 +57,20 @@ export function DataTable<TData, TValue>({
   // const [pagination, setPagination] = React.useState<PaginationState>({pageSize:5, pageIndex:0});
 
   React.useEffect(() => {
-    // console.log(columnVisibility);
     setColumnVisibility(visibleColumns);
   }, [visibleColumns]);
-  const handleColumnVisibility = (e) => {
-    setColumnVisibility(e);
-  };
+
   React.useEffect(() => {
-    if (type == "mentee" && columnVisibility["select"])
+    if (tableType == "mentee" && columnVisibility?.select)
       onChange("rows", { rows: rowSelection });
   }, [rowSelection]);
+
+  React.useEffect(() => {
+    if (type == "rowSelection") {
+      setRowSelection({});
+      onClose();
+    }
+  }, [type]);
 
   const table = useReactTable({
     data,
@@ -81,7 +85,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: handleColumnVisibility,
+    onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
@@ -95,12 +99,16 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
-      <span className="capitalize font-semibold font-sans text-xl">{type}</span>
-      <DataTableToolbar table={table} type={type} />
+      <span className="capitalize font-semibold font-sans text-xl">
+        {title}
+      </span>
+      <DataTableToolbar table={table} type={tableType} />
       <ScrollArea
         className={cn(
           "rounded-md  w-full",
-          type == "mentee" ? "md:h-[40vh] h-[40vh]" : "md:h-[60vh] h-[65vh]"
+          tableType == "mentee"
+            ? "md:h-[40vh] h-[40vh]"
+            : "md:h-[60vh] h-[50vh]"
         )}
       >
         <Table>

@@ -29,7 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
-import { Staff } from "@/schema";
+import { Staff, departmensts } from "@/schema";
 import { useSession } from "@/providers/context/SessionContext";
 import { cn } from "@/lib/utils";
 import { useModal } from "@/hooks/use-model-store";
@@ -44,7 +44,7 @@ const formSchema = z.object({
       return regex.test(str);
     }, "Faculty Id Format Incorrect")
     .default(""),
-  email: z.string().email().default(""),
+  email: z.string().default(""),
 
   department: z.string().min(1, "Department is Required").default(""),
   phone_no: z.string().refine((str) => {
@@ -82,7 +82,10 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
 
       form.setValue("faculty_id", staff.faculty_id);
       form.setValue("department", staff.department);
-      form.setValue("email", staff.email);
+      form.setValue(
+        "email",
+        staff.email.slice(0, staff.email.lastIndexOf("@"))
+      );
       form.setValue("phone_no", staff.phone_no);
     }
     getImage();
@@ -116,7 +119,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
       formdata.append("sec_sit", values.sec_sit);
       formdata.append("faculty_id", values.faculty_id);
       formdata.append("department", values.department);
-      formdata.append("email", values.email);
+      formdata.append("email", values.email + "@sairam.edu.in");
       formdata.append("phone_no", values.phone_no);
 
       if (values.file[0]) formdata.append("file", values.file[0]);
@@ -175,7 +178,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-fit h-[500px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-fit h-[65vh] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -276,7 +279,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
-                      <span className="flex items-center">
+                      <span className="flex items-center gap-2">
                         <Input
                           className=" bg-slate-200 shadow-inner"
                           disabled={isLoading || !isAuthenticated}
@@ -311,8 +314,16 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="cse">CSE</SelectItem>
-                              <SelectItem value="it">IT</SelectItem>
+                              {departmensts?.map((department, index) => {
+                                return (
+                                  <SelectItem
+                                    value={department.value}
+                                    key={index}
+                                  >
+                                    {department.label}
+                                  </SelectItem>
+                                );
+                              })}
                             </SelectGroup>
                           </SelectContent>
                         </Select>

@@ -21,7 +21,6 @@ const AddStudentInternshipPage = () => {
   }, [id]);
   const getStatus = async () => {
     try {
-      console.log("ss");
       setLoading(true);
       if (!role?.includes("student") && student == "") return;
       const response = await axios.get(
@@ -47,9 +46,9 @@ const AddStudentInternshipPage = () => {
       } else {
         setLoading(false);
 
-        console.error(error);
+        // console.error(error);
         onOpen("alert", {
-          alertText: "Student Has Already Completed 45 days of internship",
+          alertText: error.response.data.message,
         });
       }
     }

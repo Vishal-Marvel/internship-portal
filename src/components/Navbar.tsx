@@ -53,6 +53,7 @@ const Navbar = () => {
                 <>
                   {(role?.includes("hod") ||
                     role?.includes("principal") ||
+                    role?.includes("admin") ||
                     role?.includes("ceo")) && (
                     <Link
                       to={"/faculties"}

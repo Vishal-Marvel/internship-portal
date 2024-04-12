@@ -18,6 +18,7 @@ import ViewMentees from "./pages/faculty/viewMentees";
 import ModifySkills from "./pages/faculty/updateSkills";
 import ChangeMentees from "./pages/faculty/changeMentees";
 import ResetPassword from "./pages/resetPassword";
+import DownloadInternship from "./pages/faculty/downloadInternship";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
               <Route path="/skills" element={<ModifySkills />} />
               <Route path="/changeMentee" element={<ChangeMentees />} />
               <Route path="/resetPassword" element={<ResetPassword />} />
+              <Route path="/download" element={<DownloadInternship />} />
             </Routes>
           </div>
         </div>

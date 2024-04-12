@@ -137,6 +137,7 @@ const ChangeMentees = () => {
           },
           { headers: { Authorization: "Bearer " + token } }
         );
+        onClose();
         toast(
           <>
             <CircleCheck />
@@ -144,7 +145,9 @@ const ChangeMentees = () => {
           </>
         );
         setLoading(false);
-        onChange("mentee");
+        onChange("rowSelection");
+
+        setTimeout(() => onChange("mentee"), 100);
       }
     } catch (error) {
       console.error(error);
@@ -165,8 +168,10 @@ const ChangeMentees = () => {
           Update
         </Button>
       </div>
+
       <DataTable
-        type="mentee"
+        tableType="mentee"
+        title="Faculty Mentees"
         data={student}
         columns={studentColumns}
         visibleColumns={visibleColumns}

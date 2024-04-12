@@ -37,6 +37,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 import PasswordInput from "./PasswordInput";
 import { useModal } from "@/hooks/use-model-store";
+import { departmensts } from "@/schema";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is Required").default(""),
@@ -55,6 +56,7 @@ const formSchema = z.object({
   phone_no: z.string().refine((str) => {
     return str.length == 10;
   }, "Phone number is invalid"),
+  email: z.string().default(""),
 
   file: z.instanceof(FileList).optional(),
 });
@@ -81,7 +83,7 @@ const FacultySignIn = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log(values);
+      // console.log(values);
       if (values.file[0] && values.file[0].size > 1024 * 512) {
         onOpen("alert", { alertText: "File size Exceeds 512 kb" });
 
@@ -99,7 +101,7 @@ const FacultySignIn = () => {
       formdata.append("sec_sit", values.sec_sit);
       formdata.append("faculty_id", values.faculty_id);
       formdata.append("department", values.department);
-      formdata.append("email", values.faculty_id + "@sairam.edu.in");
+      formdata.append("email", values.email + "@sairam.edu.in");
       formdata.append("phone_no", values.phone_no);
       formdata.append("password", values.password);
 
@@ -186,8 +188,12 @@ const FacultySignIn = () => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="sec">SEC</SelectItem>
-                              <SelectItem value="sit">SIT</SelectItem>
+                              <SelectItem value="sec">
+                                Sri Sairam Engineering College
+                              </SelectItem>
+                              <SelectItem value="sit">
+                                Sairam Institute of Technology
+                              </SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -234,8 +240,16 @@ const FacultySignIn = () => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="cse">CSE</SelectItem>
-                              <SelectItem value="it">IT</SelectItem>
+                              {departmensts?.map((department, index) => {
+                                return (
+                                  <SelectItem
+                                    value={department.value}
+                                    key={index}
+                                  >
+                                    {department.label}
+                                  </SelectItem>
+                                );
+                              })}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -289,6 +303,27 @@ const FacultySignIn = () => {
                   )}
                 />
                 <FormField
+                  name={"email"}
+                  disabled={isLoading}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <span className="flex items-center gap-2">
+                        <Input
+                          className=" bg-slate-200 shadow-inner"
+                          disabled={isLoading}
+                          placeholder="Enter Email"
+                          type="text"
+                          {...field}
+                        />
+                        @sairam.edu.in
+                      </span>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
                   name={"password"}
                   disabled={isLoading}
                   control={form.control}
@@ -307,6 +342,7 @@ const FacultySignIn = () => {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   name={"cpassword"}
                   disabled={isLoading}

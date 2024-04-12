@@ -9,7 +9,8 @@ export type ModalType =
   | "updateRole"
   | "editSkill"
   | "deleteSkill"
-  | "addSkill";
+  | "addSkill"
+  | "loader";
 
 interface ModalData {
   internship?: Internship;

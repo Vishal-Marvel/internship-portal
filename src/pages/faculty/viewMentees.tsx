@@ -86,7 +86,8 @@ const ViewMentees = () => {
   return (
     <div className="grid place-items-center w-full">
       <DataTable
-        type="student"
+        title="Mentees"
+        tableType="student"
         data={student}
         columns={studentColumns}
         visibleColumns={visibleColumns}

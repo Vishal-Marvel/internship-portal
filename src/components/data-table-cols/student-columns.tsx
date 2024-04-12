@@ -113,6 +113,9 @@ export const studentColumns: ColumnDef<Student>[] = [
         {row.getValue("section")}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "total_days_internship",

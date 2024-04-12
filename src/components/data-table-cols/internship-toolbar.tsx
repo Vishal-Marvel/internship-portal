@@ -30,6 +30,18 @@ function InternshipToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
           options={internshipStatuses}
         />
       )}
+      {table.getColumn("mode_of_intern") && (
+        <DataTableFacetedFilter
+          column={table.getColumn("mode_of_intern")}
+          title="Mode Of Intern"
+          options={Array.from(
+            table.getColumn("mode_of_intern").getFacetedUniqueValues()
+          ).map((value) => ({
+            value: value[0],
+            label: value[0]?.charAt(0).toUpperCase() + value[0]?.slice(1),
+          }))}
+        />
+      )}
       {table.getColumn("days") && (
         <DataTableFacetedFilter
           column={table.getColumn("days")}

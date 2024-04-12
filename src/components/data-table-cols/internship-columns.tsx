@@ -44,6 +44,9 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     cell: ({ row }) => (
       <div className="text-center font-medium">{row.getValue("batch")}</div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "student.section",
@@ -52,6 +55,9 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     cell: ({ row }) => (
       <div className="text-center font-medium">{row.getValue("section")}</div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "student.department",
@@ -62,6 +68,9 @@ export const internshipColumns: ColumnDef<Internship>[] = [
         {row.getValue("department")}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "sem",
@@ -69,6 +78,9 @@ export const internshipColumns: ColumnDef<Internship>[] = [
     cell: ({ row }) => (
       <div className="text-center font-medium">{row.getValue("sem")}</div>
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "company_name",
@@ -102,6 +114,25 @@ export const internshipColumns: ColumnDef<Internship>[] = [
         {new Date(row.getValue("ending_date")).toLocaleDateString("en-GB")}
       </div>
     ),
+  },
+  {
+    accessorKey: "mode_of_intern",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Mode" />;
+    },
+    cell: ({ row }) => (
+      <div className="text-center font-medium">
+        {
+          //@ts-ignore
+          row.getValue("mode_of_intern")?.charAt(0).toUpperCase() +
+            //@ts-ignore
+            row.getValue("mode_of_intern")?.slice(1)
+        }
+      </div>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "no_of_days",

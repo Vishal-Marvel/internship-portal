@@ -30,7 +30,7 @@ import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { Skill, Student } from "@/schema";
+import { Skill, Student, departmensts } from "@/schema";
 import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import { cn } from "@/lib/utils";
@@ -460,8 +460,16 @@ const StudentProfile = ({ student }: Props) => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="cse">CSE</SelectItem>
-                              <SelectItem value="it">IT</SelectItem>
+                              {departmensts?.map((department, index) => {
+                                return (
+                                  <SelectItem
+                                    value={department.value}
+                                    key={index}
+                                  >
+                                    {department.label}
+                                  </SelectItem>
+                                );
+                              })}
                             </SelectGroup>
                           </SelectContent>
                         </Select>

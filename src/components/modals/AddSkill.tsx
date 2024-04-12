@@ -34,7 +34,7 @@ const formSchema = z.object({
 const AddSkill = () => {
   const { token, isTokenExpired } = useSession();
   const { onChange } = useSocket();
-  const {isOpen, type, onClose} = useModal();
+  const { isOpen, type, onClose } = useModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,7 +70,7 @@ const AddSkill = () => {
       );
     }
   };
-  const isModalOpen = isOpen && type=="addSkill";
+  const isModalOpen = isOpen && type == "addSkill";
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -79,7 +79,6 @@ const AddSkill = () => {
           <DialogTitle className="text-2xl text-center font-bold">
             Add Skill
           </DialogTitle>
-          
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -93,7 +92,7 @@ const AddSkill = () => {
                     <FormLabel>Skill Name</FormLabel>
                     <FormControl>
                       <Input
-                        className=" bg-slate-300 shadow-inner"
+                        className=" bg-slate-200 shadow-inner"
                         disabled={isLoading}
                         placeholder="Enter Skill Name"
                         type="text"
@@ -107,7 +106,7 @@ const AddSkill = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4 rounded-lg">
               <Button variant="primary" disabled={isLoading}>
-                Add 
+                Add
               </Button>
             </DialogFooter>
           </form>

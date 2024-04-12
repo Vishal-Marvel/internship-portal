@@ -35,7 +35,7 @@ const ViewInternshipPage = () => {
             </>
           );
         }
-        onClose()
+        onClose();
       }
     }
   };
@@ -44,7 +44,11 @@ const ViewInternshipPage = () => {
     getInternship();
   }, [token, type]);
 
-  return <StudentInternship internship={internship} />;
+  return (
+    <div className="grid place-items-center w-full">
+      <StudentInternship internship={internship} />
+    </div>
+  );
 };
 
 export default ViewInternshipPage;

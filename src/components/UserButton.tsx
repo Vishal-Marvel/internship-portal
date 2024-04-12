@@ -15,6 +15,7 @@ import { useSession } from "@/providers/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/providers/theme-provider";
 import { Staff, Student } from "@/schema";
+import { cn } from "@/lib/utils";
 
 const UserButton = ({ setClose }: { setClose?: () => void }) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -113,11 +114,16 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
         <Popover
           open={open}
           onOpenChange={() => {
-            if (image) setOpen(!open);
+            if (response) setOpen(!open);
           }}
         >
           <PopoverTrigger>
-            <Avatar className="border-2 border-gray-300">
+            <Avatar
+              className={cn(
+                "transition-all duration-100 ease-in-out",
+                open && "border-2 border-gray-300/60 drop-shadow-xl shadow-xl"
+              )}
+            >
               <AvatarImage
                 className="object-cover"
                 src={"data:image/jpeg;charset=utf-8;base64," + image}
@@ -133,7 +139,7 @@ const UserButton = ({ setClose }: { setClose?: () => void }) => {
                 src={"data:image/jpeg;charset=utf-8;base64," + image}
                 height={100}
                 width={100}
-                className="rounded-full shadow-xl"
+                className="rounded-full drop-shadow-lg"
               />
               <div>
                 <span>{response?.name}</span>

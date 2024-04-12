@@ -2,19 +2,20 @@ import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Internship, Student } from "@/schema";
 import { useEffect, useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Download } from "lucide-react";
 import { toast } from "sonner";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ViewStudentInternships from "@/components/ViewStudentInternships";
 import { useSocket } from "@/hooks/use-socket";
+import { Button } from "@/components/ui/button";
 
 const ViewInternships = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const student = searchParams.get("student");
   const { token, role, isTokenExpired } = useSession();
-
-  const [data, setData] = useState<Internship[]>([]);
-  const { type, onClose } = useSocket();
+  const [selectedFilters, setSelectedFilters] = useState({});
+  const [internships, setInternships] = useState<Internship[]>([]);
+  const { type, onClose, data } = useSocket();
 
   const getData = async () => {
     try {
@@ -28,7 +29,7 @@ const ViewInternships = () => {
             },
           }
         );
-        setData(response.data.data.internships);
+        setInternships(response.data.data.internships);
       } else {
         if (student) {
           const response = await axiosInstance.get(
@@ -40,7 +41,7 @@ const ViewInternships = () => {
               },
             }
           );
-          setData(response.data.data.internships);
+          setInternships(response.data.data.internships);
         } else {
           const response = await axiosInstance.get(
             "http://localhost:5000/internship/api/v1/internships/view/all",
@@ -50,7 +51,7 @@ const ViewInternships = () => {
               },
             }
           );
-          setData(response.data.data.internships);
+          setInternships(response.data.data.internships);
         }
       }
       onClose();
@@ -64,11 +65,21 @@ const ViewInternships = () => {
       onClose();
     }
   };
+
   useEffect(() => {
     if (!type || type == "internship") getData();
   }, [type, student]);
 
-  return <ViewStudentInternships internship={data} />;
+  return (
+    <div className="relative">
+      <Link to={"/download"}>
+        <Button className="absolute top-2 right-3" variant="primary">
+          <Download className="mr-2 h-5 w-5" /> Download
+        </Button>
+      </Link>
+      <ViewStudentInternships internship={internships} />
+    </div>
+  );
 };
 
 export default ViewInternships;

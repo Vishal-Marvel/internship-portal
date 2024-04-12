@@ -47,7 +47,8 @@ const ViewStudentInternships = ({ internship }: Props) => {
   };
   return (
     <DataTable
-      type="internship"
+      tableType="internship"
+      title="Student Internships"
       data={internship}
       columns={internshipColumns}
       visibleColumns={visibleColumns}

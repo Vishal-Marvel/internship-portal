@@ -41,11 +41,12 @@ interface Option {
 }
 
 const ModifyRole = () => {
-  const { isOpen, onClose, onOpen, type, data } = useModal();
-  const { token, isTokenExpired , role} = useSession();
+  const { isOpen, onClose, type, data } = useModal();
+  const { token, isTokenExpired, role } = useSession();
   const { faculty } = data;
   const [roles, setRoles] = useState<Option[]>([]);
-  const {onChange} = useSocket();
+  const { onChange } = useSocket();
+  const isModalOpen = isOpen && type == "updateRole";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,24 +54,24 @@ const ModifyRole = () => {
   const isLoading = form.formState.isSubmitting;
   const getRoles = async () => {
     try {
-      if (token && !isTokenExpired() && !role?.includes("student")){
-      const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/staffs/viewAllRoles",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      setRoles(
-        response.data.data.role_names.map((role: string, index) => ({
-          value: role,
-          label: role?.toUpperCase(),
-        }))
-      );
+      if (token && !isTokenExpired() && !role?.includes("student")) {
+        const response = await axiosInstance.get(
+          "http://localhost:5000/internship/api/v1/staffs/viewAllRoles",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setRoles(
+          response.data.roles.map((role) => ({
+            value: role?.id,
+            label: role?.name?.toUpperCase(),
+          }))
+        );
       }
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
   const getStaffRoles = async () => {
@@ -84,17 +85,15 @@ const ModifyRole = () => {
           },
         }
       );
-      const responseMessage = response.data.message;
-      if (responseMessage) return;
       form.setValue(
         "roles",
-        response.data.roles.map((role: string, index) => ({
-          value: role,
-          label: role?.toUpperCase(),
+        response.data.roles.map((role, index) => ({
+          value: role?.id,
+          label: role?.role_name.toUpperCase(),
         }))
       );
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -116,7 +115,7 @@ const ModifyRole = () => {
 
       const response = await axiosInstance.post(
         `http://localhost:5000/internship/api/v1/staffs/updateRole/${faculty?.id}`,
-        {roles: values.roles.map(role=>role.value)},
+        { roles: values.roles.map((role) => role.value) },
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -130,7 +129,7 @@ const ModifyRole = () => {
         </>
       );
       onClose();
-      onChange("staff")
+      onChange("staff");
     } catch (error) {
       const errorMessage = await error.response.data;
       console.error(errorMessage);
@@ -142,8 +141,6 @@ const ModifyRole = () => {
       );
     }
   };
-
-  const isModalOpen = isOpen && type == "updateRole";
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -173,7 +170,7 @@ const ModifyRole = () => {
                         classNamePrefix="bg-slate-200"
                         isDisabled={isLoading}
                         onChange={field.onChange}
-                        placeholder={"Select Skills"}
+                        placeholder={"Select Roles"}
                         onBlur={field.onBlur}
                         // @ts-ignore
                         options={roles}

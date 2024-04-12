@@ -55,12 +55,12 @@ const ViewFaculties = () => {
       onClose();
     } catch (error) {
       if (error.response.data.message != "")
-      toast(
-        <>
-          <AlertCircle />
-          {error.response.data.message}
-        </>
-      );
+        toast(
+          <>
+            <AlertCircle />
+            {error.response.data.message}
+          </>
+        );
     }
   };
   useEffect(() => {
@@ -69,7 +69,8 @@ const ViewFaculties = () => {
   return (
     <div className="grid place-items-center w-full">
       <DataTable
-        type="faculty"
+        title="Faculties"
+        tableType="faculty"
         data={faculty}
         columns={facultyColumns}
         visibleColumns={visibleColumns}

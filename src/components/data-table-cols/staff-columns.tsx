@@ -106,6 +106,7 @@ export const facultyColumns: ColumnDef<Staff>[] = [
             {(role?.includes("hod") ||
               role?.includes("tapcell") ||
               role?.includes("principal") ||
+              role?.includes("admin") ||
               role?.includes("ceo")) && (
               <DropdownMenuItem
                 className="cursor-pointer"

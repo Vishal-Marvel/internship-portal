@@ -73,7 +73,8 @@ const ModifySkills = () => {
         </Button>
       </div>
       <DataTable
-        type="skill"
+        title="Skills"
+        tableType="skill"
         data={skills}
         columns={skillColumns}
         visibleColumns={{}}

@@ -95,7 +95,7 @@ const AddStudentInternship = ({ student }: { student: string }) => {
   const [mode, setMode] = useState("");
   const fileRef = form.register("file");
   const [cin_gst_udyog, setcin_gst_udyog] = useState<string>();
-  const { onOpen } = useModal();
+  const { onOpen, onClose } = useModal();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -133,7 +133,7 @@ const AddStudentInternship = ({ student }: { student: string }) => {
 
       formdata.append("file", values.file[0]);
       if (!role?.includes("student")) formdata.append("student_id", student);
-
+      onOpen("loader");
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/internships/register",
         formdata,
@@ -143,6 +143,8 @@ const AddStudentInternship = ({ student }: { student: string }) => {
           },
         }
       );
+      onClose();
+
       toast(
         <>
           <CheckCircle2 />
@@ -150,9 +152,9 @@ const AddStudentInternship = ({ student }: { student: string }) => {
         </>
       );
 
-      // form.reset();
+      form.reset();
 
-      // router("/dashboard");
+      router("/dashboard");
     } catch (error) {
       toast(
         <>

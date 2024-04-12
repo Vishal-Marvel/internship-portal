@@ -78,7 +78,7 @@ const formSchema = z.object({
       return num >= 1 && num <= 10;
     }, "CGPA must be within 1-10")
     .default(""),
-  academic_year: z.string().min(1, "Academic year is Required").default(""),
+  sem: z.string().min(1, "SEM is Required").default(""),
   mode_of_intern: z.string().min(1, "Mode of Intern is Required").default(""),
   starting_date: z.date(),
 
@@ -145,7 +145,7 @@ const StudentInternship = ({ internship }: Props) => {
         internship.industry_supervisor_email
       );
       form.setValue("current_cgpa", internship.current_cgpa);
-      form.setValue("academic_year", internship.academic_year);
+      form.setValue("sem", internship.sem);
       form.setValue("mode_of_intern", internship.mode_of_intern);
       form.setValue("starting_date", internship.starting_date);
       const noOfDays = internship.no_of_days;
@@ -271,7 +271,7 @@ const StudentInternship = ({ internship }: Props) => {
         values.industry_supervisor_email
       );
       formdata.append("current_cgpa", values.current_cgpa);
-      formdata.append("academic_year", values.academic_year);
+      formdata.append("sem", values.sem);
       formdata.append("mode_of_intern", values.mode_of_intern);
       formdata.append("no_of_days", values.no_of_days.toString());
       formdata.append("location", values.location);
@@ -340,7 +340,7 @@ const StudentInternship = ({ internship }: Props) => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[70vh] h-[700px] w-full bg-white rounded-2xl">
+        <ScrollArea className="md:h-[70vh] h-[60vh] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={(e) => !update && form.handleSubmit(onSubmit)}
@@ -359,7 +359,7 @@ const StudentInternship = ({ internship }: Props) => {
                       <FormControl>
                         <Input
                           className=" bg-slate-200 shadow-inner font-semibold"
-                          disabled={isLoading}
+                          disabled={true}
                           type="text"
                           value={internship?.approval_status}
                         />
@@ -371,7 +371,7 @@ const StudentInternship = ({ internship }: Props) => {
                       <FormControl>
                         <Input
                           className=" bg-slate-200 shadow-inner font-semibold"
-                          disabled={isLoading}
+                          disabled={true}
                           type="text"
                           value={internship?.internship_status}
                         />
@@ -384,7 +384,7 @@ const StudentInternship = ({ internship }: Props) => {
                         <FormControl>
                           <Input
                             className=" bg-slate-200 shadow-inner font-semibold"
-                            disabled={isLoading}
+                            disabled={true}
                             type="text"
                             value={approval?.comments}
                           />
@@ -612,11 +612,11 @@ const StudentInternship = ({ internship }: Props) => {
 
                     <FormField
                       disabled={isLoading}
-                      name={"academic_year"}
+                      name={"sem"}
                       control={form.control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Academic Year</FormLabel>
+                          <FormLabel>SEM</FormLabel>
                           <FormControl>
                             <Select
                               disabled={isLoading}
@@ -631,12 +631,14 @@ const StudentInternship = ({ internship }: Props) => {
 
                               <SelectContent>
                                 <SelectGroup>
-                                  {years &&
-                                    years.map((year, index) => (
-                                      <SelectItem value={year} key={index}>
-                                        {year}
-                                      </SelectItem>
-                                    ))}
+                                  <SelectItem value="I">I</SelectItem>
+                                  <SelectItem value="II">II</SelectItem>
+                                  <SelectItem value="III">III</SelectItem>
+                                  <SelectItem value="IV">IV</SelectItem>
+                                  <SelectItem value="V">V</SelectItem>
+                                  <SelectItem value="VI">VI</SelectItem>
+                                  <SelectItem value="VII">VII</SelectItem>
+                                  <SelectItem value="VIII">VIII</SelectItem>
                                 </SelectGroup>
                               </SelectContent>
                             </Select>

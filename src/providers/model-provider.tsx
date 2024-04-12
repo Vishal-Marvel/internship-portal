@@ -3,6 +3,7 @@ import { AlertBox } from "@/components/modals/AlertBox";
 import CompletionForm from "@/components/modals/CompletionForm";
 import DeleteSkill from "@/components/modals/DeleteSkill";
 import EditSkill from "@/components/modals/EditSkill";
+import { LoaderModal } from "@/components/modals/Loader";
 import ModifyRole from "@/components/modals/ModifyRole";
 import RejectInternship from "@/components/modals/RejectInternship";
 import SendBackInternship from "@/components/modals/SendBackInternship";
@@ -29,6 +30,7 @@ export const ModalProvider = () => {
       <EditSkill />
       <DeleteSkill />
       <AlertBox />
+      <LoaderModal />
     </>
   );
 };

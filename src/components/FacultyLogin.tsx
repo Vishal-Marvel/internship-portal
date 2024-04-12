@@ -82,7 +82,7 @@ const FacultyLogin = () => {
   };
 
   return (
-    <Card className=" shadow-2xl bg-white/100 rounded-2xl">
+    <Card className=" shadow-2xl bg-white/80 rounded-2xl">
       <CardHeader>
         <CardTitle>Faculty Log In</CardTitle>
       </CardHeader>
@@ -143,7 +143,6 @@ const FacultyLogin = () => {
         </Form>
       </CardContent>
       <CardFooter className="flex text-center w-full">
-        
         <div className="flex flex-col items-center w-full justify-center gap-3">
           Haven't Signed up yet?{" "}
           <Link to={"/faculty/signin"}>

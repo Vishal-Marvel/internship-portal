@@ -153,3 +153,8 @@ export interface ApprovalStatus {
   internship_id: string;
   rejectedBy: string;
 }
+
+export const departmensts = [
+  { label: "CSE", value: "cse" },
+  { label: "IT", value: "it" },
+];

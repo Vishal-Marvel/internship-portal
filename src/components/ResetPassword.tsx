@@ -91,7 +91,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Card className=" shadow-2xl bg-white/80 rounded-2xl lg:w-[30vw] md:w-[45vw] w-full">
+    <Card className=" shadow-2xl bg-white/80 rounded-2xl lg:w-[30%] md:w-[45vw] min-w-[40vw]">
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
       </CardHeader>

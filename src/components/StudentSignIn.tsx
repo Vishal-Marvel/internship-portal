@@ -39,6 +39,7 @@ import { default as ReactSelect } from "react-select";
 import axiosInstance from "@/lib/axios";
 import PasswordInput from "./PasswordInput";
 import { useModal } from "@/hooks/use-model-store";
+import { departmensts } from "@/schema";
 
 interface Option {
   label: string;
@@ -227,7 +228,7 @@ const StudentSignIn = () => {
   };
 
   return (
-    <Card className="h-full w-full shadow-2xl bg-blue-300/80 border-0 rounded-2xl">
+    <Card className="h-full w-full shadow-2xl bg-white/80 border-0 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
           <CardTitle>Student Register</CardTitle>
@@ -452,8 +453,16 @@ const StudentSignIn = () => {
 
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="cse">CSE</SelectItem>
-                              <SelectItem value="it">IT</SelectItem>
+                              {departmensts?.map((department, index) => {
+                                return (
+                                  <SelectItem
+                                    value={department.value}
+                                    key={index}
+                                  >
+                                    {department.label}
+                                  </SelectItem>
+                                );
+                              })}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
