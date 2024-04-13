@@ -20,6 +20,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
@@ -28,11 +31,12 @@ import PasswordInput from "./PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
 import { useTheme } from "@/providers/theme-provider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
+  sec_sit: z.string(),
 });
 
 const FacultyLogin = () => {
@@ -46,20 +50,34 @@ const FacultyLogin = () => {
     defaultValues: {
       email: "",
       password: "",
+      sec_sit: "sec",
     },
   });
   const isLoading = form.formState.isSubmitting;
+  const [college, setCollege] = useState("@sairam.edu.in");
 
   useEffect(() => {
     if (form.getValues("email") && form.getValues("email").length >= 0)
       form.setValue("email", form.getValues("email").toLowerCase());
   }, [form.watch("email")]);
 
+  useEffect(() => {
+    console.log(form.getValues("sec_sit"));
+    if (form.getValues("sec_sit")?.length > 0) {
+      if (form.getValues("sec_sit") == "sec") {
+        setCollege("@sairam.edu.in");
+      }
+      if (form.getValues("sec_sit") == "sit") {
+        setCollege("@sairamit.edu.in");
+      }
+    }
+  }, [form.watch("sec_sit")]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axiosInstance.post(
         "http://localhost:5000/internship/api/v1/staffs/login",
-        { email: values.email + "@sairam.edu.in", password: values.password }
+        { email: values.email + college, password: values.password }
       );
       setSession(
         response.data.data.token,
@@ -91,22 +109,56 @@ const FacultyLogin = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid w-full items-center gap-10 ">
               <FormField
+                control={form.control}
+                name="sec_sit"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>College</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-1"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="sec" />
+                          </FormControl>
+                          <FormLabel className="">
+                            Sri Sairam Engineering College
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="sit" />
+                          </FormControl>
+                          <FormLabel className="">
+                            Sairam Institute Of Technology
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
                 disabled={isLoading}
                 name={"email"}
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Faculty Id</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <span className="flex items-center gap-5">
                         <Input
                           className=" bg-slate-300 shadow-inner"
                           disabled={isLoading}
-                          placeholder="Username"
+                          placeholder="Email"
                           type="text"
                           {...field}
                         />
-                        @sairam.edu.in
+                        {college}
                       </span>
                     </FormControl>
                     <FormMessage />
@@ -124,7 +176,7 @@ const FacultyLogin = () => {
                       <PasswordInput
                         className=" bg-slate-300 shadow-inner"
                         disabled={isLoading}
-                        placeholder="*********"
+                        placeholder="Enter Password"
                         {...field}
                       />
                     </FormControl>
@@ -143,14 +195,6 @@ const FacultyLogin = () => {
         </Form>
       </CardContent>
       <CardFooter className="flex text-center w-full">
-        <div className="flex flex-col items-center w-full justify-center gap-3">
-          Haven't Signed up yet?{" "}
-          <Link to={"/faculty/signin"}>
-            <Button variant="primary" className="p-2">
-              Sign in
-            </Button>
-          </Link>
-        </div>
         <div className="flex flex-col items-center w-full justify-center gap-3">
           Forgot password?{" "}
           <Link to={"/forgetpass?faculty=1"}>

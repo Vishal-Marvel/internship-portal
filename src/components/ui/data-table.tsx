@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table";
 
 import { DataTableToolbar } from "@/components/ui/data-table/data-toolbar";
-import { ScrollArea } from "./scroll-area";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 import { DataTablePagination } from "./data-table/data-pagination";
 import { cn } from "@/lib/utils";
 import { useSocket } from "@/hooks/use-socket";
@@ -98,14 +98,14 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4 bg-white/80 p-3 rounded-lg min-w-[70vw]">
+    <div className="space-y-4 bg-white/80 p-3 rounded-lg ">
       <span className="capitalize font-semibold font-sans text-xl">
         {title}
       </span>
       <DataTableToolbar table={table} type={tableType} />
       <ScrollArea
         className={cn(
-          "rounded-md  w-full",
+          "rounded-md  w-[70vw]",
           tableType == "mentee"
             ? "md:h-[40vh] h-[40vh]"
             : "md:h-[60vh] h-[50vh]"
@@ -156,6 +156,8 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="vertical" />
       </ScrollArea>
       {/* <DataTablePagination table={table} /> */}
     </div>

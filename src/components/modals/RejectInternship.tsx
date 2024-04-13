@@ -36,7 +36,7 @@ const RejectInternship = () => {
   const { token, isTokenExpired } = useSession();
   const { role, id } = data;
 
-  const {onChange} = useSocket();
+  const { onChange } = useSocket();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

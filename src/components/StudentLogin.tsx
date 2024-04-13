@@ -122,7 +122,7 @@ const StudentLogin = () => {
                       <PasswordInput
                         className=" bg-slate-300 shadow-inner"
                         disabled={isLoading}
-                        placeholder="*********"
+                        placeholder="Enter Password"
                         {...field}
                       />
                     </FormControl>

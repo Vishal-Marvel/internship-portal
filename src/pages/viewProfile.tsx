@@ -10,11 +10,11 @@ const ViewProfilePage = () => {
   const [student, setStudent] = useState<Student>();
   const [staff, setStaff] = useState<Staff>();
   const { token, isTokenExpired, role } = useSession();
-  const {type, onClose} = useSocket();
+  const { type, onClose } = useSocket();
   const getData = async () => {
     if (token && !isTokenExpired()) {
       try {
-        if (role.includes("student") ||  (type && type == "studentProfile")) {
+        if (role.includes("student") || (type && type == "studentProfile")) {
           const response = await axiosInstance.get(
             "http://localhost:5000/internship/api/v1/students/viewStudent",
             {
@@ -24,7 +24,7 @@ const ViewProfilePage = () => {
             }
           );
           setStudent(response.data.data.student);
-        } else if (!type || type === "facultyProfile"){
+        } else if (!type || type === "facultyProfile") {
           const response = await axiosInstance.get(
             "http://localhost:5000/internship/api/v1/staffs/viewStaff",
             {
@@ -42,7 +42,6 @@ const ViewProfilePage = () => {
     }
   };
   useEffect(() => {
-    
     getData();
   }, [type]);
   return (

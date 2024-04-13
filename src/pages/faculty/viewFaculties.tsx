@@ -1,12 +1,14 @@
 import { facultyColumns } from "@/components/data-table-cols/staff-columns";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Staff } from "@/schema";
 import { VisibilityState } from "@tanstack/react-table";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CirclePlus } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 function isMobileView() {
   if (window) {
@@ -67,7 +69,12 @@ const ViewFaculties = () => {
     if (!type || type == "staff") getStaff();
   }, [type]);
   return (
-    <div className="grid place-items-center w-full">
+    <div className="relative flex w-full h-full justify-center items-center">
+      <Link to={"/faculty/signin"} className="absolute top-5 right-3">
+        <Button variant="primary" className="p-2">
+          <CirclePlus /> Add Faculty
+        </Button>
+      </Link>
       <DataTable
         title="Faculties"
         tableType="faculty"

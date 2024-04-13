@@ -71,6 +71,7 @@ const FacultySignIn = () => {
 
   const isLoading = form.formState.isSubmitting;
   const fileRef = form.register("file");
+  const [college, setCollege] = useState("@sairam.edu.in");
 
   useEffect(() => {
     if (
@@ -101,7 +102,7 @@ const FacultySignIn = () => {
       formdata.append("sec_sit", values.sec_sit);
       formdata.append("faculty_id", values.faculty_id);
       formdata.append("department", values.department);
-      formdata.append("email", values.email + "@sairam.edu.in");
+      formdata.append("email", values.email + college);
       formdata.append("phone_no", values.phone_no);
       formdata.append("password", values.password);
 
@@ -120,7 +121,7 @@ const FacultySignIn = () => {
 
       form.reset();
 
-      router("/");
+      router("/faculties");
     } catch (error) {
       console.error(error);
       toast(
@@ -132,6 +133,16 @@ const FacultySignIn = () => {
       //   console.error(error.response.data.message);
     }
   };
+  useEffect(() => {
+    if (form.getValues("sec_sit")?.length > 0) {
+      if (form.getValues("sec_sit") == "sec") {
+        setCollege("@sairam.edu.in");
+      }
+      if (form.getValues("sec_sit") == "sit") {
+        setCollege("@sairamit.edu.in");
+      }
+    }
+  }, [form.watch("sec_sit")]);
 
   return (
     <Card className="h-full w-full shadow-2xl bg-white/80 border-0 rounded-2xl">
@@ -141,11 +152,11 @@ const FacultySignIn = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="md:h-[55vh] h-[600px] w-full bg-white rounded-2xl">
+        <ScrollArea className="relative md:h-[55vh] h-[600px] w-full bg-white rounded-2xl">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 p-4"
+              className="space-y-8 p-4 "
             >
               <div className=" w-full gap-5 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-start">
                 <FormField
@@ -284,7 +295,7 @@ const FacultySignIn = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Profile Photo</FormLabel>
+                      <FormLabel>Profile Photo (OPTIONAL)</FormLabel>
                       <FormControl>
                         <Input
                           className="bg-slate-200 shadow-inner"
@@ -317,7 +328,7 @@ const FacultySignIn = () => {
                           type="text"
                           {...field}
                         />
-                        @sairam.edu.in
+                        {college}
                       </span>
                       <FormMessage />
                     </FormItem>
@@ -373,16 +384,6 @@ const FacultySignIn = () => {
           <ScrollBar />
         </ScrollArea>
       </CardContent>
-      <CardFooter>
-        <div className="flex flex-col items-center w-full justify-center gap-3">
-          Already Have a Account
-          <Link to={"/"}>
-            <Button variant="primary" className="p-2">
-              Log in
-            </Button>
-          </Link>
-        </div>
-      </CardFooter>
     </Card>
   );
 };

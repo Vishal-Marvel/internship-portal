@@ -72,11 +72,13 @@ const ViewInternships = () => {
 
   return (
     <div className="relative">
-      <Link to={"/download"}>
-        <Button className="absolute top-2 right-3" variant="primary">
-          <Download className="mr-2 h-5 w-5" /> Download
-        </Button>
-      </Link>
+      {!role.includes("student") && (
+        <Link to={"/download"}>
+          <Button className="absolute top-2 right-3" variant="primary">
+            <Download className="mr-2 h-5 w-5" /> Download
+          </Button>
+        </Link>
+      )}
       <ViewStudentInternships internship={internships} />
     </div>
   );

@@ -29,28 +29,27 @@ import { useModal } from "@/hooks/use-model-store";
 import { useEffect } from "react";
 
 const formSchema = z.object({
-    skillName: z.string().min(1, { message: "Skill Name is required" }),
-    id: z.string(),
+  skillName: z.string().min(1, { message: "Skill Name is required" }),
+  id: z.string(),
 });
 
 const EditSkill = () => {
   const { token, isTokenExpired } = useSession();
   const { onChange } = useSocket();
-  const {isOpen, type, onClose, data} = useModal();
-  const {skill} = data;
+  const { isOpen, type, onClose, data } = useModal();
+  const { skill } = data;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        skillName: "",
-        id :""
+      skillName: "",
+      id: "",
     },
   });
   useEffect(() => {
-    if (skill){
-        form.setValue("skillName", skill.skill);
-        form.setValue("id", skill.id);
-
+    if (skill) {
+      form.setValue("skillName", skill.skill);
+      form.setValue("id", skill.id);
     }
   }, [skill]);
   const isLoading = form.formState.isSubmitting;
@@ -82,7 +81,7 @@ const EditSkill = () => {
       );
     }
   };
-  const isModalOpen = isOpen && type=="editSkill";
+  const isModalOpen = isOpen && type == "editSkill";
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -91,7 +90,6 @@ const EditSkill = () => {
           <DialogTitle className="text-2xl text-center font-bold">
             Edit Skill
           </DialogTitle>
-          
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

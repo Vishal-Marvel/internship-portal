@@ -47,10 +47,10 @@ const Dashboard = () => {
     }, []);
 
     return (
-      <div className="flex justify-center items-center w-full gap-5 ">
+      <div className="flex justify-center items-center w-full gap-5">
         <div
           className={cn(
-            !visible ? "hidden " : "h-[570px] w-[500px]",
+            !visible ? "hidden " : "h-[70vh] w-[30vw]",
             " text-center bg-white/80 p-4 rounded-lg m-2 transition-all duration-700 ease-in"
           )}
         >
@@ -75,8 +75,8 @@ const Dashboard = () => {
         </div>
         <div
           className={cn(
-            "gap-5 md:min-h-[85vh]",
-            !visible ? "flex items-center" : "hidden"
+            "gap-5 md:max-h-[85vh] w-full",
+            !visible ? "flex items-center justify-center" : "hidden"
           )}
         >
           <div className="lg:block hidden">
@@ -135,7 +135,7 @@ const Dashboard = () => {
             <div
               className={cn(
                 visible && "hidden",
-                "transition-all duration-100 ease-in "
+                "transition-all duration-100 ease-in"
               )}
             >
               <ViewInternships />

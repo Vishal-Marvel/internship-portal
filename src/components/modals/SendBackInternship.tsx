@@ -35,7 +35,7 @@ const SendBackInternship = () => {
   const { isOpen, onClose, type, data } = useModal();
   const { token, isTokenExpired } = useSession();
   const { role, id } = data;
-  const {onChange} = useSocket();
+  const { onChange } = useSocket();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -156,6 +156,8 @@ const AddStudentInternship = ({ student }: { student: string }) => {
 
       router("/dashboard");
     } catch (error) {
+      onClose();
+
       toast(
         <>
           <AlertCircle />

@@ -7,14 +7,13 @@ import { useSocket } from "@/hooks/use-socket";
 interface Props {
   id: string;
   role: "mentor" | "hod" | "internshipcoordinator" | "tapcell" | "principal";
-
 }
 
 const ApproveRejectSendBack = ({ id, role }: Props) => {
   const { token, isTokenExpired } = useSession();
   const { onOpen } = useModal();
-  const {onChange} = useSocket();
- 
+  const { onChange } = useSocket();
+
   const handleApprove = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

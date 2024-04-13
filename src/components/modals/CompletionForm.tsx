@@ -36,7 +36,6 @@ const CompletionForm = () => {
 
   const { onChange } = useSocket();
 
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -52,8 +51,7 @@ const CompletionForm = () => {
       }
       const formData = new FormData();
       if (values.certificate[0]?.size > 1048576) {
-        onOpen("alert", {alertText: "File size Exceeds 1 Mb"});
-
+        onOpen("alert", { alertText: "File size Exceeds 1 Mb" });
       }
       formData.append("certificate", values.certificate[0]);
 

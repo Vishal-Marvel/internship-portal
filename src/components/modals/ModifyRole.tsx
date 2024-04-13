@@ -98,7 +98,7 @@ const ModifyRole = () => {
   };
   useEffect(() => {
     getRoles();
-  }, []);
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (faculty) {
@@ -112,6 +112,10 @@ const ModifyRole = () => {
         onClose();
         return;
       }
+      console.log(
+        faculty?.id,
+        values.roles.map((role) => role.value)
+      );
 
       const response = await axiosInstance.post(
         `http://localhost:5000/internship/api/v1/staffs/updateRole/${faculty?.id}`,

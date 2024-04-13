@@ -549,7 +549,7 @@ const StudentSignIn = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Profile Photo</FormLabel>
+                      <FormLabel>Profile Photo (OPTIONAL)</FormLabel>
                       <FormControl>
                         <Input
                           className="bg-slate-200 shadow-inner"
