@@ -76,7 +76,7 @@ const FacultyLogin = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axiosInstance.post(
-        "http://localhost:5000/internship/api/v1/staffs/login",
+        "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/login",
         { email: values.email + college, password: values.password }
       );
       setSession(

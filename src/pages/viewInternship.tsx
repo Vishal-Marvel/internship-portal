@@ -19,7 +19,8 @@ const ViewInternshipPage = () => {
       if (!type || type == "internship") {
         try {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/internships/" + id,
+            "https://internship-portal-backend.vercel.app/internship/api/v1/internships/" +
+              id,
             {
               headers: {
                 Authorization: "Bearer " + token,

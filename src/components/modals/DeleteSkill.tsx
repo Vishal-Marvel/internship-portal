@@ -26,7 +26,7 @@ const DeleteSkill = () => {
     try {
       if (token && !isTokenExpired()) {
         const response = await axiosInstance.delete(
-          "http://localhost:5000/internship/api/v1/skill/deleteskill/" +
+          "https://internship-portal-backend.vercel.app/internship/api/v1/skill/deleteskill/" +
             skill.id,
           {
             headers: {

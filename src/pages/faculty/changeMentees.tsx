@@ -63,7 +63,7 @@ const ChangeMentees = () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/staffs/mentee-students/" +
+          "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/mentee-students/" +
             id,
           {
             headers: {
@@ -130,7 +130,7 @@ const ChangeMentees = () => {
         setLoading(true);
 
         const response = await axiosInstance.post(
-          "http://localhost:5000/internship/api/v1/staffs/updateMentees",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/updateMentees",
           {
             to_staff: toFaculty,
             students,

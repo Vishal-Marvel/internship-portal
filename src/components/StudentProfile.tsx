@@ -105,7 +105,7 @@ const StudentProfile = ({ student }: Props) => {
   const getSkills = async () => {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/skill/getAllSkills"
+        "https://internship-portal-backend.vercel.app/internship/api/v1/skill/getAllSkills"
       );
       setSkills(
         response.data.data.skillNames.map((skill, index) => ({
@@ -125,7 +125,7 @@ const StudentProfile = ({ student }: Props) => {
   const getImage = async () => {
     if (student) {
       const imageResponse = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/image/" +
+        "https://internship-portal-backend.vercel.app/internship/api/v1/students/image/" +
           student.profile_photo,
         {
           headers: {
@@ -195,7 +195,7 @@ const StudentProfile = ({ student }: Props) => {
       }
       if (isStudent) {
         const response = await axiosInstance.put(
-          "http://localhost:5000/internship/api/v1/students/update",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/students/update",
           formdata,
           {
             headers: {
@@ -211,7 +211,8 @@ const StudentProfile = ({ student }: Props) => {
         );
       } else {
         const response = await axiosInstance.put(
-          "http://localhost:5000/internship/api/v1/students/" + student.id,
+          "https://internship-portal-backend.vercel.app/internship/api/v1/students/" +
+            student.id,
           formdata,
           {
             headers: {

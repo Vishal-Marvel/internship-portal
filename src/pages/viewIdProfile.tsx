@@ -18,7 +18,7 @@ const ViewIdProfilePage = () => {
       try {
         if (type?.includes("student")) {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/students/viewStudent/" +
+            "https://internship-portal-backend.vercel.app/internship/api/v1/students/viewStudent/" +
               id,
             {
               headers: {
@@ -29,7 +29,8 @@ const ViewIdProfilePage = () => {
           setStudent(response.data.data.student);
         } else {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/staffs/viewStaff/" + id,
+            "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewStaff/" +
+              id,
             {
               headers: {
                 Authorization: "Bearer " + token,

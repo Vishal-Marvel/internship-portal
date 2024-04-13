@@ -177,7 +177,7 @@ const StudentInternship = ({ internship }: Props) => {
   const getFiles = async () => {
     if (internship.offer_letter) {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/internships/download-file/" +
+        "https://internship-portal-backend.vercel.app/internship/api/v1/internships/download-file/" +
           internship.offer_letter,
         {
           headers: {
@@ -193,7 +193,7 @@ const StudentInternship = ({ internship }: Props) => {
     }
     if (internship.certificate) {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/internships/download-file/" +
+        "https://internship-portal-backend.vercel.app/internship/api/v1/internships/download-file/" +
           internship.certificate,
         {
           headers: {
@@ -208,7 +208,7 @@ const StudentInternship = ({ internship }: Props) => {
       setCertificate(url);
     }
     const response = await axiosInstance.get(
-      "http://localhost:5000/internship/api/v1/internships/download-report/" +
+      "https://internship-portal-backend.vercel.app/internship/api/v1/internships/download-report/" +
         internship.id,
       {
         headers: {
@@ -226,7 +226,7 @@ const StudentInternship = ({ internship }: Props) => {
   const getApproval = async () => {
     if (!type || type == "approval") {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/internships/approval-status/" +
+        "https://internship-portal-backend.vercel.app/internship/api/v1/internships/approval-status/" +
           internship.id,
         {
           headers: {
@@ -282,7 +282,8 @@ const StudentInternship = ({ internship }: Props) => {
         formdata.append("certificate", values.certificate[0]);
 
       const response = await axiosInstance.put(
-        "http://localhost:5000/internship/api/v1/internships/" + internship.id,
+        "https://internship-portal-backend.vercel.app/internship/api/v1/internships/" +
+          internship.id,
         formdata,
         {
           headers: {

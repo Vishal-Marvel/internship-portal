@@ -24,7 +24,7 @@ const AddStudentInternshipPage = () => {
       setLoading(true);
       if (!role?.includes("student") && student == "") return;
       const response = await axios.get(
-        `http://localhost:5000/internship/api/v1/internships/check${
+        `https://internship-portal-backend.vercel.app/internship/api/v1/internships/check${
           !role?.includes("student") ? "/" + student : ""
         }`,
         {

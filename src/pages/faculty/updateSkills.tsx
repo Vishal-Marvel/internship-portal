@@ -36,7 +36,7 @@ const ModifySkills = () => {
     try {
       if (token && !isTokenExpired()) {
         const response = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/skill/skillList",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/skill/skillList",
           {
             headers: {
               Authorization: "Bearer " + token,

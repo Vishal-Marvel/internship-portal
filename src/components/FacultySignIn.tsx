@@ -109,7 +109,7 @@ const FacultySignIn = () => {
       if (values.file[0]) formdata.append("file", values.file[0]);
 
       const response = await axiosInstance.post(
-        "http://localhost:5000/internship/api/v1/staffs/signup",
+        "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/signup",
         formdata
       );
       toast(

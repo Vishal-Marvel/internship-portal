@@ -16,7 +16,7 @@ const ViewProfilePage = () => {
       try {
         if (role.includes("student") || (type && type == "studentProfile")) {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/students/viewStudent",
+            "https://internship-portal-backend.vercel.app/internship/api/v1/students/viewStudent",
             {
               headers: {
                 Authorization: "Bearer " + token,
@@ -26,7 +26,7 @@ const ViewProfilePage = () => {
           setStudent(response.data.data.student);
         } else if (!type || type === "facultyProfile") {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/staffs/viewStaff",
+            "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewStaff",
             {
               headers: {
                 Authorization: "Bearer " + token,

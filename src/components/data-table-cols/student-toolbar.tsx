@@ -23,7 +23,7 @@ function StudentToolBar<TData>({ table }: DataTableToolbarProps<TData>) {
   const [skills, setSkills] = useState([]);
   const getSkills = async () => {
     const response = await axiosInstance.get(
-      "http://localhost:5000/internship/api/v1/skill/getAllSkills"
+      "https://internship-portal-backend.vercel.app/internship/api/v1/skill/getAllSkills"
     );
     setSkills(
       response.data.data.skillNames.map((skill: string, index) => ({

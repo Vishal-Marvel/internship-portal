@@ -83,7 +83,7 @@ const StudentForgotPassword = () => {
     try {
       if (!OTPShown) {
         await axiosInstance.post(
-          "http://localhost:5000/internship/api/v1/students/forgot-password",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/students/forgot-password",
           { email: values.email + "@sairamtap.edu.in" }
         );
         setOTPShown(true);
@@ -109,7 +109,7 @@ const StudentForgotPassword = () => {
           return;
         }
         await axiosInstance.post(
-          "http://localhost:5000/internship/api/v1/students/set-forgot-password",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/students/set-forgot-password",
           {
             email: values.email + "@sairamtap.edu.in",
             otp: values.otp,

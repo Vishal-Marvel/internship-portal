@@ -22,7 +22,7 @@ const ViewInternships = () => {
       if (isTokenExpired()) return;
       if (role?.includes("student")) {
         const response = await axiosInstance.get(
-          "http://localhost:5000/internship/api/v1/students/internships",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/students/internships",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -33,7 +33,7 @@ const ViewInternships = () => {
       } else {
         if (student) {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/internships/view-student-internships/" +
+            "https://internship-portal-backend.vercel.app/internship/api/v1/internships/view-student-internships/" +
               student,
             {
               headers: {
@@ -44,7 +44,7 @@ const ViewInternships = () => {
           setInternships(response.data.data.internships);
         } else {
           const response = await axiosInstance.get(
-            "http://localhost:5000/internship/api/v1/internships/view/all",
+            "https://internship-portal-backend.vercel.app/internship/api/v1/internships/view/all",
             {
               headers: {
                 Authorization: "Bearer " + token,

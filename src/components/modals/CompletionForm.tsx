@@ -56,7 +56,7 @@ const CompletionForm = () => {
       formData.append("certificate", values.certificate[0]);
 
       await axiosInstance.post(
-        `http://localhost:5000/internship/api/v1/internships/completion-update/${internship?.id}`,
+        `https://internship-portal-backend.vercel.app/internship/api/v1/internships/completion-update/${internship?.id}`,
         formData,
         {
           headers: {

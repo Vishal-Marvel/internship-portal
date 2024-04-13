@@ -46,7 +46,7 @@ const ViewFaculties = () => {
   const getStaff = async () => {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/staffs/viewMultipleStaff/all",
+        "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewMultipleStaff/all",
         {
           headers: {
             Authorization: "Bearer " + token,

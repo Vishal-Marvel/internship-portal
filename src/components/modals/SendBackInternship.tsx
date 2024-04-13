@@ -53,7 +53,7 @@ const SendBackInternship = () => {
       }
 
       await axiosInstance.post(
-        `http://localhost:5000/internship/api/v1/internships/send-back/${role}/${id}`,
+        `https://internship-portal-backend.vercel.app/internship/api/v1/internships/send-back/${role}/${id}`,
         values,
         {
           headers: {

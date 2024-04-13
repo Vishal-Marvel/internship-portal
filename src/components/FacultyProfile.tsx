@@ -94,7 +94,7 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
   const getImage = async () => {
     if (staff) {
       const imageResponse = await axiosInstance.get(
-        "http://localhost:5000/internship/api/v1/students/image/" +
+        "https://internship-portal-backend.vercel.app/internship/api/v1/students/image/" +
           staff.profile_photo,
         {
           headers: {
@@ -125,7 +125,8 @@ const FacultyProfile = ({ staff }: { staff: Staff }) => {
       if (values.file[0]) formdata.append("file", values.file[0]);
 
       await axiosInstance.put(
-        `http://localhost:5000/internship/api/v1/staffs/update/` + staff.id,
+        `https://internship-portal-backend.vercel.app/internship/api/v1/staffs/update/` +
+          staff.id,
         formdata,
         {
           headers: {

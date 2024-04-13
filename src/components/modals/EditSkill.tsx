@@ -58,7 +58,7 @@ const EditSkill = () => {
     try {
       if (token && !isTokenExpired()) {
         const response = await axiosInstance.put(
-          "http://localhost:5000/internship/api/v1/skill/editSkill",
+          "https://internship-portal-backend.vercel.app/internship/api/v1/skill/editSkill",
           values,
           {
             headers: {
