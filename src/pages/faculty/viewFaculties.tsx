@@ -72,7 +72,7 @@ const ViewFaculties = () => {
     <div className="relative flex w-full h-full justify-center items-center">
       <Link to={"/faculty/signin"} className="absolute top-5 right-3">
         <Button variant="primary" className="p-2">
-          <CirclePlus /> Add Faculty
+          <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
         </Button>
       </Link>
       <DataTable

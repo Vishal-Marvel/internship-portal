@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Internship, Student } from "@/schema";
 import { useEffect, useState } from "react";
-import { AlertCircle, Download } from "lucide-react";
+import { AlertCircle, CirclePlus, Download } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useSearchParams } from "react-router-dom";
 import ViewStudentInternships from "@/components/ViewStudentInternships";
@@ -79,6 +79,11 @@ const ViewInternships = () => {
           </Button>
         </Link>
       )}
+      <Link to={"/faculty/signin"} className="absolute top-5 right-3">
+        <Button variant="primary" className="p-2">
+          <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
+        </Button>
+      </Link>
       <ViewStudentInternships internship={internships} />
     </div>
   );

@@ -5,20 +5,15 @@ import { Theme, ThemeProvider, useTheme } from "./theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ModalProvider } from "./model-provider";
 
-export const publicRoutes = [
-  "/student/signin",
-  "/faculty/signin",
-  "/",
-  "/forgetpass",
-];
+export const publicRoutes = ["/student/signin", "/", "/forgetpass"];
 
 export const facultyRoutes = [
-  "/faculties", 
+  "/faculties",
   "/students",
   "/studentInternships",
-  "/skills"
-  
-]
+  "/skills",
+  "/faculty/signin",
+];
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -38,10 +33,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       if (token) navigate("/dashboard");
     }
 
-    if (facultyRoutes.includes(pathname) && role?.includes("student")){
-      navigate("/")
+    if (facultyRoutes.includes(pathname) && role?.includes("student")) {
+      navigate("/");
     }
-    setTheme(clg)
+    setTheme(clg);
   }, [pathname, token]);
 
   useEffect(() => {

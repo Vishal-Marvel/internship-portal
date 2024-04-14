@@ -93,16 +93,19 @@ export const facultyColumns: ColumnDef<Staff>[] = [
             >
               View Faculty Profile
             </DropdownMenuItem>
-            {role && role != "mentor" && (
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/mentees/" + faculty.id);
-                }}
-              >
-                View Faculty Mentees
-              </DropdownMenuItem>
-            )}
+            {role &&
+              role != "mentor" &&
+              faculty.roles.includes("mentor") &&
+              !role?.includes("admin") && (
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    navigate("/mentees/" + faculty.id);
+                  }}
+                >
+                  View Faculty Mentees
+                </DropdownMenuItem>
+              )}
             {(role?.includes("hod") ||
               role?.includes("tapcell") ||
               role?.includes("principal") ||

@@ -112,10 +112,6 @@ const ModifyRole = () => {
         onClose();
         return;
       }
-      console.log(
-        faculty?.id,
-        values.roles.map((role) => role.value)
-      );
 
       const response = await axiosInstance.post(
         `https://internship-portal-backend.vercel.app/internship/api/v1/staffs/updateRole/${faculty?.id}`,

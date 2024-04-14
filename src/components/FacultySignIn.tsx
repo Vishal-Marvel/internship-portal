@@ -118,6 +118,7 @@ const FacultySignIn = () => {
           <span>Staff Data Successfully Registered, Login to Continue</span>
         </>
       );
+      console.log(response);
 
       form.reset();
 
@@ -145,7 +146,7 @@ const FacultySignIn = () => {
   }, [form.watch("sec_sit")]);
 
   return (
-    <Card className="h-full w-full shadow-2xl bg-white/80 border-0 rounded-2xl">
+    <Card className=" w-full shadow-2xl bg-white/80 border-0 rounded-2xl">
       <CardHeader>
         <div className="w-full flex justify-between">
           <CardTitle>Faculty Register</CardTitle>
