@@ -55,7 +55,6 @@ const ModifyRole = () => {
   const getRoles = async () => {
     try {
       if (token && !isTokenExpired() && !role?.includes("student")) {
-        onOpen("loader");
         const response = await axiosInstance.get(
           "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewAllRoles",
           {
@@ -70,16 +69,13 @@ const ModifyRole = () => {
             label: role?.name?.toUpperCase(),
           }))
         );
-        onClose();
       }
     } catch (error) {
-      onClose();
       console.error(error);
     }
   };
   const getStaffRoles = async () => {
     try {
-      onOpen("loader");
       const response = await axiosInstance.get(
         "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewStaffRoles/" +
           faculty.id,
@@ -96,9 +92,7 @@ const ModifyRole = () => {
           label: role?.role_name.toUpperCase(),
         }))
       );
-      onClose();
     } catch (error) {
-      onClose();
       console.error(error);
     }
   };
@@ -119,7 +113,7 @@ const ModifyRole = () => {
         onClose();
         return;
       }
-      onOpen("loader");
+
       const response = await axiosInstance.post(
         `https://internship-portal-backend.vercel.app/internship/api/v1/staffs/updateRole/${faculty?.id}`,
         { roles: values.roles.map((role) => role.value) },
@@ -140,7 +134,7 @@ const ModifyRole = () => {
     } catch (error) {
       const errorMessage = await error.response.data;
       console.error(errorMessage);
-      onClose();
+
       toast(
         <>
           <AlertCircle /> {errorMessage.message}
