@@ -158,3 +158,17 @@ export const departmensts = [
   { label: "CSE", value: "cse" },
   { label: "IT", value: "it" },
 ];
+
+
+export interface NotificationDetails {
+  id: string
+  message : string
+  staff_id : string
+  staff : string
+  staff_name : string
+  type : string
+  toRoles : string[]
+  date : Date
+  year : string
+  depts : string[]
+}
