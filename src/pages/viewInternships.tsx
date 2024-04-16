@@ -79,11 +79,13 @@ const ViewInternships = () => {
           </Button>
         </Link>
       )}
-      <Link to={"/faculty/signin"} className="absolute top-5 right-3">
-        <Button variant="primary" className="p-2">
-          <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
-        </Button>
-      </Link>
+      {role.includes("student") && (
+        <Link to={"/addInternship"} className="absolute top-5 right-3">
+          <Button variant="primary" className="p-2">
+            <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
+          </Button>
+        </Link>
+      )}
       <ViewStudentInternships internship={internships} />
     </div>
   );
