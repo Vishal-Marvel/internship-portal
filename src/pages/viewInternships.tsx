@@ -80,9 +80,9 @@ const ViewInternships = () => {
         </Link>
       )}
       {role.includes("student") && (
-        <Link to={"/addInternship"} className="absolute top-5 right-3">
+        <Link to={"/addInternship"} className="absolute top-2 right-3">
           <Button variant="primary" className="p-2">
-            <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
+            <CirclePlus className="h-5 w-5 mr-2" /> Add Internship
           </Button>
         </Link>
       )}
