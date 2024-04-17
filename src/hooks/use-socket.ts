@@ -22,7 +22,7 @@ interface SocketData {
 interface SocketStore {
   type: SocketType | null;
   onChange: (type: SocketType, data?: SocketData) => void;
-  onClose: () => void;
+  onSocketClose: () => void;
   data: SocketData | null;
 }
 
@@ -30,5 +30,5 @@ export const useSocket = create<SocketStore>((set) => ({
   type: null,
   data: {},
   onChange: (type, data = {}) => set({ type, data }),
-  onClose: () => set({ type: null, data: {} }),
+  onSocketClose: () => set({ type: null, data: {} }),
 }));

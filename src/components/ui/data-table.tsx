@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({
   title,
   visibleColumns,
 }: DataTableProps<TData, TValue>) {
-  const { onChange, type, onClose } = useSocket();
+  const { onChange, type, onSocketClose } = useSocket();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     if (type == "rowSelection") {
       setRowSelection({});
-      onClose();
+      onSocketClose();
     }
   }, [type]);
 
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar table={table} type={tableType} />
       <ScrollArea
         className={cn(
-          "rounded-md  w-[70vw]",
+          "rounded-md  lg:w-[70vw]",
           tableType == "mentee"
             ? "md:h-[40vh] h-[40vh]"
             : "md:h-[60vh] h-[50vh]"

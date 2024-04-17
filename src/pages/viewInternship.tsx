@@ -1,4 +1,5 @@
 import StudentInternship from "@/components/StudentInternship";
+import { useModal } from "@/hooks/use-model-store";
 import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
@@ -12,12 +13,14 @@ const ViewInternshipPage = () => {
   const { id } = useParams();
   const [internship, setInternship] = useState<Internship>();
   const { token, isTokenExpired } = useSession();
-  const { type, onClose } = useSocket();
+  const { type, onSocketClose } = useSocket();
+  const { onOpen, onClose } = useModal();
 
   const getInternship = async () => {
     if (token && !isTokenExpired()) {
       if (!type || type == "internship") {
         try {
+          onOpen("loader");
           const response = await axiosInstance.get(
             "https://internship-portal-backend.vercel.app/internship/api/v1/internships/" +
               id,
@@ -28,7 +31,9 @@ const ViewInternshipPage = () => {
             }
           );
           setInternship(response.data.data.internshipDetails);
+          onClose();
         } catch (error) {
+          onClose();
           toast(
             <>
               <AlertCircle />
@@ -36,7 +41,7 @@ const ViewInternshipPage = () => {
             </>
           );
         }
-        onClose();
+        onSocketClose();
       }
     }
   };

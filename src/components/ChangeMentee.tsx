@@ -29,7 +29,7 @@ interface Props {
 const ChangeMentee = ({ staff, loading }: Props) => {
   const { token } = useSession();
   const { onChange } = useSocket();
-  const { type, onClose } = useSocket();
+  const { type, onSocketClose } = useSocket();
   const [faculty, setFaculty] = useState<Staff[]>([]);
   const [fromMentor, setFromMentor] = useState(staff);
   const [toMentor, setToMentor] = useState("");
@@ -48,7 +48,7 @@ const ChangeMentee = ({ staff, loading }: Props) => {
   useEffect(() => {
     onChange("fromMentor", { fromMentor });
     setTimeout(() => onChange("toMentor", { toMentor }), 100);
-    setTimeout(() => onClose(), 100);
+    setTimeout(() => onSocketClose(), 100);
   }, [fromMentor, toMentor]);
   const getStaff = async () => {
     try {

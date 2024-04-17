@@ -1,6 +1,7 @@
 import { facultyColumns } from "@/components/data-table-cols/staff-columns";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import { useModal } from "@/hooks/use-model-store";
 import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
@@ -29,7 +30,8 @@ function isMobileView() {
 const ViewFaculties = () => {
   const { token, role } = useSession();
   const [width, setWidth] = useState(isMobileView());
-  const { type, onClose } = useSocket();
+  const { type, onSocketClose } = useSocket();
+  const { onOpen, onClose } = useModal();
   useEffect(() => {
     const handleResize = () => {
       setWidth(isMobileView());
@@ -45,6 +47,7 @@ const ViewFaculties = () => {
   const [faculty, setFaculty] = useState<Staff[]>([]);
   const getStaff = async () => {
     try {
+      onOpen("loader");
       const response = await axiosInstance.get(
         "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewMultipleStaff/all",
         {
@@ -54,8 +57,10 @@ const ViewFaculties = () => {
         }
       );
       setFaculty(response.data.data.staffs);
+      onSocketClose();
       onClose();
     } catch (error) {
+      onClose();
       if (error.response.data.message != "")
         toast(
           <>

@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const AddStudentInternshipPage = () => {
   const navigate = useNavigate();
-  const { onOpen } = useModal();
+  const { onOpen, onClose } = useModal();
   const { token, role } = useSession();
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,6 +22,7 @@ const AddStudentInternshipPage = () => {
   const getStatus = async () => {
     try {
       setLoading(true);
+      onOpen("loader");
       if (!role?.includes("student") && student == "") return;
       const response = await axios.get(
         `https://internship-portal-backend.vercel.app/internship/api/v1/internships/check${
@@ -34,7 +35,9 @@ const AddStudentInternshipPage = () => {
         }
       );
       setLoading(false);
+      onClose();
     } catch (error) {
+      onClose();
       if (role?.includes("student")) {
         toast(
           <>
@@ -61,7 +64,6 @@ const AddStudentInternshipPage = () => {
   return (
     <div className="w-full md:w-fit">
       {!loading && <AddStudentInternship student={student} />}
-      {loading && <Loader2 className=" animate-spin " size={44} />}
     </div>
   );
 };

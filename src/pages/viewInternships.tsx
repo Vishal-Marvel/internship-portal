@@ -8,18 +8,20 @@ import { Link, useSearchParams } from "react-router-dom";
 import ViewStudentInternships from "@/components/ViewStudentInternships";
 import { useSocket } from "@/hooks/use-socket";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-model-store";
 
 const ViewInternships = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const student = searchParams.get("student");
   const { token, role, isTokenExpired } = useSession();
-  const [selectedFilters, setSelectedFilters] = useState({});
   const [internships, setInternships] = useState<Internship[]>([]);
-  const { type, onClose, data } = useSocket();
+  const { type, onSocketClose, data } = useSocket();
+  const { onOpen, onClose } = useModal();
 
   const getData = async () => {
     try {
       if (isTokenExpired()) return;
+      onOpen("loader");
       if (role?.includes("student")) {
         const response = await axiosInstance.get(
           "https://internship-portal-backend.vercel.app/internship/api/v1/students/internships",
@@ -55,14 +57,16 @@ const ViewInternships = () => {
         }
       }
       onClose();
+      onSocketClose();
     } catch (error) {
+      onClose();
       toast(
         <>
           <AlertCircle />
           {error.response.data.message}
         </>
       );
-      onClose();
+      onSocketClose();
     }
   };
 

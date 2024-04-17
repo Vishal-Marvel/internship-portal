@@ -91,7 +91,7 @@ const formSchema = z.object({
 
 const StudentInternship = ({ internship }: Props) => {
   const { token, role } = useSession();
-  const { type, onClose } = useSocket();
+  const { type, onSocketClose } = useSocket();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -235,7 +235,7 @@ const StudentInternship = ({ internship }: Props) => {
         }
       );
       setApproval(response.data.data.approval_status);
-      onClose();
+      onSocketClose();
     }
   };
 

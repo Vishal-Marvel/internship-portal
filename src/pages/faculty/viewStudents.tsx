@@ -1,9 +1,11 @@
 import { studentColumns } from "@/components/data-table-cols/student-columns";
 import { DataTable } from "@/components/ui/data-table";
+import { useModal } from "@/hooks/use-model-store";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
 import { Student } from "@/schema";
 import { VisibilityState } from "@tanstack/react-table";
+import { isToday } from "date-fns";
 import { AlertCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -24,7 +26,8 @@ function isMobileView() {
   }
 }
 const ViewStudents = () => {
-  const { token, role } = useSession();
+  const { token, role, isTokenExpired } = useSession();
+  const { onOpen, onClose } = useModal();
   const [width, setWidth] = useState(isMobileView());
   const isMentor = role?.includes("mentor");
   const isTapCell = role?.includes("tapcell");
@@ -54,6 +57,10 @@ const ViewStudents = () => {
   const [student, setStudent] = useState<Student[]>([]);
   const getStudent = async () => {
     try {
+      if (!token || isTokenExpired()) {
+        return;
+      }
+      onOpen("loader");
       const response = await axiosInstance.get(
         "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/viewMultipleStudent",
         {
@@ -69,7 +76,9 @@ const ViewStudents = () => {
         total_days_internship: student.total_days_internship ?? 0,
       }));
       setStudent(student);
+      onClose();
     } catch (error) {
+      onClose();
       toast(
         <>
           <AlertCircle />

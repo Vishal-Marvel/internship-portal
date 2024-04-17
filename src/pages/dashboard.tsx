@@ -18,7 +18,7 @@ const Dashboard = () => {
   if (role && role.includes("student")) {
     const [student, setStudent] = useState<Student>();
     const [visible, setVisible] = useState(true);
-    const { type, onClose } = useSocket();
+    const { type, onSocketClose } = useSocket();
     const getData = async () => {
       try {
         if (isTokenExpired()) return;
@@ -32,7 +32,7 @@ const Dashboard = () => {
             }
           );
           setStudent(studentResponse.data.data.student);
-          onClose();
+          onSocketClose();
         }
       } catch (error) {
         console.error(error.response.data.message || error);

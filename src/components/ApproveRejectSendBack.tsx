@@ -11,7 +11,7 @@ interface Props {
 
 const ApproveRejectSendBack = ({ id, role }: Props) => {
   const { token, isTokenExpired } = useSession();
-  const { onOpen } = useModal();
+  const { onOpen, onClose } = useModal();
   const { onChange } = useSocket();
 
   const handleApprove = async (
@@ -20,6 +20,7 @@ const ApproveRejectSendBack = ({ id, role }: Props) => {
     e.preventDefault();
     try {
       if (isTokenExpired()) return;
+      onOpen("loader");
       await axiosInstance.post(
         `https://internship-portal-backend.vercel.app/internship/api/v1/internships/approval/${role}/${id}`,
         {},
@@ -30,8 +31,10 @@ const ApproveRejectSendBack = ({ id, role }: Props) => {
         }
       );
       onChange("approval");
+      onClose();
       // console.log(response);
     } catch (error) {
+      onClose();
       console.error(error);
     }
   };

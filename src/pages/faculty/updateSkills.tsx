@@ -27,13 +27,14 @@ function isMobileView() {
 }
 const ModifySkills = () => {
   const { token, role, isTokenExpired } = useSession();
-  const { type, onClose } = useSocket();
-  const { onOpen } = useModal();
+  const { type, onSocketClose } = useSocket();
+  const { onOpen, onClose } = useModal();
 
   const [skills, setSkills] = useState<Skill[]>([]);
 
   const getSkills = async () => {
     try {
+      onOpen("loader");
       if (token && !isTokenExpired()) {
         const response = await axiosInstance.get(
           "https://internship-portal-backend.vercel.app/internship/api/v1/skill/skillList",
@@ -44,16 +45,18 @@ const ModifySkills = () => {
           }
         );
         setSkills(response.data.data.skill);
-        onClose();
+        onSocketClose();
       }
+      onClose();
     } catch (error) {
+      onClose();
       toast(
         <>
           <AlertCircle />
           {error.response.data.message}
         </>
       );
-      onClose();
+      onSocketClose();
     }
   };
 

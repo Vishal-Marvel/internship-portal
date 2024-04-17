@@ -129,7 +129,12 @@ const DownloadInternshipComponent = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 p-4"
             >
-              <div className=" w-full gap-5 grid items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
+              <div
+                className=" w-full gap-5 grid items-start  "
+                style={{
+                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                }}
+              >
                 {isAdmin && (
                   <FormField
                     name={"sec_sit"}

@@ -16,7 +16,7 @@ export const LoaderModal = () => {
       )}
     >
       <div className="absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="relative">
+        <div className="relative bg-slate-50/50 rounded-full">
           <img
             src="/logo.png"
             className="aspect-auto h-10 absolute z-[100] top-16 left-10"

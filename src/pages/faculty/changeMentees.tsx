@@ -30,7 +30,7 @@ function isMobileView() {
 const ChangeMentees = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { token, isTokenExpired } = useSession();
-  const { type, onClose, data, onChange } = useSocket();
+  const { type, onSocketClose, data, onChange } = useSocket();
   const { fromMentor, toMentor, rows } = data;
   const [id, setId] = useState(searchParams.get("mentor"));
   const [width, setWidth] = useState(isMobileView());
@@ -75,7 +75,7 @@ const ChangeMentees = () => {
 
         setStudent(student);
         setLoading(false);
-        onClose();
+        onSocketClose();
       } catch (error) {
         toast(
           <>
@@ -99,7 +99,7 @@ const ChangeMentees = () => {
     if (type == "rows") {
       setSelectedRows(rows);
     }
-    onClose();
+    onSocketClose();
   }, [type]);
 
   const handleSubmit = async () => {
@@ -137,7 +137,7 @@ const ChangeMentees = () => {
           },
           { headers: { Authorization: "Bearer " + token } }
         );
-        onClose();
+        onSocketClose();
         toast(
           <>
             <CircleCheck />
