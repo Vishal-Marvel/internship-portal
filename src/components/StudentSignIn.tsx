@@ -92,7 +92,7 @@ const StudentSignIn = () => {
 
   const isLoading = form.formState.isSubmitting;
   const fileRef = form.register("file");
-  const { onOpen } = useModal();
+  const { onOpen, onClose } = useModal();
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -124,6 +124,7 @@ const StudentSignIn = () => {
 
   const getMentors = async () => {
     try {
+      onOpen("loader");
       const response = await axiosInstance.get(
         `https://internship-portal-backend.vercel.app/internship/api/v1/staffs/${form.getValues(
           "department"
@@ -136,7 +137,9 @@ const StudentSignIn = () => {
           label: `${key} (${data[key]})`,
         }))
       );
+      onClose();
     } catch (error) {
+      onClose();
       console.error(error.response.data);
     }
   };
@@ -198,11 +201,13 @@ const StudentSignIn = () => {
         formdata.append(`skills`, skill.value);
       });
       if (values.file[0]) formdata.append("file", values.file[0]);
+      onOpen("loader")
 
       const response = await axiosInstance.post(
         "https://internship-portal-backend.vercel.app/internship/api/v1/students/signup",
         formdata
       );
+      onClose()
       toast(
         <>
           <CheckCircle2 />
@@ -216,6 +221,7 @@ const StudentSignIn = () => {
 
       router("/");
     } catch (error) {
+      onClose()
       console.error(error);
       toast(
         <>

@@ -41,24 +41,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    const storedClg = localStorage.getItem("clg");
     if (storedToken) {
       setToken(storedToken);
-    }
-    if (storedClg) {
+      const val = JSON.parse(atob(storedToken.split(".")[1]));
       //@ts-ignore
-      setClg(storedClg);
+      setClg(val.clg);
+
+      setRole(val.roles);
     }
-    if (storedRole) {
-      setRole(storedRole);
-    }
-  }, []);
+  }, [pathname]);
 
   const setSession = (newToken: string, newRole: string, newClg: string) => {
     localStorage.setItem("token", newToken);
-    localStorage.setItem("clg", newClg);
-    localStorage.setItem("role", newRole);
     setToken(newToken);
     setRole(newRole);
     //@ts-ignore
@@ -67,8 +61,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const clearSession = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("clg");
     setToken(null);
     setClg(null);
     setRole(null);

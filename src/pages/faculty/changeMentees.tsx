@@ -2,6 +2,7 @@ import ChangeMentee from "@/components/ChangeMentee";
 import { studentColumns } from "@/components/data-table-cols/student-columns";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import { useModal } from "@/hooks/use-model-store";
 import { useSocket } from "@/hooks/use-socket";
 import axiosInstance from "@/lib/axios";
 import { useSession } from "@/providers/context/SessionContext";
@@ -37,6 +38,7 @@ const ChangeMentees = () => {
   const [toFaculty, setToFaculty] = useState("");
   const [selectedRows, setSelectedRows] = useState({});
   const [loading, setLoading] = useState(false);
+  const { onOpen, onClose } = useModal();
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,7 +63,7 @@ const ChangeMentees = () => {
   const getStudent = async () => {
     if (token && !isTokenExpired()) {
       try {
-        setLoading(true);
+        onOpen("loader");
         const response = await axiosInstance.get(
           "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/mentee-students/" +
             id,
@@ -74,7 +76,7 @@ const ChangeMentees = () => {
         let student = await response.data.data.students;
 
         setStudent(student);
-        setLoading(false);
+        onClose();
         onSocketClose();
       } catch (error) {
         toast(
@@ -87,8 +89,11 @@ const ChangeMentees = () => {
     }
   };
   useEffect(() => {
-    if (!type || type == "mentee") getStudent();
-  }, [id, type]);
+    getStudent();
+  }, [id]);
+  useEffect(() => {
+    if (type == "mentee") getStudent();
+  }, [type]);
   useEffect(() => {
     if (type == "fromMentor") {
       setId(fromMentor);
@@ -128,7 +133,7 @@ const ChangeMentees = () => {
           return;
         }
         setLoading(true);
-
+        onOpen("loader");
         const response = await axiosInstance.post(
           "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/updateMentees",
           {
@@ -138,6 +143,7 @@ const ChangeMentees = () => {
           { headers: { Authorization: "Bearer " + token } }
         );
         onSocketClose();
+        onClose();
         toast(
           <>
             <CircleCheck />

@@ -21,7 +21,7 @@ const ViewInternships = () => {
   const getData = async () => {
     try {
       if (isTokenExpired()) return;
-      onOpen("loader");
+
       if (role?.includes("student")) {
         const response = await axiosInstance.get(
           "https://internship-portal-backend.vercel.app/internship/api/v1/students/internships",
@@ -33,6 +33,7 @@ const ViewInternships = () => {
         );
         setInternships(response.data.data.internships);
       } else {
+        onOpen("loader");
         if (student) {
           const response = await axiosInstance.get(
             "https://internship-portal-backend.vercel.app/internship/api/v1/internships/view-student-internships/" +
@@ -55,8 +56,9 @@ const ViewInternships = () => {
           );
           setInternships(response.data.data.internships);
         }
+        onClose();
       }
-      onClose();
+
       onSocketClose();
     } catch (error) {
       onClose();

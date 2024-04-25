@@ -74,8 +74,8 @@ const ViewFaculties = () => {
     if (!type || type == "staff") getStaff();
   }, [type]);
   return (
-    <div className="relative flex w-full h-full justify-center items-center">
-      <Link to={"/faculty/signin"} className="absolute top-5 right-3">
+    <div className="relative flex  justify-center items-center">
+      <Link to={"/faculty/signin"} className="absolute top-3 right-3">
         <Button variant="primary" className="p-2">
           <CirclePlus className="h-5 w-5 mr-2" /> Add Faculty
         </Button>

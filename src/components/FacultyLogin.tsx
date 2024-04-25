@@ -32,6 +32,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
 import { useTheme } from "@/providers/theme-provider";
 import { useEffect, useState } from "react";
+import { useModal } from "@/hooks/use-model-store";
 
 const formSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }),
@@ -42,7 +43,7 @@ const formSchema = z.object({
 const FacultyLogin = () => {
   const router = useNavigate();
   const { setTheme } = useTheme();
-
+  const { onOpen, onClose } = useModal();
   const { setSession } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,6 +76,7 @@ const FacultyLogin = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      onOpen("loader");
       const response = await axiosInstance.post(
         "https://internship-portal-backend.vercel.app/internship/api/v1/staffs/login",
         { email: values.email + college, password: values.password }
@@ -86,7 +88,7 @@ const FacultyLogin = () => {
       );
       setTheme("faculty");
       form.reset();
-
+      onClose();
       router("/dashboard");
     } catch (error: any) {
       const errorMessage = await error.response.data;
