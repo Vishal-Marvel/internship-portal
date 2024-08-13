@@ -57,9 +57,9 @@ const formSchema = z.object({
   phone_no: z.string().refine((str) => {
     return str.length == 10;
   }, "Phone number is invalid"),
-  total_days_internship: z.number().optional(),
+  total_days_internship: z.number().nullable(),
   placement_status: z.string().optional(),
-  placed_company: z.string().optional(),
+  placed_company: z.string().nullable(),
   file: z.instanceof(FileList).optional(),
   mentor_name: z.string(),
   skills: z

@@ -98,6 +98,8 @@ const FacultyLogin = () => {
           <AlertCircle /> {errorMessage.message}
         </>
       );
+    } finally {
+      onClose();
     }
   };
 

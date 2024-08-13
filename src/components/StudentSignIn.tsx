@@ -201,13 +201,13 @@ const StudentSignIn = () => {
         formdata.append(`skills`, skill.value);
       });
       if (values.file[0]) formdata.append("file", values.file[0]);
-      onOpen("loader")
+      onOpen("loader");
 
       const response = await axiosInstance.post(
         "https://internship-portal-backend.vercel.app/internship/api/v1/students/signup",
         formdata
       );
-      onClose()
+      onClose();
       toast(
         <>
           <CheckCircle2 />
@@ -221,7 +221,7 @@ const StudentSignIn = () => {
 
       router("/");
     } catch (error) {
-      onClose()
+      onClose();
       console.error(error);
       toast(
         <>
